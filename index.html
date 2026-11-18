@@ -17,7 +17,7 @@ a{color:inherit}
 /* topo */
 #topo{position:fixed;top:0;left:var(--sb);right:var(--pn);z-index:70;height:calc(var(--hh) + env(safe-area-inset-top));padding:env(safe-area-inset-top) max(12px,env(safe-area-inset-right)) 0 max(12px,env(safe-area-inset-left));display:flex;align-items:center;gap:10px;background:rgba(20,20,20,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--borda)}
 .marca{flex:none;background:none;border:0;padding:6px 4px;cursor:pointer;font-family:Futura,"Jost",sans-serif;font-weight:600;font-size:17px;letter-spacing:.22em;white-space:nowrap;min-height:44px;color:#EDEDEA}
-#voltar{flex:none;display:none;align-items:center;gap:4px;background:rgba(237,237,234,.07);border:1px solid var(--borda);border-radius:999px;padding:0 14px;min-height:40px;cursor:pointer;font-size:13px;letter-spacing:.08em}
+#voltar{flex:none;display:none !important;align-items:center;gap:4px;background:rgba(237,237,234,.07);border:1px solid var(--borda);border-radius:999px;padding:0 14px;min-height:40px;cursor:pointer;font-size:13px;letter-spacing:.08em}
 body.em-materia #voltar{display:inline-flex}
 #busca{flex:1;min-width:0;display:flex;align-items:center;position:relative}
 #busca input{width:100%;font:inherit;font-size:16px;color:#EDEDEA;background:rgba(237,237,234,.07);border:1px solid var(--borda);border-radius:999px;padding:9px 38px 9px 40px;min-height:42px;outline:none;-webkit-appearance:none;appearance:none}
@@ -26,7 +26,7 @@ body.em-materia #voltar{display:inline-flex}
 #busca svg{position:absolute;left:14px;width:16px;height:16px;stroke:#B8BBBD;pointer-events:none}
 #limpa{position:absolute;right:4px;width:36px;height:36px;border:0;background:none;color:#B8BBBD;font-size:18px;cursor:pointer;display:none}
 #busca.tem #limpa{display:block}
-body.em-materia:not(.com-lateral) #busca{visibility:hidden}
+
 #mais{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--borda);background:rgba(237,237,234,.07);cursor:pointer;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0 0 8px}
 #menu{position:fixed;z-index:90;top:calc(var(--hh) + env(safe-area-inset-top) + 6px);right:max(12px,env(safe-area-inset-right));width:min(300px,calc(100vw - 24px));background:#1c1c1c;border:1px solid var(--borda);border-radius:18px;padding:8px;display:none;box-shadow:0 18px 50px rgba(0,0,0,.5);max-height:calc(100dvh - var(--hh) - 30px);overflow-y:auto}
 #menu.on{display:block}
@@ -35,12 +35,17 @@ body.em-materia:not(.com-lateral) #busca{visibility:hidden}
 #menu button:active,#menu button.atual{background:rgba(237,237,234,.08)}
 #menu .ic{width:22px;text-align:center;color:#B8BBBD}
 #menu hr{border:0;border-top:1px solid var(--borda);margin:6px 4px}
-#veu{position:fixed;inset:0;z-index:85;display:none}
+#veu{position:fixed;inset:0;z-index:92;display:none}
 #veu.on{display:block}
 /* lateral */
 #lateral{display:none;position:fixed;top:0;left:0;bottom:0;width:230px;z-index:75;background:#111;border-right:1px solid var(--borda);padding:calc(14px + env(safe-area-inset-top)) 12px 16px;flex-direction:column;overflow-y:auto}
 body.com-lateral #lateral{display:flex}
-body.com-lateral #topo .marca,body.com-lateral #mais,body.com-lateral #voltar{display:none}
+body.com-lateral #topo .marca,body.com-lateral #abre,body.com-lateral #voltar{display:none}
+#abre{flex:none;width:44px;height:44px;border-radius:12px;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0;margin-left:-6px}
+#abre span{display:block;width:20px;height:1.5px;background:#EDEDEA;border-radius:2px}
+body:not(.com-lateral) #lateral{display:flex;width:min(300px,86vw);z-index:96;transform:translateX(-102%);transition:transform .25s ease;box-shadow:20px 0 60px rgba(0,0,0,.5);padding-left:max(12px,env(safe-area-inset-left))}
+body.gaveta:not(.com-lateral) #lateral{transform:none}
+#veu{background:rgba(0,0,0,.45)}
 #lateral .marca{margin:0 0 18px 8px;text-align:left;font-size:19px}
 #lateral h4{margin:16px 12px 6px;font-size:10.5px;letter-spacing:.18em;color:#8a8d90;font-weight:500}
 #lateral nav button{display:flex;width:100%;align-items:center;gap:12px;text-align:left;background:none;border:0;border-radius:12px;padding:0 12px;min-height:44px;cursor:pointer;font-size:14.5px;color:#d8d8d4}
@@ -177,10 +182,10 @@ body.na-revista #ui{display:flex}
 @media(hover:hover){.card:hover img{transform:scale(1.02)}.card img{transition:transform .5s}}
 </style></head><body>
 <header id="topo">
+ <button id="abre" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
  <button class="marca" id="home" type="button" aria-label="Cartola — início">CARTOLA</button>
  <button id="voltar" type="button">‹ Início</button>
  <label id="busca"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Pesquisar matérias e textos" aria-label="Pesquisar" enterkeyhint="search" autocomplete="off"><button id="limpa" type="button" aria-label="Limpar busca">×</button></label>
- <button id="mais" type="button" aria-label="Menu" aria-expanded="false">⋯</button>
 </header>
 <aside id="lateral" aria-label="Navegação">
  <button class="marca" id="home2" type="button" aria-label="Cartola — início">CARTOLA</button>
@@ -327,17 +332,17 @@ $('cf').addEventListener('submit',function(e){e.preventDefault();var cs=$('cs');
 
 
 /* ---------- MENU ---------- */
-function menu(on){$('menu').classList.toggle('on',on);$('veu').classList.toggle('on',on);$('mais').setAttribute('aria-expanded',on?'true':'false');}
-$('mais').addEventListener('click',function(){menu(!$('menu').classList.contains('on'));});
+function menu(on){document.body.classList.toggle('gaveta',on);$('veu').classList.toggle('on',on);$('abre').setAttribute('aria-expanded',on?'true':'false');}
+$('abre').addEventListener('click',function(){menu(!document.body.classList.contains('gaveta'));});
 $('veu').addEventListener('click',function(){menu(false);});
 M.forEach(function(m){var b=el('button');b.setAttribute('data-ir',m.id);b.appendChild(el('span','ic',m.icone));b.appendChild(document.createTextNode(m.titulo));$('menu-mat').appendChild(b);});
 M.forEach(function(m){var b=el('button');b.setAttribute('data-ir',m.id);b.appendChild(el('span','ic',m.icone));b.appendChild(document.createTextNode(m.titulo));$('lat-mat').appendChild(b);});
 Array.prototype.forEach.call(document.querySelectorAll('[data-ir]'),function(b){b.addEventListener('click',function(){menu(false);ir(b.getAttribute('data-ir'));});});
-$('l-chat').addEventListener('click',function(){abreChat('geral');});
-$('home2').addEventListener('click',function(){ir('inicio');});
+$('l-chat').addEventListener('click',function(){menu(false);abreChat('geral');});
+$('home2').addEventListener('click',function(){menu(false);ir('inicio');});
 $('m-chat').addEventListener('click',function(){menu(false);abreChat();});
 var temFs=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
-[$('m-fs'),$('l-fs')].forEach(function(fsb){if(!temFs)fsb.style.display='none';fsb.addEventListener('click',function(){menu(false);try{var d=document.documentElement;if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else if(d.requestFullscreen){d.requestFullscreen();}else if(d.webkitRequestFullscreen){d.webkitRequestFullscreen();}}catch(e){}});});
+[$('m-fs'),$('l-fs')].forEach(function(fsb){if(!temFs)fsb.style.display='none';fsb.addEventListener('click',function(){menu(false);menu(false);try{var d=document.documentElement;if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else if(d.requestFullscreen){d.requestFullscreen();}else if(d.webkitRequestFullscreen){d.webkitRequestFullscreen();}}catch(e){}});});
 $('home').addEventListener('click',function(){ir('inicio');});
 $('voltar').addEventListener('click',function(){ir('inicio');});
 
