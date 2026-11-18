@@ -16,8 +16,7 @@ a{color:inherit}
 :root{--hh:56px;--pn:0px;--borda:rgba(237,237,234,.14)}
 /* topo */
 #topo{position:fixed;top:0;left:0;right:var(--pn);z-index:70;height:calc(var(--hh) + env(safe-area-inset-top));padding:env(safe-area-inset-top) max(12px,env(safe-area-inset-right)) 0 max(12px,env(safe-area-inset-left));display:flex;align-items:center;gap:10px;background:rgba(20,20,20,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--borda)}
-.marca{flex:none;background:none;border:0;padding:6px 4px;cursor:pointer;font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:500;font-size:20px;letter-spacing:.01em;white-space:nowrap;min-height:44px}
-.marca small{font-family:Futura,"Jost",sans-serif;font-style:normal;font-size:11px;letter-spacing:.16em;color:#B8BBBD;margin-left:6px}
+.marca{flex:none;background:none;border:0;padding:6px 4px;cursor:pointer;font-family:Futura,"Jost",sans-serif;font-weight:600;font-size:17px;letter-spacing:.22em;white-space:nowrap;min-height:44px;color:#EDEDEA}
 #voltar{flex:none;display:none;align-items:center;gap:4px;background:rgba(237,237,234,.07);border:1px solid var(--borda);border-radius:999px;padding:0 14px;min-height:40px;cursor:pointer;font-size:13px;letter-spacing:.08em}
 body.em-materia #voltar{display:inline-flex}
 #busca{flex:1;min-width:0;display:flex;align-items:center;position:relative}
@@ -162,11 +161,11 @@ body.na-revista #ui{display:flex}
 /* responsivo */
 
 @media(max-width:820px){#dest{grid-template-columns:1fr}#dest .lado{grid-template-columns:1fr 1fr}.card.principal{width:100%}.card.principal img{width:100%;height:auto}#mural{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}.fotos{column-count:2;column-gap:8px}.fotos .pg{margin-bottom:8px}}
-@media(max-width:560px){#rapido.nome #rn{flex-basis:100%}.marca small{display:none}.marca{font-size:18px}#dest .lado{grid-template-columns:1fr}#mural{grid-template-columns:1fr}.card h3{font-size:24px}.card p{font-size:16px}.pin .card h3{font-size:16px}.cab p{font-size:18px}#topo{gap:8px}}
+@media(max-width:560px){#rapido.nome #rn{flex-basis:100%}.marca{font-size:15px;letter-spacing:.16em}#dest .lado{grid-template-columns:1fr}#mural{grid-template-columns:1fr}.card h3{font-size:24px}.card p{font-size:16px}.pin .card h3{font-size:16px}.cab p{font-size:18px}#topo{gap:8px}}
 @media(hover:hover){.card:hover img{transform:scale(1.02)}.card img{transition:transform .5s}}
 </style></head><body>
 <header id="topo">
- <button class="marca" id="home" type="button" aria-label="Início">Cartola<small>#13 · TEMPO REI</small></button>
+ <button class="marca" id="home" type="button" aria-label="Cartola — início">CARTOLA</button>
  <button id="voltar" type="button">‹ Início</button>
  <label id="busca"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Pesquisar matérias e textos" aria-label="Pesquisar" enterkeyhint="search" autocomplete="off"><button id="limpa" type="button" aria-label="Limpar busca">×</button></label>
  <button id="mais" type="button" aria-label="Menu" aria-expanded="false">⋯</button>
@@ -328,7 +327,7 @@ function card(m,cls){var b=el('button','card '+(cls||''));b.type='button';var i=
  b.addEventListener('click',function(){ir(m.id);});return b;}
 (function(){var d=$('dest');d.appendChild(card(porId.revista,'principal inteira'));var lado=el('div','lado');lado.appendChild(card(porId.temporei,'inteira'));lado.appendChild(card(porId.cenarios,'inteira'));d.appendChild(lado);
  var mu=$('mural');var pins=[];
- M.forEach(function(m){if(m.destaque)return;var p=el('div','pin');p.appendChild(card(m,'inteira'));pins.push(p);});
+ M.forEach(function(m){var p=el('div','pin');p.appendChild(card(m,'inteira'));pins.push(p);});
  pins.forEach(function(p){mu.appendChild(p);});})();
 
 /* ---------- BUSCA ---------- */
