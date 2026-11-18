@@ -51,6 +51,15 @@ body.gaveta:not(.com-lateral) #lateral{transform:none}
 #lateral nav button{display:flex;width:100%;align-items:center;gap:12px;text-align:left;background:none;border:0;border-radius:12px;padding:0 12px;min-height:44px;cursor:pointer;font-size:14.5px;color:#d8d8d4}
 #lateral nav button:hover,#lateral nav button.atual{background:rgba(237,237,234,.08);color:#EDEDEA}
 #lateral .ic{width:22px;text-align:center;color:#B8BBBD}
+#lateral nav .it::before,#lateral .sub button::before{content:"";flex:none;width:5px;height:5px;border-radius:50%;background:#B8BBBD;opacity:.8}
+#lateral nav button.atual::before{background:#EDEDEA;opacity:1}
+#lateral .grupo{justify-content:flex-start}
+#lateral .seta{margin-left:auto;width:8px;height:8px;border-right:1.5px solid #B8BBBD;border-bottom:1.5px solid #B8BBBD;transform:rotate(45deg) translate(-2px,-2px);transition:transform .2s}
+#lateral .grupo[aria-expanded="true"] .seta{transform:rotate(-135deg) translate(-2px,-2px)}
+#lateral .sub{display:none;margin:0 0 4px 14px;border-left:1px solid var(--borda);padding-left:6px}
+#lateral .sub.on{display:block}
+#lateral .sub button{font-size:14px;min-height:42px}
+#lateral .sub button::before{width:4px;height:4px;border-radius:0;transform:rotate(45deg)}
 #lateral .chatb{margin-top:6px;background:rgba(94,26,36,.55)!important;color:#EDEDEA!important}
 #lateral .rod{margin-top:auto;padding:16px 12px 0;font-size:11px;line-height:1.6;letter-spacing:.06em;color:#8a8d90}
 body.chat-fixo #pc,body.chat-fixo .acoes .chat{display:none}
@@ -189,10 +198,10 @@ body.na-revista #ui{display:flex}
 </header>
 <aside id="lateral" aria-label="Navegação">
  <button class="marca" id="home2" type="button" aria-label="JOTTA's house — início">JOTTA's house</button>
- <nav><button data-ir="inicio">Início</button>
- <h4>MATÉRIAS</h4><div id="lat-mat"></div>
- <h4>CONVERSA</h4><button id="l-chat" class="chatb">Chat geral</button>
- <button id="l-fs">Tela cheia</button></nav>
+ <nav><button data-ir="inicio" class="it">Início</button>
+ <button id="grupo" class="it grupo" type="button" aria-expanded="false">Matérias<span class="seta" aria-hidden="true"></span></button>
+ <div id="lat-mat" class="sub"></div>
+ <button id="l-fs" class="it">Tela cheia</button></nav>
  <div class="rod">Cartola #13 — Tempo Rei<br>TIC II · Design de Moda · Univali · 2026/2</div>
 </aside>
 <div id="veu"></div>
@@ -201,7 +210,6 @@ body.na-revista #ui{display:flex}
  <h4>MATÉRIAS</h4>
  <div id="menu-mat"></div>
  <hr>
- <button id="m-chat"><span id="m-chat-t">Chat</span></button>
  <button id="m-fs">Tela cheia</button>
 </nav>
 
@@ -338,9 +346,9 @@ $('veu').addEventListener('click',function(){menu(false);});
 M.forEach(function(m){var b=el('button');b.setAttribute('data-ir',m.id);b.appendChild(document.createTextNode(m.titulo));$('menu-mat').appendChild(b);});
 M.forEach(function(m){var b=el('button');b.setAttribute('data-ir',m.id);b.appendChild(document.createTextNode(m.titulo));$('lat-mat').appendChild(b);});
 Array.prototype.forEach.call(document.querySelectorAll('[data-ir]'),function(b){b.addEventListener('click',function(){menu(false);ir(b.getAttribute('data-ir'));});});
-$('l-chat').addEventListener('click',function(){menu(false);abreChat('geral');});
+function grupo(on){$('lat-mat').classList.toggle('on',on);$('grupo').setAttribute('aria-expanded',on?'true':'false');}
+$('grupo').addEventListener('click',function(){grupo(!$('lat-mat').classList.contains('on'));});
 $('home2').addEventListener('click',function(){menu(false);ir('inicio');});
-$('m-chat').addEventListener('click',function(){menu(false);abreChat();});
 var temFs=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
 [$('m-fs'),$('l-fs')].forEach(function(fsb){if(!temFs)fsb.style.display='none';fsb.addEventListener('click',function(){menu(false);menu(false);try{var d=document.documentElement;if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else if(d.requestFullscreen){d.requestFullscreen();}else if(d.webkitRequestFullscreen){d.webkitRequestFullscreen();}}catch(e){}});});
 $('home').addEventListener('click',function(){ir('inicio');});
@@ -420,7 +428,7 @@ function mostra(id,pg){if(id!=='inicio'&&!porId[id])id='inicio';rota=id;
  var m=porId[id];document.body.classList.toggle('em-materia',id!=='inicio');document.body.classList.toggle('na-revista',id==='revista');document.body.classList.toggle('travado',id==='revista'&&!document.body.classList.contains('nolib'));
  if(id!=='inicio'){$('q').value='';busca();}
  Array.prototype.forEach.call(document.querySelectorAll('[data-ir]'),function(b){b.classList.toggle('atual',b.getAttribute('data-ir')===id);});
- $('m-chat-t').textContent=id==='inicio'?'Chat geral':'Chat desta matéria';
+ if(porId[id])grupo(true);
  document.title=(m?m.titulo+' — ':'')+'Cartola #13 — Tempo Rei';
  if(id==='inicio'){$('t-inicio').classList.add('on');if(!pg)scrollTo(0,0);}
  else if(id==='revista'){$('t-revista').classList.add('on');iniciaRevista();setTimeout(window._fit,20);if(pg&&pf){try{pf.turnToPage(Math.max(0,Math.min(37,pg-1)));label();}catch(e){}}}
