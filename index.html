@@ -13,9 +13,9 @@ body{min-height:100vh;min-height:100dvh;overflow-x:hidden}
 body.travado{overflow:hidden}
 button{font:inherit;color:inherit}
 a{color:inherit}
-:root{--hh:56px;--pn:0px;--borda:rgba(237,237,234,.14)}
+:root{--hh:56px;--pn:0px;--sb:0px;--borda:rgba(237,237,234,.14)}
 /* topo */
-#topo{position:fixed;top:0;left:0;right:var(--pn);z-index:70;height:calc(var(--hh) + env(safe-area-inset-top));padding:env(safe-area-inset-top) max(12px,env(safe-area-inset-right)) 0 max(12px,env(safe-area-inset-left));display:flex;align-items:center;gap:10px;background:rgba(20,20,20,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--borda)}
+#topo{position:fixed;top:0;left:var(--sb);right:var(--pn);z-index:70;height:calc(var(--hh) + env(safe-area-inset-top));padding:env(safe-area-inset-top) max(12px,env(safe-area-inset-right)) 0 max(12px,env(safe-area-inset-left));display:flex;align-items:center;gap:10px;background:rgba(20,20,20,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--borda)}
 .marca{flex:none;background:none;border:0;padding:6px 4px;cursor:pointer;font-family:Futura,"Jost",sans-serif;font-weight:600;font-size:17px;letter-spacing:.22em;white-space:nowrap;min-height:44px;color:#EDEDEA}
 #voltar{flex:none;display:none;align-items:center;gap:4px;background:rgba(237,237,234,.07);border:1px solid var(--borda);border-radius:999px;padding:0 14px;min-height:40px;cursor:pointer;font-size:13px;letter-spacing:.08em}
 body.em-materia #voltar{display:inline-flex}
@@ -26,7 +26,7 @@ body.em-materia #voltar{display:inline-flex}
 #busca svg{position:absolute;left:14px;width:16px;height:16px;stroke:#B8BBBD;pointer-events:none}
 #limpa{position:absolute;right:4px;width:36px;height:36px;border:0;background:none;color:#B8BBBD;font-size:18px;cursor:pointer;display:none}
 #busca.tem #limpa{display:block}
-body.em-materia #busca{visibility:hidden}
+body.em-materia:not(.com-lateral) #busca{visibility:hidden}
 #mais{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--borda);background:rgba(237,237,234,.07);cursor:pointer;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0 0 8px}
 #menu{position:fixed;z-index:90;top:calc(var(--hh) + env(safe-area-inset-top) + 6px);right:max(12px,env(safe-area-inset-right));width:min(300px,calc(100vw - 24px));background:#1c1c1c;border:1px solid var(--borda);border-radius:18px;padding:8px;display:none;box-shadow:0 18px 50px rgba(0,0,0,.5);max-height:calc(100dvh - var(--hh) - 30px);overflow-y:auto}
 #menu.on{display:block}
@@ -37,10 +37,22 @@ body.em-materia #busca{visibility:hidden}
 #menu hr{border:0;border-top:1px solid var(--borda);margin:6px 4px}
 #veu{position:fixed;inset:0;z-index:85;display:none}
 #veu.on{display:block}
+/* lateral */
+#lateral{display:none;position:fixed;top:0;left:0;bottom:0;width:230px;z-index:75;background:#111;border-right:1px solid var(--borda);padding:calc(14px + env(safe-area-inset-top)) 12px 16px;flex-direction:column;overflow-y:auto}
+body.com-lateral #lateral{display:flex}
+body.com-lateral #topo .marca,body.com-lateral #mais,body.com-lateral #voltar{display:none}
+#lateral .marca{margin:0 0 18px 8px;text-align:left;font-size:19px}
+#lateral h4{margin:16px 12px 6px;font-size:10.5px;letter-spacing:.18em;color:#8a8d90;font-weight:500}
+#lateral nav button{display:flex;width:100%;align-items:center;gap:12px;text-align:left;background:none;border:0;border-radius:12px;padding:0 12px;min-height:44px;cursor:pointer;font-size:14.5px;color:#d8d8d4}
+#lateral nav button:hover,#lateral nav button.atual{background:rgba(237,237,234,.08);color:#EDEDEA}
+#lateral .ic{width:22px;text-align:center;color:#B8BBBD}
+#lateral .chatb{margin-top:6px;background:rgba(94,26,36,.55)!important;color:#EDEDEA!important}
+#lateral .rod{margin-top:auto;padding:16px 12px 0;font-size:11px;line-height:1.6;letter-spacing:.06em;color:#8a8d90}
+body.chat-fixo #pc,body.chat-fixo .acoes .chat{display:none}
 /* telas */
 .tela{display:none}
 .tela.on{display:block}
-#t-inicio,#t-mat{padding:calc(var(--hh) + env(safe-area-inset-top) + 18px) max(16px,env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));margin-right:var(--pn)}
+#t-inicio,#t-mat{padding:calc(var(--hh) + env(safe-area-inset-top) + 18px) max(16px,env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));margin-right:var(--pn);margin-left:var(--sb)}
 .cx{max-width:1180px;margin:0 auto}
 /* recado rápido */
 #rapido{display:flex;gap:8px;align-items:center;margin:0 0 22px;flex-wrap:wrap}
@@ -104,7 +116,7 @@ body.buscando #normal{display:none}
 .fotos .pg{margin:0 0 12px;break-inside:avoid;border-radius:10px}
 /* revista */
 #t-revista{position:fixed;inset:0}
-#wrap{touch-action:none;position:fixed;top:calc(var(--hh) + env(safe-area-inset-top));left:0;right:var(--pn);bottom:0;display:flex;align-items:center;justify-content:center;padding-bottom:54px}
+#wrap{touch-action:none;position:fixed;top:calc(var(--hh) + env(safe-area-inset-top));left:var(--sb);right:var(--pn);bottom:0;display:flex;align-items:center;justify-content:center;padding-bottom:54px}
 #book{width:800px;height:566px}
 .page{background:#EDEDEA;overflow:hidden;position:relative}
 .page::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:3}
@@ -112,15 +124,15 @@ body.buscando #normal{display:none}
 .page.l::after{background:linear-gradient(to left,rgba(0,0,0,.36) 0,rgba(0,0,0,.14) 2.5%,rgba(255,255,255,.12) 4.5%,rgba(255,255,255,0) 11%),linear-gradient(245deg,rgba(255,255,255,.07),rgba(255,255,255,0) 40%,rgba(0,0,0,.05))}
 .page img{width:100%;height:100%;display:block;object-fit:fill;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;pointer-events:none}
 body.nolib #t-revista{position:static}
-body.nolib #wrap{position:static;display:block;padding:calc(var(--hh) + 20px) 0 80px;margin-right:var(--pn)}
+body.nolib #wrap{position:static;display:block;padding:calc(var(--hh) + 20px) 0 80px;margin-right:var(--pn);margin-left:var(--sb)}
 body.nolib #book{width:min(94vw,700px)!important;height:auto!important;margin:0 auto}
 body.nolib .page{width:100%;height:auto;margin-bottom:12px}
 body.nolib .page img{height:auto}
 body.nolib #pg{display:none}
-#ui{position:fixed;left:0;right:var(--pn);bottom:max(10px,env(safe-area-inset-bottom));display:none;justify-content:center;align-items:center;gap:14px;z-index:60;font-size:13px;letter-spacing:.08em;color:#B8BBBD;pointer-events:none}
+#ui{position:fixed;left:var(--sb);right:var(--pn);bottom:max(10px,env(safe-area-inset-bottom));display:none;justify-content:center;align-items:center;gap:14px;z-index:60;font-size:13px;letter-spacing:.08em;color:#B8BBBD;pointer-events:none}
 body.na-revista #ui{display:flex}
 #ui button{pointer-events:auto;background:rgba(237,237,234,.08);color:#EDEDEA;border:1px solid rgba(237,237,234,.18);border-radius:999px;min-width:44px;min-height:44px;padding:0 14px;font-size:18px;cursor:pointer}
-#hint{position:fixed;top:calc(var(--hh) + env(safe-area-inset-top) + 10px);left:0;right:var(--pn);text-align:center;font-size:12px;letter-spacing:.14em;color:#B8BBBD;opacity:.85;z-index:60;transition:opacity 1s;pointer-events:none;padding:0 16px}
+#hint{position:fixed;top:calc(var(--hh) + env(safe-area-inset-top) + 10px);left:var(--sb);right:var(--pn);text-align:center;font-size:12px;letter-spacing:.14em;color:#B8BBBD;opacity:.85;z-index:60;transition:opacity 1s;pointer-events:none;padding:0 16px}
 /* chat */
 #panel{position:fixed;top:0;right:0;bottom:0;width:380px;max-width:100vw;background:#141414;border-left:1px solid var(--borda);z-index:95;display:none;flex-direction:column;padding-top:env(safe-area-inset-top)}
 #panel.open{display:flex}
@@ -170,6 +182,14 @@ body.na-revista #ui{display:flex}
  <label id="busca"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Pesquisar matérias e textos" aria-label="Pesquisar" enterkeyhint="search" autocomplete="off"><button id="limpa" type="button" aria-label="Limpar busca">×</button></label>
  <button id="mais" type="button" aria-label="Menu" aria-expanded="false">⋯</button>
 </header>
+<aside id="lateral" aria-label="Navegação">
+ <button class="marca" id="home2" type="button" aria-label="Cartola — início">CARTOLA</button>
+ <nav><button data-ir="inicio"><span class="ic">⌂</span>Início</button>
+ <h4>MATÉRIAS</h4><div id="lat-mat"></div>
+ <h4>CONVERSA</h4><button id="l-chat" class="chatb"><span class="ic">💬</span>Chat geral</button>
+ <button id="l-fs"><span class="ic">⛶</span>Tela cheia</button></nav>
+ <div class="rod">Cartola #13 — Tempo Rei<br>TIC II · Design de Moda · Univali · 2026/2</div>
+</aside>
 <div id="veu"></div>
 <nav id="menu" aria-label="Menu">
  <button data-ir="inicio"><span class="ic">⌂</span>Início</button>
@@ -182,7 +202,7 @@ body.na-revista #ui{display:flex}
 
 <main id="t-inicio" class="tela">
  <div class="cx">
-  <form id="rapido" autocomplete="off"><input id="rn" type="text" maxlength="30" placeholder="Seu nome" aria-label="Seu nome"><input id="rm" type="text" maxlength="500" placeholder="Deixe um recado no chat geral" aria-label="Recado" enterkeyhint="send"><button type="submit">Enviar</button><div id="rodape-r"><div id="rst" role="status"></div><button type="button" class="ver" id="verchat">VER CHAT GERAL ›</button></div></form>
+
   <section id="res"><div class="rot" id="res-t">RESULTADOS</div><div id="res-l"></div></section>
   <div id="normal">
    <div class="rot" style="margin-top:0">EM DESTAQUE</div>
@@ -286,7 +306,7 @@ function enviar(sala,n,m,st,ok){n=n.trim().slice(0,30);m=m.trim().slice(0,500);
  if(!n){st.textContent='Escreva seu nome antes de enviar.';return false;}
  if(!m)return false;
  if(Date.now()-chat.ultimo<4000){st.textContent='Espere um instante antes de mandar outro recado.';return false;}
- st.textContent='Enviando…';ls('cartolaNome',n);$('cn').value=n;$('rn').value=n;
+ st.textContent='Enviando…';ls('cartolaNome',n);$('cn').value=n;
  fetch(caminho(sala)+'.json',{method:'POST',body:JSON.stringify({n:n,m:m,t:{'.sv':'timestamp'}})}).then(function(r){return r.json();}).then(function(d){
   if(!d||!d.name)throw 0;chat.ultimo=Date.now();chat.meus[d.name]=1;ls('cartolaMeus',JSON.stringify(chat.meus));st.textContent='';
   if(chat.sala===sala&&!chat.msgs[d.name]){chat.msgs[d.name]={n:n,m:m,t:Date.now()};render();}ok&&ok();
@@ -294,29 +314,30 @@ function enviar(sala,n,m,st,ok){n=n.trim().slice(0,30);m=m.trim().slice(0,500);
 function salaAtual(){return rota==='inicio'?'geral':rota;}
 function abreChat(sala){sala=sala||salaAtual();$('panel').classList.add('open');chat.aberto=true;conecta(sala);ajustaPainel();}
 function fechaChat(){$('panel').classList.remove('open');chat.aberto=false;ajustaPainel();}
-function ajustaPainel(){var largo=innerWidth>=900;document.documentElement.style.setProperty('--pn',(chat.aberto&&largo)?'380px':'0px');setTimeout(function(){if(window._fit)window._fit();},30);}
+function ajustaPainel(){var lat=innerWidth>=1100,fixo=lat&&rota!=='inicio';document.body.classList.toggle('com-lateral',lat);document.body.classList.toggle('chat-fixo',fixo);
+ if(fixo&&!chat.aberto){$('panel').classList.add('open');chat.aberto=true;conecta(salaAtual());}
+ var st=document.documentElement.style;st.setProperty('--sb',lat?'230px':'0px');st.setProperty('--pn',(chat.aberto&&innerWidth>=900)?'380px':'0px');setTimeout(function(){if(window._fit)window._fit();},30);}
 $('pc').addEventListener('click',fechaChat);
-$('cn').value=$('rn').value=ls('cartolaNome')||'';
+$('cn').value=ls('cartolaNome')||'';
 ['😀','😂','🥹','😍','🥰','😎','🤩','😮','😭','👏','🙌','🔥','✨','💛','❤️','🖤','🎩','👑','⏳','🕰️','📖','🌹','🎉','🥂'].forEach(function(em){var b=el('button','',em);b.type='button';b.setAttribute('aria-label',em);
  b.addEventListener('click',function(){var cm=$('cm'),s=cm.selectionStart,e=cm.selectionEnd;if(s==null){cm.value+=em;}else{cm.value=cm.value.slice(0,s)+em+cm.value.slice(e);var p=s+em.length;try{cm.setSelectionRange(p,p);}catch(x){}}cm.focus();});$('ce').appendChild(b);});
 $('cem').addEventListener('click',function(){$('ce').classList.toggle('on');});
 $('cf').addEventListener('submit',function(e){e.preventDefault();var cs=$('cs');if(!$('cn').value.trim()){$('cst').textContent='Escreva seu nome antes de enviar.';$('cn').focus();return;}if(!$('cm').value.trim()){$('cm').focus();return;}
  cs.disabled=true;if(!enviar(chat.sala,$('cn').value,$('cm').value,$('cst'),function(err){cs.disabled=false;if(!err){$('cm').value='';$('ce').classList.remove('on');$('cl').scrollTop=$('cl').scrollHeight;}}))cs.disabled=false;});
-if(!$('rn').value)$('rapido').classList.add('nome');$('rm').addEventListener('focus',function(){if(!$('rn').value.trim())$('rapido').classList.add('nome');});
-$('rapido').addEventListener('submit',function(e){e.preventDefault();var rm=$('rm');if(!$('rn').value.trim()){$('rapido').classList.add('nome');$('rst').textContent='Escreva seu nome antes de enviar.';$('rn').focus();return;}if(!rm.value.trim()){rm.focus();return;}
- enviar('geral',$('rn').value,rm.value,$('rst'),function(err){if(!err){rm.value='';$('rst').textContent='Recado enviado! ✨';}});});
-$('verchat').addEventListener('click',function(){abreChat('geral');});
+
 
 /* ---------- MENU ---------- */
 function menu(on){$('menu').classList.toggle('on',on);$('veu').classList.toggle('on',on);$('mais').setAttribute('aria-expanded',on?'true':'false');}
 $('mais').addEventListener('click',function(){menu(!$('menu').classList.contains('on'));});
 $('veu').addEventListener('click',function(){menu(false);});
 M.forEach(function(m){var b=el('button');b.setAttribute('data-ir',m.id);b.appendChild(el('span','ic',m.icone));b.appendChild(document.createTextNode(m.titulo));$('menu-mat').appendChild(b);});
-Array.prototype.forEach.call(document.querySelectorAll('#menu [data-ir]'),function(b){b.addEventListener('click',function(){menu(false);ir(b.getAttribute('data-ir'));});});
+M.forEach(function(m){var b=el('button');b.setAttribute('data-ir',m.id);b.appendChild(el('span','ic',m.icone));b.appendChild(document.createTextNode(m.titulo));$('lat-mat').appendChild(b);});
+Array.prototype.forEach.call(document.querySelectorAll('[data-ir]'),function(b){b.addEventListener('click',function(){menu(false);ir(b.getAttribute('data-ir'));});});
+$('l-chat').addEventListener('click',function(){abreChat('geral');});
+$('home2').addEventListener('click',function(){ir('inicio');});
 $('m-chat').addEventListener('click',function(){menu(false);abreChat();});
-var fsb=$('m-fs');
-if(!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen))fsb.style.display='none';
-fsb.addEventListener('click',function(){menu(false);try{var d=document.documentElement;if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else if(d.requestFullscreen){d.requestFullscreen();}else if(d.webkitRequestFullscreen){d.webkitRequestFullscreen();}}catch(e){}});
+var temFs=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
+[$('m-fs'),$('l-fs')].forEach(function(fsb){if(!temFs)fsb.style.display='none';fsb.addEventListener('click',function(){menu(false);try{var d=document.documentElement;if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else if(d.requestFullscreen){d.requestFullscreen();}else if(d.webkitRequestFullscreen){d.webkitRequestFullscreen();}}catch(e){}});});
 $('home').addEventListener('click',function(){ir('inicio');});
 $('voltar').addEventListener('click',function(){ir('inicio');});
 
@@ -393,15 +414,15 @@ function mostra(id,pg){if(id!=='inicio'&&!porId[id])id='inicio';rota=id;
  Array.prototype.forEach.call(document.querySelectorAll('.tela'),function(t){t.classList.remove('on');});
  var m=porId[id];document.body.classList.toggle('em-materia',id!=='inicio');document.body.classList.toggle('na-revista',id==='revista');document.body.classList.toggle('travado',id==='revista'&&!document.body.classList.contains('nolib'));
  if(id!=='inicio'){$('q').value='';busca();}
- Array.prototype.forEach.call(document.querySelectorAll('#menu [data-ir]'),function(b){b.classList.toggle('atual',b.getAttribute('data-ir')===id);});
+ Array.prototype.forEach.call(document.querySelectorAll('[data-ir]'),function(b){b.classList.toggle('atual',b.getAttribute('data-ir')===id);});
  $('m-chat-t').textContent=id==='inicio'?'Chat geral':'Chat desta matéria';
  document.title=(m?m.titulo+' — ':'')+'Cartola #13 — Tempo Rei';
  if(id==='inicio'){$('t-inicio').classList.add('on');if(!pg)scrollTo(0,0);}
  else if(id==='revista'){$('t-revista').classList.add('on');iniciaRevista();setTimeout(window._fit,20);if(pg&&pf){try{pf.turnToPage(Math.max(0,Math.min(37,pg-1)));label();}catch(e){}}}
  else{$('t-mat').classList.add('on');abreMateria(m,pg);}
- if(chat.aberto)conecta(salaAtual());}
+ if(innerWidth>=1100&&id==='inicio'&&document.body.classList.contains('chat-fixo')){fechaChat();}ajustaPainel();if(chat.aberto)conecta(salaAtual());}
 function lerHash(){var h=location.hash.replace(/^#\/?/,'').split('/');mostra(h[0]||'inicio',parseInt(h[1],10)||0);}
 addEventListener('hashchange',lerHash);
-lerHash();
+lerHash();ajustaPainel();
 })();
 </script></body></html>
