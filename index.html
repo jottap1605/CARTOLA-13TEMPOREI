@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191352";</script>
+<script>var VERSAO="202611191358";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -418,7 +418,7 @@ html.claro #ra-nome{color:#141414}html.claro #ra-tit,html.claro #fb-txt{color:#4
 .rf-tit{margin:0 0 2px;font-family:inherit;font-weight:500;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8a8d90}
 .rf-tit2{margin-top:14px}
 #rod-p{text-align:left!important;font-size:11.5px!important;line-height:1.7!important}
-.rf-logo{font-family:'Playfair Display',Georgia,serif;font-size:26px;line-height:1.2;letter-spacing:.01em;text-transform:none;color:#EDEDEA;margin-bottom:6px}
+.rf-logo{font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,3.3cqi,38px);white-space:nowrap;line-height:1.2;letter-spacing:.01em;text-transform:none;color:#EDEDEA;margin-bottom:6px}
 .rf-col #ra-links,.rf-col .rod-bts{justify-content:flex-start}
 #fb-txt{text-align:left;max-width:300px}
 .rf-base{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px 20px;margin-top:30px;padding-top:14px;border-top:1px solid rgba(184,187,189,.18)}
@@ -428,6 +428,7 @@ html.claro .rf-logo{color:#141414}html.claro .rf-tit{color:#6E7174}html.claro .r
 .pf-fbs{margin:40px 0 0;padding-top:24px;border-top:1px solid var(--borda);max-width:760px}.pf-fbs h2{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:26px;margin:6px 0 10px}
 .tela>#rodape{margin-top:64px}
 #ra-links:empty{display:none}
+.pf-base{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px 20px;margin-top:40px;padding-top:14px;border-top:1px solid var(--borda)}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -542,12 +543,12 @@ html.claro #cst{color:#4A4E52}
    <div class="rf-col rf-autor"><h3 class="rf-tit">Criado por</h3><div id="ra-nome"></div><div id="ra-tit"></div><div id="ra-links" class="rod-bts"></div><button id="ra-perfil" type="button" class="rod-link">Ver perfil completo</button></div>
    <div class="rf-col rf-fb"><h3 class="rf-tit">Feedback</h3><p id="fb-txt">Gostou do site? Achou algum erro? Conta pra mim, a mensagem chega só para o criador.</p><div class="rod-bts"><button id="fb-abre" class="rbt" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Mandar feedback</span></button><button id="fb-ver" class="rbt" type="button" hidden><span>Ver feedbacks</span></button></div></div>
    <div class="rf-col rf-acoes"><h3 class="rf-tit">Compartilhe o site</h3><div class="rod-bts"><a id="rs-wa" class="rbt" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5l1.3-3.6A8 8 0 1 1 8.4 19z"/><path d="M9 9.5c.3 2 2.3 4.1 4.5 4.6l1.3-1.1 1.7.8-.4 1.6c-3.6.4-7.4-3.4-7.6-6.9l1.6-.5.8 1.7z"/></svg><span>WhatsApp</span></a><button id="rs-cp" class="rbt" type="button" aria-label="Copiar link do site"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span>Copiar link</span></button><button id="rs-nat" class="rbt" type="button" hidden aria-label="Mais opções de compartilhar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg><span>Mais</span></button></div><h3 class="rf-tit rf-tit2">Visualização</h3><div class="rod-bts"><button id="rv-tema" class="rbt" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><span id="rv-tema-t">Modo claro</span></button><button id="rv-fs" class="rbt" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg><span>Tela cheia</span></button></div></div>
-  </div><div class="rf-base"><span id="rod-vis" hidden></span><button id="rod-editar" type="button" class="rod-link">Editar o site</button></div></footer>
+  </div></footer>
  </div>
 </main>
 
 <main id="t-form" class="tela"><div id="fm-corpo"></div></main>
-<main id="t-perfil" class="tela"><div class="perfil" id="pf-corpo"></div></main>
+<main id="t-perfil" class="tela"><div class="perfil" id="pf-corpo"></div><div class="perfil pf-base"><span id="rod-vis" hidden></span><button id="rod-editar" type="button" class="rod-link">Editar o site</button></div></main>
 <div id="toast" role="status"></div>
 <main id="t-mat" class="tela"><div class="cab" id="m-cab"></div><div id="m-corpo"></div></main>
 
@@ -653,7 +654,7 @@ function apagaRecado(sala,k){if(!editor||!fb)return;if(!confirm('Apagar este rec
 function salaAtual(){return rota;}
 function abreChat(sala){sala=sala||salaAtual();$('panel').classList.add('open');chat.aberto=true;conecta(sala);ajustaPainel();}
 function fechaChat(){$('panel').classList.remove('open');chat.aberto=false;ajustaPainel();}
-function ajustaPainel(){var lat=innerWidth>=1100,fixo=lat&&!!porId[rota];document.body.classList.toggle('com-lateral',lat);document.body.classList.toggle('chat-fixo',fixo);
+function ajustaPainel(){var largo=innerWidth>=1100,lat=false,fixo=largo&&!!porId[rota];document.body.classList.toggle('com-lateral',lat);document.body.classList.toggle('chat-fixo',fixo);
  if(fixo&&!chat.aberto){$('panel').classList.add('open');chat.aberto=true;conecta(salaAtual());}
  var st=document.documentElement.style;st.setProperty('--sb',lat?'230px':'0px');st.setProperty('--pn',(chat.aberto&&innerWidth>=900)?'380px':'0px');setTimeout(function(){if(window._fit)window._fit();},30);}
 $('pc').addEventListener('click',fechaChat);
@@ -852,7 +853,7 @@ function leVisitas(){if(!fb)return;fb.database().ref('visitas').once('value').th
  if(!temFs)f.hidden=true;f.addEventListener('click',function(){$('l-fs').click();});rvTema();})();
 function rvTema(){var c=document.documentElement.classList.contains('claro');var e=$('rv-tema-t');if(e)e.textContent=c?'Modo escuro':'Modo claro';}
 function rodapeEd(){try{montaAutor();}catch(e){}var b=$('rod-editar');if(b)b.textContent=editor?'Sair do modo de edição':'Editar o site';var v=$('rod-vis');if(!v)return;
- if(VIS.site!=null){var tot=0;for(var k in VIS)if(k!=='site')tot+=Number(VIS[k])||0;v.textContent=VIS.site+(VIS.site===1?' visita ao site':' visitas ao site')+' · '+tot+' nos projetos';v.hidden=false;}else{v.textContent='';v.hidden=true;}}
+ if(VIS.site!=null){var tot=0;for(var k in VIS)if(k!=='site')tot+=Number(VIS[k])||0;v.textContent='Visitas: '+VIS.site+' ao site'+' · '+tot+' nos projetos';v.hidden=!editor;}else{v.textContent='';v.hidden=true;}}
 
 /* ---------- RODAPÉ: criador e feedback ---------- */
 function montaAutor(){if(!$('ra-nome'))return;var p=perfil();$('ra-nome').textContent=p.nome;$('ra-tit').textContent=p.titulo||'';$('ra-tit').hidden=!p.titulo;
