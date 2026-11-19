@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191900";</script>
+<script>var VERSAO="202611191930";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -98,7 +98,7 @@ body.gaveta:not(.com-lateral) #lateral{transform:none}
 #lateral .sub button::before{width:4px;height:4px;border-radius:0;transform:rotate(45deg)}
 #lateral .chatb{margin-top:6px;background:rgba(94,26,36,.55)!important;color:#EDEDEA!important}
 #lateral .rod{margin-top:auto;padding:16px 12px 0;font-size:11px;line-height:1.6;letter-spacing:.06em;color:#8a8d90}
-body.chat-fixo .acoes .chat{display:none}
+body.chat-fixo #pc{display:none}
 /* telas */
 .tela{display:none}
 .tela.on{display:block}
@@ -556,7 +556,23 @@ html.claro #ce{background:rgba(20,20,20,.05)}
 html.claro #ce button:active{background:rgba(20,20,20,.12)}
 html.claro #cst{color:#4A4E52}
 
-#rod-editar[hidden]{display:none!important}
+#rod-editar[hidden],#chat-bt[hidden]{display:none!important}
+#chat-bt{float:right;position:relative;z-index:5;margin:0 0 10px 14px;display:flex;align-items:center;gap:7px;height:42px;padding:0 16px 0 13px;border-radius:999px;border:1px solid #5E1A24;background:#5E1A24;color:#EDEDEA;font:inherit;font-size:13.5px;letter-spacing:.04em;cursor:pointer}
+#chat-bt svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}
+#chat-bt.on{background:none;color:#B8BBBD;border-color:var(--borda)}html.claro #chat-bt.on{color:#4A4E52}
+.acoes .mais-bt{display:inline-flex;align-items:center;gap:8px}
+.acoes .mais-bt::after{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translate(-2px,-2px);transition:transform .2s}
+.acoes .mais-bt[aria-expanded="true"]::after{transform:rotate(-135deg) translate(-2px,-2px)}
+.mais-p{margin:16px 0 4px;max-width:760px}.mais-p[hidden]{display:none!important}
+.mais-p .info{margin-top:0;border-top:1px solid var(--borda)}
+.mais-p .mais-fotos{display:flex;align-items:center;width:100%;min-height:50px;padding:0 0 0 14px;border:0;border-bottom:1px solid var(--borda);background:none;color:inherit;font:inherit;font-size:12px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;text-align:left}
+.mais-p .mais-fotos::before{content:"";flex:none;width:5px;height:5px;border-radius:50%;background:#B8BBBD;margin:0 10px 0 -13px}
+.mais-p .mais-fotos::after{content:"›";margin-left:auto;font-size:20px;letter-spacing:0;color:#B8BBBD}
+.rf-topo{align-items:stretch!important}
+.rf-col>.rod-bts:last-child{margin-top:auto}
+.rf-autor #ra-perfil{order:1}.rf-autor #ra-links{order:2;margin-top:auto}
+.rf-vis{margin-top:auto}
+#rs-nat.rs-um{background:#48503F;border-color:#48503F;color:#EDEDEA}
 #ui .rfs{display:inline-flex;align-items:center;gap:7px;pointer-events:auto}#ui .rfs svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7}
 #ui .rfs[hidden]{display:none!important}
 #t-revista:fullscreen{background:#141414;margin:0;padding:14px 14px 10px;overflow:hidden}
@@ -592,6 +608,7 @@ body.chat-fixo .tela>#rodape{margin-right:calc(-1 * var(--pn));padding-right:4px
  <button id="voltar" type="button" aria-label="Voltar para a página anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span>Voltar</span></button>
  <label id="busca"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Pesquisar matérias e textos" aria-label="Pesquisar" enterkeyhint="search" autocomplete="off"><button id="limpa" type="button" aria-label="Limpar busca">×</button></label>
 </header>
+<button id="chat-bt" type="button" aria-label="Abrir o chat" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Chat</span></button>
 <button id="rod-editar" type="button" aria-label="Editar o site"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg><span>Editar</span></button>
 <aside id="lateral" aria-label="Navegação">
  <button class="marca" id="home2" type="button" aria-label="JOTTA's house — início">JOTTA's house</button>
@@ -617,10 +634,10 @@ body.chat-fixo .tela>#rodape{margin-right:calc(-1 * var(--pn));padding-right:4px
    <section id="mural"></section>
   </div>
   <footer id="rodape"><div class="rf-topo">
-   <div class="rf-col rf-marca"><div id="rod-p"></div></div>
+   <div class="rf-col rf-marca"><div id="rod-p"></div><div class="rod-bts rf-vis"><button id="rv-tema" class="rbt" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><span id="rv-tema-t">Modo claro</span></button><button id="rv-fs" class="rbt" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg><span>Tela cheia</span></button></div></div>
    <div class="rf-col rf-autor"><h3 class="rf-tit">Criado por</h3><div id="ra-nome"></div><div id="ra-tit"></div><div id="ra-links" class="rod-bts"></div><button id="ra-perfil" type="button" class="rod-link">Ver perfil completo</button></div>
    <div class="rf-col rf-fb"><h3 class="rf-tit">Feedback</h3><p id="fb-txt">Gostou do site? Achou algum erro? Conta pra mim, a mensagem chega só para o criador.</p><div class="rod-bts"><button id="fb-abre" class="rbt" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Mandar feedback</span></button><button id="fb-ver" class="rbt" type="button" hidden><span>Ver feedbacks</span></button></div></div>
-   <div class="rf-col rf-acoes"><h3 class="rf-tit">Compartilhe o site</h3><div class="rod-bts"><a id="rs-wa" class="rbt" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5l1.3-3.6A8 8 0 1 1 8.4 19z"/><path d="M9 9.5c.3 2 2.3 4.1 4.5 4.6l1.3-1.1 1.7.8-.4 1.6c-3.6.4-7.4-3.4-7.6-6.9l1.6-.5.8 1.7z"/></svg><span>WhatsApp</span></a><button id="rs-cp" class="rbt" type="button" aria-label="Copiar link do site"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span>Copiar link</span></button><button id="rs-nat" class="rbt" type="button" hidden aria-label="Mais opções de compartilhar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg><span>Mais</span></button></div><h3 class="rf-tit rf-tit2">Visualização</h3><div class="rod-bts"><button id="rv-tema" class="rbt" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><span id="rv-tema-t">Modo claro</span></button><button id="rv-fs" class="rbt" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg><span>Tela cheia</span></button></div></div>
+   <div class="rf-col rf-acoes"><h3 class="rf-tit">Compartilhe o site</h3><div class="rod-bts"><a id="rs-wa" class="rbt" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5l1.3-3.6A8 8 0 1 1 8.4 19z"/><path d="M9 9.5c.3 2 2.3 4.1 4.5 4.6l1.3-1.1 1.7.8-.4 1.6c-3.6.4-7.4-3.4-7.6-6.9l1.6-.5.8 1.7z"/></svg><span>WhatsApp</span></a><button id="rs-cp" class="rbt" type="button" aria-label="Copiar link do site"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span>Copiar link</span></button><button id="rs-nat" class="rbt" type="button" hidden aria-label="Mais opções de compartilhar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg><span>Mais</span></button></div></div>
   </div></footer>
  </div>
 </main>
@@ -733,9 +750,11 @@ function apagaRecado(sala,k){if(!editor||!fb)return;if(!confirm('Apagar este rec
 function salaAtual(){return rota;}
 var chatFechado=ls('cartolaChat')==='0';function abreChat(sala){if(chatFechado){chatFechado=false;ls('cartolaChat','1');}sala=sala||salaAtual();$('panel').classList.add('open');chat.aberto=true;conecta(sala);ajustaPainel();}
 function fechaChat(){$('panel').classList.remove('open');chat.aberto=false;ajustaPainel();}
+function rotChat(){var b=$('chat-bt');if(!b)return;var on=chat.aberto;b.querySelector('span').textContent=on?'Fechar chat':'Chat';b.setAttribute('aria-label',on?'Fechar o chat':'Abrir o chat');b.classList.toggle('on',on);}
+$('chat-bt').addEventListener('click',function(){if(chat.aberto){if(innerWidth>=1100){chatFechado=true;ls('cartolaChat','0');}fechaChat();}else abreChat(rota);});
 function ajustaPainel(){var largo=innerWidth>=1100,lat=false,fixo=largo&&!!porId[rota]&&!chatFechado;document.body.classList.toggle('com-lateral',lat);document.body.classList.toggle('chat-fixo',fixo);
  if(fixo&&!chat.aberto){$('panel').classList.add('open');chat.aberto=true;conecta(salaAtual());}
- var st=document.documentElement.style;st.setProperty('--sb',lat?'230px':'0px');st.setProperty('--pn',(chat.aberto&&innerWidth>=900)?'380px':'0px');setTimeout(function(){if(window._fit)window._fit();},30);}
+ rotChat();var st=document.documentElement.style;st.setProperty('--sb',lat?'230px':'0px');st.setProperty('--pn',(chat.aberto&&innerWidth>=900)?'380px':'0px');setTimeout(function(){if(window._fit)window._fit();},30);}
 $('pc').addEventListener('click',function(){if(innerWidth>=1100){chatFechado=true;ls('cartolaChat','0');}fechaChat();});
 function chatRodape(){var pn=$('panel'),rod=$('rodape');var d=0;if(document.body.classList.contains('chat-fixo')&&rod&&!rod.hidden&&rod.offsetParent){var t=rod.getBoundingClientRect().top;d=Math.max(0,innerHeight-t+1);}pn.style.transform=d?'translateY(-'+d+'px)':'';}
 (function(){var q=false;function f(){if(q)return;q=true;requestAnimationFrame(function(){q=false;chatRodape();});}addEventListener('scroll',f,{passive:true});addEventListener('resize',f);setInterval(chatRodape,800);})();
@@ -897,14 +916,18 @@ function infoEl(m){if(!m.info)return null;var inf=el('div','info'),tem=false;[['
 function montaCab(m,cab0){cab0.innerHTML='';var cab=el('div','cab-esq');cab0.appendChild(cab);
  cab.appendChild(el('span','tag'+(m.cor==='bo'?' bo':''),m.tag));cab.appendChild(el('h1','',m.titulo));var lp=m.data?'Publicado em '+m.data:'',fi=String(m.ficha||'');if(fi){if(/^Publicado na /.test(fi))lp=lp?lp+' na '+fi.slice(13):fi;else lp=lp?lp+' · '+fi:fi;}if(lp)cab.appendChild(el('div','mdata',lp));if(m.resumo)cab.appendChild(el('p','',m.resumo));
  if(m.rascunho)cab.insertBefore(el('span','tag rasc','Rascunho · só você vê'),cab.firstChild);
- var ac=el('div','acoes');var bc=el('button','chat',m.tipo==='revista'?'Chat da revista':'Chat desta matéria');bc.type='button';bc.addEventListener('click',function(){abreChat(m.id);});ac.appendChild(bc);
+ var ac=el('div','acoes');var inf=infoEl(m),temF=m.fotos&&m.fotos.length,mp=null;
+ if(inf||temF){mp=el('div','mais-p');mp.hidden=true;if(inf)mp.appendChild(inf);
+  if(temF){var bf=el('button','mais-fotos','Ver as fotos uma a uma');bf.type='button';bf.addEventListener('click',function(){abreVz(m.fotos.map(function(f,i){return{src:f.g,leg:m.curto+' · foto '+(i+1)};}),0);});
+   var ds0=inf?inf.querySelectorAll('details'):[],dep=null;Array.prototype.forEach.call(ds0,function(d){if(d.querySelector('summary').textContent==='Sobre')dep=d;});
+   if(dep&&dep.nextSibling)inf.insertBefore(bf,dep.nextSibling);else if(dep)inf.appendChild(bf);else if(inf)inf.insertBefore(bf,inf.firstChild);else mp.appendChild(bf);}
+  var bm=el('button','mais-bt','Saiba mais');bm.type='button';bm.setAttribute('aria-expanded','false');bm.addEventListener('click',function(){var on=mp.hidden;mp.hidden=!on;bm.setAttribute('aria-expanded',on?'true':'false');});ac.appendChild(bm);}
  var bs=el('button','','Compartilhar');bs.type='button';bs.addEventListener('click',function(){compartilha(m);});ac.appendChild(bs);if(m.pdf&&!(EDIT[m.id]&&EDIT[m.id].paginas)){var bd=el('a','baixar');bd.href=m.pdf;bd.setAttribute('download',m.pdf.split('/').pop());bd.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';bd.appendChild(el('span','','Baixar PDF'+(m.pdfmb?' · '+m.pdfmb+' MB':'')));ac.appendChild(bd);}
- if(m.fotos&&m.fotos.length){var bf=el('button','','Ver as fotos uma a uma');bf.type='button';bf.addEventListener('click',function(){abreVz(m.fotos.map(function(f,i){return{src:f.g,leg:m.curto+' · foto '+(i+1)};}),0);});ac.appendChild(bf);}
  if(editor){var be=el('button','ed','Editar projeto');be.type='button';be.addEventListener('click',function(){ir('editar/'+m.id);});ac.appendChild(be);
   {var bx=el('button','perigo','Apagar projeto');bx.type='button';bx.addEventListener('click',function(){apagar(m);});ac.appendChild(bx);}}
- cab.appendChild(ac);
+ cab.appendChild(ac);if(mp)cab.appendChild(mp);
  if(editor&&VIS[m.id]!=null)cab.appendChild(el('div','ficha vis-m',VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));
- var inf=infoEl(m);if(inf){var dir=el('aside','cab-dir');dir.appendChild(el('div','rot cab-rot','SAIBA MAIS'));dir.appendChild(inf);cab0.appendChild(dir);cab0.classList.add('duas');}else cab0.classList.remove('duas');
+ cab0.classList.remove('duas');
 }
 function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');c.innerHTML='';montaCab(m,cab);
  var lista=m.paginas.map(function(p,i){return{src:p.src,leg:m.curto+' · pág. '+(i+1)};});
@@ -929,9 +952,9 @@ function leVisitas(){if(!fb)return;fb.database().ref('visitas').once('value').th
 
 /* rodapé: compartilhar o site, editar, visitas */
 (function(){var url=location.origin+location.pathname,tit="JOTTA's house — portfólio de João Pedro de Oliveira";
- $('rs-wa').href='https://wa.me/?text='+encodeURIComponent(tit+' '+url);
- $('rs-cp').addEventListener('click',function(){var ok=function(){alertaTela('Link do site copiado.');};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(ok).catch(function(){prompt('Copie o link:',url);});else prompt('Copie o link:',url);});
- if(navigator.share){$('rs-nat').hidden=false;$('rs-nat').addEventListener('click',function(){navigator.share({title:tit,url:url}).catch(function(){});});}
+ $('rs-wa').hidden=true;$('rs-cp').hidden=true;var nat=$('rs-nat');nat.hidden=false;nat.classList.add('rs-um');nat.querySelector('span').textContent='Compartilhar';nat.setAttribute('aria-label','Compartilhar o site');
+ function copia(){var ok=function(){alertaTela('Link do site copiado.');};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(ok).catch(function(){prompt('Copie o link:',url);});else prompt('Copie o link:',url);}
+ nat.addEventListener('click',function(){if(navigator.share)navigator.share({title:tit,url:url}).catch(function(){});else copia();});
  $('rod-editar').addEventListener('click',function(){if(editor){if(confirm('Sair do modo de edição?')){fb.auth().signOut();ls('cartolaEditor','0');}}else entrar();});})();
 (function(){var t=$('rv-tema'),f=$('rv-fs');t.addEventListener('click',function(){$('l-tema').click();rvTema();});
  f.hidden=true;$('l-fs').style.display='none';rvTema();})();
@@ -1273,7 +1296,7 @@ function mostra(id,pg){var tipo='inicio';
  else if(tipo==='espera'){$('t-form').classList.add('on');$('fm-corpo').innerHTML='';$('fm-corpo').appendChild(el('div','aviso','Carregando…'));}
  else if(id==='revista'){montaCab(porId.revista,$('r-cab'));$('t-revista').classList.add('on');iniciaRevista();setTimeout(window._fit,20);if(pg&&pf){try{pf.turnToPage(Math.max(0,Math.min(37,pg-1)));label();}catch(e){}}}
  else{$('t-mat').classList.add('on');abreMateria(m,pg);}
- try{var be=$('rod-editar'),tl0=document.querySelector('.tela.on');be.hidden=tipo!=='perfil';if(tl0){var alvo=tl0.id==='t-inicio'?tl0.querySelector('.cx'):tl0;alvo.insertBefore(be,alvo.firstChild);}}catch(e){}
+ try{var be=$('rod-editar'),bc0=$('chat-bt'),tl0=document.querySelector('.tela.on');be.hidden=tipo!=='perfil';bc0.hidden=!(m&&(tipo==='materia'||id==='revista'));if(tl0){var alvo=tl0.id==='t-inicio'?tl0.querySelector('.cx'):tl0;alvo.insertBefore(be,alvo.firstChild);alvo.insertBefore(bc0,alvo.firstChild);}}catch(e){}
  try{var rod=$('rodape');if(!mostra.casa)mostra.casa=rod.parentNode;var tl=document.querySelector('.tela.on');if(tipo==='inicio')mostra.casa.appendChild(rod);else if(tl&&tipo!=='form'&&tipo!=='espera')tl.appendChild(rod);rod.hidden=(tipo==='form'||tipo==='espera');}catch(e){}
  if(innerWidth>=1100&&tipo!=='materia'&&document.body.classList.contains('chat-fixo')){fechaChat();}ajustaPainel();if(chat.aberto&&tipo==='materia')conecta(salaAtual());}
 function lerHash(){var raw=location.hash.replace(/^#\/?/,''),h=raw.split('/');var id=h[0]||'inicio',pg=parseInt(h[1],10)||0;if(id==='editar'){id='editar/'+(h[1]||'');pg=0;}mostra(id,pg);}
