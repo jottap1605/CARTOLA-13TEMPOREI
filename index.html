@@ -2,8 +2,8 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611192015";</script>
-<script>document.documentElement.classList.add("claro");try{document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}catch(e){}</script>
+<script>var VERSAO="202611192045";</script>
+<script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="JOTTA's house">
@@ -568,10 +568,10 @@ html.claro #cst{color:#4A4E52}
 .mais-p .mais-fotos{display:flex;align-items:center;width:100%;min-height:50px;padding:0 0 0 14px;border:0;border-bottom:1px solid var(--borda);background:none;color:inherit;font:inherit;font-size:12px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;text-align:left}
 .mais-p .mais-fotos::before{content:"";flex:none;width:5px;height:5px;border-radius:50%;background:#B8BBBD;margin:0 10px 0 -13px}
 .mais-p .mais-fotos::after{content:"›";margin-left:auto;font-size:20px;letter-spacing:0;color:#B8BBBD}
-.rf-topo{align-items:stretch!important}
-.rf-col>.rod-bts:last-child{margin-top:auto}
-.rf-autor #ra-perfil{order:1}.rf-autor #ra-links{order:2;margin-top:auto}
-.rf-vis{margin-top:auto}
+.rf-topo{align-items:start!important}
+.rf-autor #ra-perfil{order:1}.rf-autor #ra-links{order:2}
+.rf-col .rf-tit{min-height:16px}
+.rf-marca{padding-top:0}
 #rs-nat.rs-um{background:#48503F;border-color:#48503F;color:#EDEDEA}
 #ui .rfs{display:inline-flex;align-items:center;gap:7px;pointer-events:auto}#ui .rfs svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7}
 #ui .rfs[hidden]{display:none!important}
@@ -603,6 +603,23 @@ body.chat-fixo .tela>#rodape{margin-right:calc(-1 * var(--pn));padding-right:4px
 .pf-cv[hidden]{display:none!important}
 .cvbloco .cvt{font-size:11px!important;letter-spacing:.16em;text-transform:uppercase;margin-bottom:6px}
 .sb-ed{margin-top:22px}
+
+/* 19/11 20h40: só escuro, com pontos de luz; cores padronizadas (verde: etiquetas, Saiba mais, Compartilhar; bordô: Chat, Baixar PDF, Mandar feedback) */
+html{background:#161616}body{background:transparent}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+ radial-gradient(70vw 55vh at 8% -5%,rgba(184,187,189,.17),transparent 70%),
+ radial-gradient(55vw 50vh at 102% 18%,rgba(94,26,36,.16),transparent 72%),
+ radial-gradient(65vw 60vh at 95% 105%,rgba(72,80,63,.28),transparent 72%),
+ radial-gradient(45vw 40vh at 0% 80%,rgba(184,187,189,.06),transparent 70%)}
+:root{--borda:rgba(237,237,234,.18)}
+#topo{background:rgba(24,24,24,.94)}
+.card{background:#212121}
+.tag,.tag.bo{background:#48503F;color:#EDEDEA}
+.tag.rasc{background:#4A4E52}
+.acoes .mais-bt,.acoes button.comp,.pf-links .pf-mais,#rs-nat.rs-um{background:#48503F!important;border-color:#48503F!important;color:#EDEDEA!important}
+#chat-bt,.acoes a.baixar,#fb-abre{background:#5E1A24!important;border-color:#5E1A24!important;color:#EDEDEA!important}
+#chat-bt.on{background:transparent!important;border-color:#5E1A24!important;color:#EDEDEA!important}
+.rot,.rf-tit,.cdata,.mdata{color:#C9CBCC}
 </style></head><body>
 <header id="topo">
  <button id="abre" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -842,7 +859,7 @@ var temFs=!!(document.documentElement.requestFullscreen||document.documentElemen
 [$('l-fs')].forEach(function(fsb){if(!temFs)fsb.style.display='none';fsb.addEventListener('click',function(){menu(false);try{var d=document.documentElement;if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else if(d.requestFullscreen){d.requestFullscreen();}else if(d.webkitRequestFullscreen){d.webkitRequestFullscreen();}}catch(e){}});});
 (function(){var gb=$('g-vis'),sb=$('s-vis'),tb=$('l-tema'),mt=document.querySelector('meta[name="theme-color"]');
  gb.addEventListener('click',function(){var on=!sb.classList.contains('on');sb.classList.toggle('on',on);gb.setAttribute('aria-expanded',on?'true':'false');});
- function rot(){if(mt)mt.content='#EDEDEA';}gb.style.display='none';sb.style.display='none';
+ function rot(){if(mt)mt.content='#161616';}gb.style.display='none';sb.style.display='none';
  tb.addEventListener('click',function(){return;var c=!document.documentElement.classList.contains('claro');document.documentElement.classList.toggle('claro',c);ls('cartolaTema',c?'claro':'escuro');rot();if(window.rvTema)rvTema();});rot();})();
 $('home').addEventListener('click',function(){ir('inicio');});
 
@@ -924,7 +941,7 @@ function montaCab(m,cab0){cab0.innerHTML='';var cab=el('div','cab-esq');cab0.app
    var ds0=inf?inf.querySelectorAll('details'):[],dep=null;Array.prototype.forEach.call(ds0,function(d){if(d.querySelector('summary').textContent==='Sobre')dep=d;});
    if(dep&&dep.nextSibling)inf.insertBefore(bf,dep.nextSibling);else if(dep)inf.appendChild(bf);else if(inf)inf.insertBefore(bf,inf.firstChild);else mp.appendChild(bf);}
   var bm=el('button','mais-bt','Saiba mais');bm.type='button';bm.setAttribute('aria-expanded','false');bm.addEventListener('click',function(){var on=mp.hidden;mp.hidden=!on;bm.setAttribute('aria-expanded',on?'true':'false');});ac.appendChild(bm);}
- var bs=el('button','','Compartilhar');bs.type='button';bs.addEventListener('click',function(){compartilha(m);});ac.appendChild(bs);if(m.pdf&&!(EDIT[m.id]&&EDIT[m.id].paginas)){var bd=el('a','baixar');bd.href=m.pdf;bd.setAttribute('download',m.pdf.split('/').pop());bd.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';bd.appendChild(el('span','','Baixar PDF'+(m.pdfmb?' · '+m.pdfmb+' MB':'')));ac.appendChild(bd);}
+ var bs=el('button','comp','Compartilhar');bs.type='button';bs.addEventListener('click',function(){compartilha(m);});ac.appendChild(bs);if(m.pdf&&!(EDIT[m.id]&&EDIT[m.id].paginas)){var bd=el('a','baixar');bd.href=m.pdf;bd.setAttribute('download',m.pdf.split('/').pop());bd.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';bd.appendChild(el('span','','Baixar PDF'+(m.pdfmb?' · '+m.pdfmb+' MB':'')));ac.appendChild(bd);}
  if(editor){var be=el('button','ed','Editar projeto');be.type='button';be.addEventListener('click',function(){ir('editar/'+m.id);});ac.appendChild(be);
   {var bx=el('button','perigo','Apagar projeto');bx.type='button';bx.addEventListener('click',function(){apagar(m);});ac.appendChild(bx);}}
  cab.appendChild(ac);if(mp)cab.appendChild(mp);
