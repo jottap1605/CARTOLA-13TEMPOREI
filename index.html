@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191135";</script>
+<script>var VERSAO="202611191137";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -334,6 +334,16 @@ html.claro .rgcab small{color:#6E7174}html.claro .rmais{border-color:#4A4E52}htm
 #rod-p{font-size:12px;line-height:1.8;letter-spacing:.12em;text-transform:uppercase;color:#8a8d90}
 body.buscando #rodape{display:none}
 html.claro #rod-p{color:#6E7174}
+
+.rod-share{margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.rod-rot{font-size:11px;letter-spacing:.18em;color:#8a8d90}
+.rod-bts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.rbt{display:inline-flex;align-items:center;min-height:44px;border-radius:999px;border:1px solid var(--borda);background:rgba(237,237,234,.06);padding:0 18px;cursor:pointer;font-size:14px;letter-spacing:.05em;text-decoration:none;color:inherit}
+#rs-wa{background:#48503F;border-color:#48503F;color:#EDEDEA}
+.rod-ed{margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:8px}
+#rod-vis{font-size:12px;letter-spacing:.06em;color:#B8BBBD}
+.rod-link{background:none;border:0;min-height:44px;padding:0 10px;cursor:pointer;font-size:12px;letter-spacing:.1em;color:#8a8d90;text-decoration:underline;text-underline-offset:3px}
+html.claro .rod-rot,html.claro .rod-link{color:#6E7174}html.claro .rbt{background:rgba(20,20,20,.06)}html.claro #rs-wa{background:#48503F;color:#EDEDEA}html.claro #rod-vis{color:#4A4E52}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -443,7 +453,9 @@ html.claro #cst{color:#4A4E52}
    <div id="filtros" role="group" aria-label="Filtrar projetos"></div>
    <section id="mural"></section>
   </div>
-  <footer id="rodape"><div id="rod-p"></div></footer>
+  <footer id="rodape"><div id="rod-p"></div>
+   <div class="rod-share"><span class="rod-rot">COMPARTILHAR O SITE</span><div class="rod-bts"><a id="rs-wa" class="rbt" target="_blank" rel="noopener">WhatsApp</a><button id="rs-cp" class="rbt" type="button">Copiar link</button><button id="rs-nat" class="rbt" type="button" hidden>Mais opções</button></div></div>
+   <div class="rod-ed"><span id="rod-vis"></span><button id="rod-editar" type="button" class="rod-link">Editar o site</button></div></footer>
  </div>
 </main>
 
@@ -732,9 +744,19 @@ function compartilha(m){var url=linkDe2(m),tit=m.titulo+" — JOTTA's house";
  var cp=el('button','','Copiar link');cp.type='button';cp.addEventListener('click',function(){var ok=function(){alertaTela('Link copiado.');f.classList.remove('on');};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(ok).catch(function(){prompt('Copie o link:',url);});else prompt('Copie o link:',url);});ac.appendChild(cp);
  c.appendChild(ac);f.querySelector('.ftopo span').textContent='COMPARTILHAR';f.classList.add('on');}
+function contaVisitaSite(){contaVisita('site');}
 function contaVisita(id){try{var k='cartolaVis-'+id;if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');}catch(e){}
  if(editor||ls('cartolaEditor')==='1')return;fetch(DB+'visitas/'+encodeURIComponent(id)+'.json',{method:'PUT',body:JSON.stringify({'.sv':{'increment':1}})}).catch(function(){});}
-function leVisitas(){if(!fb)return;fb.database().ref('visitas').once('value').then(function(s){VIS=s.val()||{};if(porId[rota]&&$('t-mat').classList.contains('on')){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}if(rota==='organizar')telaOrganizar();}).catch(function(){});}
+function leVisitas(){if(!fb)return;fb.database().ref('visitas').once('value').then(function(s){VIS=s.val()||{};rodapeEd();if(porId[rota]&&$('t-mat').classList.contains('on')){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}if(rota==='organizar')telaOrganizar();}).catch(function(){});}
+
+/* rodapé: compartilhar o site, editar, visitas */
+(function(){var url=location.origin+location.pathname,tit="JOTTA's house — portfólio de João Pedro de Oliveira";
+ $('rs-wa').href='https://wa.me/?text='+encodeURIComponent(tit+' '+url);
+ $('rs-cp').addEventListener('click',function(){var ok=function(){alertaTela('Link do site copiado.');};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(ok).catch(function(){prompt('Copie o link:',url);});else prompt('Copie o link:',url);});
+ if(navigator.share){$('rs-nat').hidden=false;$('rs-nat').addEventListener('click',function(){navigator.share({title:tit,url:url}).catch(function(){});});}
+ $('rod-editar').addEventListener('click',function(){if(editor){if(confirm('Sair do modo de edição?')){fb.auth().signOut();ls('cartolaEditor','0');}}else entrar();});})();
+function rodapeEd(){var b=$('rod-editar');if(b)b.textContent=editor?'Sair do modo de edição':'Editar o site';var v=$('rod-vis');if(!v)return;
+ if(editor&&VIS.site!=null){var tot=0;for(var k in VIS)if(k!=='site')tot+=Number(VIS[k])||0;v.textContent=VIS.site+(VIS.site===1?' visita ao site':' visitas ao site')+' · '+tot+' nos projetos';v.hidden=false;}else{v.textContent='';v.hidden=true;}}
 /* ---------- LOGIN (só o dono) ---------- */
 function alertaTela(txt){var a=$('toast');a.textContent=txt;a.classList.add('on');clearTimeout(alertaTela.t);alertaTela.t=setTimeout(function(){a.classList.remove('on');},4200);}
 function carregaScript(src){return new Promise(function(ok,erro){var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=erro;document.head.appendChild(s);});}
@@ -742,7 +764,7 @@ function carregaFirebase(){if(fb)return Promise.resolve(fb);if(!FB)return Promis
  var p=window.firebase&&firebase.initializeApp?Promise.resolve():carregaScript(v+'app-compat.js').then(function(){return carregaScript(v+'auth-compat.js');}).then(function(){return carregaScript(v+'database-compat.js');});
  return p.then(function(){fb=firebase.initializeApp(FB);fb.auth().onAuthStateChanged(function(u){eu=u||null;var ok=!!(eu&&eu.email&&eu.email.toLowerCase()===DONO);
   if(eu&&!ok){alertaTela('Só o dono do site pode editar.');fb.auth().signOut();}
-  editor=ok;ls('cartolaEditor',ok?'1':'0');refaz();if(ok)leVisitas();if(porId[rota]&&$('t-mat').classList.contains('on'))abreMateria(porId[rota]);if(['nova','organizar','editar-perfil','perfil'].indexOf(rota)>=0||rota.indexOf('editar/')===0)lerHash();if(chat.sala)render();});return fb;});}
+  editor=ok;ls('cartolaEditor',ok?'1':'0');refaz();rodapeEd();if(ok)leVisitas();if(porId[rota]&&$('t-mat').classList.contains('on'))abreMateria(porId[rota]);if(['nova','organizar','editar-perfil','perfil'].indexOf(rota)>=0||rota.indexOf('editar/')===0)lerHash();if(chat.sala)render();});return fb;});}
 function entrar(){if(!FB||!DONO){alertaTela('O modo de edição ainda está sendo configurado.');return;}
  carregaFirebase().then(function(){if(editor){alertaTela('Você já está no modo de edição.');return;}var pr=new firebase.auth.GoogleAuthProvider();pr.setCustomParameters({prompt:'select_account'});
   return fb.auth().signInWithPopup(pr).catch(function(e){if(e&&(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'))return fb.auth().signInWithRedirect(pr);if(e&&e.code!=='auth/popup-closed-by-user')alertaTela('Não foi possível entrar. Tente de novo.');});})
@@ -997,6 +1019,7 @@ grupos();indexa();montaLateral();montaInicio();aplicaTextos();
 lerHash();ajustaPainel();
 carregaSite();
 if(ls('cartolaEditor')==='1'&&FB)carregaFirebase().catch(function(){});
+contaVisitaSite();rodapeEd();
 /* versão nova: se o aparelho guardou uma cópia antiga, troca sozinho */
 (function(){try{fetch(location.pathname+'?ver='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var m=t.match(/var VERSAO="(\d+)"/);if(!m||m[1]===window.VERSAO)return;
  var k='cartolaVer'+m[1];if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+m[1]+location.hash);}).catch(function(){});}catch(e){}})();
