@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191228";</script>
+<script>var VERSAO="202611191242";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -379,6 +379,16 @@ html.claro .rod-rot,html.claro .rod-link{color:#6E7174}html.claro .rbt{backgroun
 #filtros{margin:0 0 18px!important}
 body.filtrando #dest,body.filtrando #rot-dest{display:none}
 html.claro .cdata,html.claro .mdata{color:#4A4E52}
+
+/* revista igual às matérias: cabeçalho + revista grande; chat fixo à direita */
+#t-revista{position:static;inset:auto;padding:calc(var(--hh) + env(safe-area-inset-top) + 18px) max(16px,env(safe-area-inset-right)) calc(30px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));margin-right:var(--pn);margin-left:var(--sb)}
+#wrap{position:relative;top:auto;left:auto;right:auto;bottom:auto;height:calc(100vh - var(--hh) - 96px);height:calc(100dvh - var(--hh) - 96px);min-height:340px;padding-bottom:0;touch-action:pan-y}
+#hint{position:absolute;top:-4px;left:0;right:0;z-index:5}
+#ui{position:static;margin:12px 0 0}
+#ui #rsobre,#ui #rchat{display:none}
+#r-cab{margin-bottom:18px}
+@media(max-width:700px){#wrap{height:calc((100vw - 32px) * 0.72 + 24px);min-height:0}}
+@media(min-width:1100px){#t-revista{padding-left:calc(var(--sb) + 32px);padding-right:32px;margin-left:0}}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -502,7 +512,8 @@ html.claro #cst{color:#4A4E52}
 <main id="t-mat" class="tela"><div class="cab" id="m-cab"></div><div id="m-corpo"></div></main>
 
 <section id="t-revista" class="tela">
- <div id="wrap"><div id="book">
+ <div class="cab" id="r-cab"></div>
+ <div id="wrap"><div id="hint">TOQUE NA PÁGINA OU ARRASTE O CANTO PARA FOLHEAR</div><div id="book">
 <div class="page r"><img src="arquivos/revista/p01.jpg" alt="Revista, página 1" draggable="false"></div>
 <div class="page l"><img src="arquivos/revista/p02.jpg" alt="Revista, página 2" draggable="false"></div>
 <div class="page r"><img src="arquivos/revista/p03.jpg" alt="Revista, página 3" draggable="false"></div>
@@ -542,9 +553,8 @@ html.claro #cst{color:#4A4E52}
 <div class="page r"><img src="arquivos/revista/p37.jpg" alt="Revista, página 37" draggable="false"></div>
 <div class="page l"><img src="arquivos/revista/p38.jpg" alt="Revista, página 38" draggable="false"></div>
  </div></div>
- <div id="hint">TOQUE NA PÁGINA OU ARRASTE O CANTO PARA FOLHEAR</div>
+ <div id="ui"><button id="pv" type="button" aria-label="Página anterior">‹</button><span id="pg">Capa</span><button id="nx" type="button" aria-label="Próxima página">›</button><button id="rsobre" type="button" class="txt">Sobre</button><button id="rchat" type="button" class="txt">Chat</button></div>
 </section>
-<div id="ui"><button id="pv" type="button" aria-label="Página anterior">‹</button><span id="pg">Capa</span><button id="nx" type="button" aria-label="Próxima página">›</button><button id="rsobre" type="button" class="txt">Sobre</button><button id="rchat" type="button" class="txt">Chat</button></div>
 <div id="folha" role="dialog" aria-label="Sobre a revista"><div class="fcx"><div class="ftopo"><span>CARTOLA #13 — TEMPO REI</span><button id="fx" type="button">Fechar</button></div><div id="fcorpo"></div></div></div>
 
 <aside id="panel" aria-label="Chat"><div id="ph"><span>CHAT · <b id="sala-t">GERAL</b></span><button id="pc" type="button">Fechar</button></div>
@@ -651,7 +661,8 @@ function refaz(){M.length=0;var oc=ocultos();ESTATICAS.forEach(function(m){aplic
  if(!editor){for(var i=M.length-1;i>=0;i--)if(M[i].rascunho)M.splice(i,1);}
  var ord=(CFG.ordem||[]).map(String);if(ord.length){var pos={};M.forEach(function(m,i){pos[m.id]=i;});M.sort(function(a,b){var ia=ord.indexOf(a.id),ib=ord.indexOf(b.id);if(ia<0)ia=1000+pos[a.id];if(ib<0)ib=1000+pos[b.id];return ia-ib;});}
  porId={};M.forEach(function(m){porId[m.id]=m;});grupos();indexa();montaLateral();montaInicio();aplicaTextos();if(rota==='perfil')telaPerfil();
- if(porId[rota]&&rota!=='revista'&&$('t-mat').classList.contains('on')){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}}
+ if(porId[rota]&&rota!=='revista'&&$('t-mat').classList.contains('on')){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}
+ if(rota==='revista'&&porId.revista&&$('t-revista').classList.contains('on'))montaCab(porId.revista,$('r-cab'));}
 var TX0={rodape:'Cartola #13 — Tempo Rei\nTIC II · Design de Moda · Univali · 2026/2',destaques:'Em destaque',lista:'Matérias e processo'};
 function textos(){var t=CFG.textos||{},o={};for(var k in TX0)o[k]=(t[k]!=null&&String(t[k]).trim()!=='')?String(t[k]):TX0[k];return o;}
 function aplicaTextos(){var t=textos(),r=$('rod-p');r.innerHTML='';String(t.rodape).split('\n').forEach(function(l,i){if(i)r.appendChild(el('br'));r.appendChild(document.createTextNode(l));});
@@ -758,10 +769,10 @@ function busca(){var bruto=$('q').value.trim(),q=semAcento(bruto);$('busca').cla
 /* ---------- MATÉRIA ---------- */
 function infoEl(m){if(!m.info)return null;var inf=el('div','info'),tem=false;[['sobre','Sobre'],['processo','Processo'],['creditos','Créditos']].forEach(function(x){var v=m.info[x[0]];if(!v||!v.length)return;tem=true;var d=el('details');d.appendChild(el('summary','',x[1]));var cx=el('div','ic-corpo');
   if(x[0]==='creditos'){var dl=el('dl');v.forEach(function(c){dl.appendChild(el('dt','',c[0]));dl.appendChild(el('dd','',c[1]));});cx.appendChild(dl);}else v.forEach(function(par){cx.appendChild(el('p','',par));});d.appendChild(cx);inf.appendChild(d);});return tem?inf:null;}
-function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');cab.innerHTML='';c.innerHTML='';
+function montaCab(m,cab){cab.innerHTML='';
  cab.appendChild(el('span','tag'+(m.cor==='bo'?' bo':''),m.tag));cab.appendChild(el('h1','',m.titulo));if(m.data)cab.appendChild(el('div','mdata','Publicado em '+m.data));if(m.resumo)cab.appendChild(el('p','',m.resumo));if(m.ficha)cab.appendChild(el('div','ficha',m.ficha));
  if(m.rascunho)cab.insertBefore(el('span','tag rasc','Rascunho · só você vê'),cab.firstChild);
- var ac=el('div','acoes');var bc=el('button','chat','Chat desta matéria');bc.type='button';bc.addEventListener('click',function(){abreChat(m.id);});ac.appendChild(bc);
+ var ac=el('div','acoes');var bc=el('button','chat',m.tipo==='revista'?'Chat da revista':'Chat desta matéria');bc.type='button';bc.addEventListener('click',function(){abreChat(m.id);});ac.appendChild(bc);
  var bs=el('button','','Compartilhar');bs.type='button';bs.addEventListener('click',function(){compartilha(m);});ac.appendChild(bs);
  if(m.fotos&&m.fotos.length){var bf=el('button','','Ver as fotos uma a uma');bf.type='button';bf.addEventListener('click',function(){abreVz(m.fotos.map(function(f,i){return{src:f.g,leg:m.curto+' · foto '+(i+1)};}),0);});ac.appendChild(bf);}
  if(editor){var be=el('button','ed','Editar projeto');be.type='button';be.addEventListener('click',function(){ir('editar/'+m.id);});ac.appendChild(be);
@@ -769,6 +780,8 @@ function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');cab.innerHTML='';c.
  cab.appendChild(ac);
  if(VIS[m.id]!=null)cab.appendChild(el('div','ficha vis-m',VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));
  var inf=infoEl(m);if(inf)cab.appendChild(inf);
+}
+function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');c.innerHTML='';montaCab(m,cab);
  var lista=m.paginas.map(function(p,i){return{src:p.src,leg:m.curto+' · pág. '+(i+1)};});
  var ps=el('div','pags'+(m.tipo==='slides'?' slides':''));m.paginas.forEach(function(p,i){var b=el('button','pg');b.type='button';b.id='p-'+(i+1);var im=el('img');im.src=p.src;im.alt=m.curto+', página '+(i+1);im.width=p.w;im.height=p.h;im.loading=i<2?'eager':'lazy';im.decoding='async';b.appendChild(im);b.appendChild(el('span','n',(i+1)+' / '+m.paginas.length));
   b.addEventListener('click',function(){abreVz(lista,i);});ps.appendChild(b);});c.appendChild(ps);
@@ -1027,12 +1040,12 @@ addEventListener('keydown',function(e){if($('vz').classList.contains('on')){if(e
 
 /* ---------- REVISTA ---------- */
 var RATIO=595.5/842.25,book=$('book'),pf=null,revIniciada=false;
-function fit(){if(document.body.classList.contains('nolib'))return;var w=$('wrap'),vw=w.clientWidth,vh=w.clientHeight-54;if(!vw||!vh)return;var ph=Math.min(vh*0.96,(vw*0.94/2)/RATIO);book.style.height=ph+'px';book.style.width=(ph*RATIO*2)+'px';}
+function fit(){if(document.body.classList.contains('nolib'))return;var w=$('wrap'),vw=w.clientWidth,vh=w.clientHeight-8;if(!vw||!vh)return;var ph=Math.min(vh*0.99,(vw*0.985/2)/RATIO);book.style.height=ph+'px';book.style.width=(ph*RATIO*2)+'px';}
 window._fit=function(){if(rota!=='revista')return;fit();try{pf&&pf.update();}catch(e){}};
 function label(){var i=pf.getCurrentPageIndex(),t;if(i<=0)t='Capa';else if(i>=37)t='Contracapa';else{if(i%2===0)i-=1;t='Págs. '+(i+1)+'–'+(i+2);}$('pg').textContent=t;}
 function iniciaRevista(){if(revIniciada)return;revIniciada=true;fit();
  if(!window.St||!St.PageFlip){document.body.classList.add('nolib');$('hint').textContent='O efeito de folha precisa de internet e não carregou. As páginas aparecem em lista. Atualize para tentar de novo.';return;}
- pf=new St.PageFlip(book,{width:595,height:842,size:'stretch',minWidth:200,maxWidth:1800,minHeight:283,maxHeight:2546,showCover:true,usePortrait:false,drawShadow:true,maxShadowOpacity:0.55,flippingTime:1100,mobileScrollSupport:false,swipeDistance:18,clickEventForward:false,showPageCorners:true,disableFlipByClick:false,autoSize:true});
+ pf=new St.PageFlip(book,{width:595,height:842,size:'stretch',minWidth:200,maxWidth:1800,minHeight:283,maxHeight:2546,showCover:true,usePortrait:false,drawShadow:true,maxShadowOpacity:0.55,flippingTime:1100,mobileScrollSupport:true,swipeDistance:18,clickEventForward:false,showPageCorners:true,disableFlipByClick:false,autoSize:true});
  pf.loadFromHTML(document.querySelectorAll('.page'));
  try{var pc=pf.getPageCollection();var ps=pc.getPages?pc.getPages():pc.pages;ps.forEach(function(p){if(p.setDensity)p.setDensity('soft');});pf.update();}catch(e){}
  pf.on('flip',function(){label();$('hint').style.opacity=0;});
@@ -1052,7 +1065,7 @@ function mostra(id,pg){var tipo='inicio';
  else if(/^m[a-z0-9]{6,}$/.test(id)){tipo='espera';}else id='inicio';
  rota=id;pendente=tipo==='espera'?{id:id,pg:pg}:null;
  Array.prototype.forEach.call(document.querySelectorAll('.tela'),function(t){t.classList.remove('on');});
- var m=porId[id];document.body.classList.toggle('em-materia',tipo!=='inicio');document.body.classList.toggle('na-revista',id==='revista');document.body.classList.toggle('travado',id==='revista'&&!document.body.classList.contains('nolib'));
+ var m=porId[id];document.body.classList.toggle('em-materia',tipo!=='inicio');document.body.classList.toggle('na-revista',id==='revista');document.body.classList.remove('travado');
  if(tipo!=='inicio'){$('q').value='';busca();}
  Array.prototype.forEach.call(document.querySelectorAll('[data-ir]'),function(b){b.classList.toggle('atual',b.getAttribute('data-ir')===id);});
  if(m){abreGrupo(m.grupo);contaVisita(m.id);}
@@ -1061,7 +1074,7 @@ function mostra(id,pg){var tipo='inicio';
  else if(tipo==='form'){$('t-form').classList.add('on');scrollTo(0,0);if(id==='nova')telaNova();else if(id==='organizar')telaOrganizar();else if(id==='editar-perfil')telaEditarPerfil();else telaEditar(id.slice(7));}
  else if(tipo==='perfil'){$('t-perfil').classList.add('on');scrollTo(0,0);telaPerfil();}
  else if(tipo==='espera'){$('t-form').classList.add('on');$('fm-corpo').innerHTML='';$('fm-corpo').appendChild(el('div','aviso','Carregando…'));}
- else if(id==='revista'){$('t-revista').classList.add('on');iniciaRevista();setTimeout(window._fit,20);if(pg&&pf){try{pf.turnToPage(Math.max(0,Math.min(37,pg-1)));label();}catch(e){}}}
+ else if(id==='revista'){montaCab(porId.revista,$('r-cab'));$('t-revista').classList.add('on');iniciaRevista();setTimeout(window._fit,20);if(pg&&pf){try{pf.turnToPage(Math.max(0,Math.min(37,pg-1)));label();}catch(e){}}}
  else{$('t-mat').classList.add('on');abreMateria(m,pg);}
  if(innerWidth>=1100&&tipo!=='materia'&&document.body.classList.contains('chat-fixo')){fechaChat();}ajustaPainel();if(chat.aberto&&tipo==='materia')conecta(salaAtual());}
 function lerHash(){var raw=location.hash.replace(/^#\/?/,''),h=raw.split('/');var id=h[0]||'inicio',pg=parseInt(h[1],10)||0;if(id==='editar'){id='editar/'+(h[1]||'');pg=0;}mostra(id,pg);}
@@ -1074,7 +1087,7 @@ lerHash();ajustaPainel();
 carregaSite();
 if(ls('cartolaEditor')==='1'&&FB)carregaFirebase().catch(function(){});
 contaVisitaSite();rodapeEd();
-function carregaVisitas(){fetch(DB+'visitas.json').then(function(r){return r.json();}).then(function(d){if(!d||d.error)return;VIS=d;rodapeEd();var a=document.querySelector('#m-cab .vis-m');if(porId[rota]&&$('t-mat').classList.contains('on')&&!a){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}}).catch(function(){});}
+function carregaVisitas(){fetch(DB+'visitas.json').then(function(r){return r.json();}).then(function(d){if(!d||d.error)return;VIS=d;rodapeEd();if(rota==='revista'&&porId.revista&&!document.querySelector('#r-cab .vis-m'))montaCab(porId.revista,$('r-cab'));var a=document.querySelector('#m-cab .vis-m');if(porId[rota]&&$('t-mat').classList.contains('on')&&!a){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}}).catch(function(){});}
 setTimeout(carregaVisitas,1200);
 /* versão nova: se o aparelho guardou uma cópia antiga, troca sozinho */
 (function(){try{fetch(location.pathname+'?ver='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var m=t.match(/var VERSAO="(\d+)"/);if(!m||m[1]===window.VERSAO)return;
