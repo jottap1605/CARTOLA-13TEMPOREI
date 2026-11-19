@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611192245";</script>
+<script>var VERSAO="202611192300";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -620,6 +620,18 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 #chat-bt,.acoes a.baixar,#fb-abre{background:#5E1A24!important;border-color:#5E1A24!important;color:#EDEDEA!important}
 #chat-bt.on{background:#5E1A24!important;border-color:#5E1A24!important;color:#EDEDEA!important}
 .rot,.rf-tit,.cdata,.mdata{color:#C9CBCC}
+
+/* revista: só botões; setas grandes e translúcidas nas laterais; tela cheia no canto */
+.rseta,.rcanto{position:absolute;z-index:6;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(237,237,234,.32);background:rgba(20,20,20,.38);color:#EDEDEA;cursor:pointer;padding:0;transition:opacity .2s,background .2s}
+.rseta{top:50%;width:56px;height:56px;margin-top:-28px}
+.rseta svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rseta:active,.rcanto:active{background:rgba(20,20,20,.6)}
+.rseta.off{opacity:0;pointer-events:none}
+.rcanto{top:6px;width:42px;height:42px;border-radius:12px}
+.rcanto svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.rcanto[hidden]{display:none!important}
+body.nolib .rseta,body.nolib .rcanto{display:none!important}
+@media(max-width:700px){.rseta{width:48px;height:48px;margin-top:-24px}}
 </style></head><body>
 <header id="topo">
  <button id="abre" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -669,7 +681,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 
 <section id="t-revista" class="tela">
  <div class="cab" id="r-cab"></div>
- <div id="wrap"><div id="hint">TOQUE NA PÁGINA OU ARRASTE O CANTO PARA FOLHEAR</div><div id="book">
+ <div id="wrap"><div id="hint">USE AS SETAS PARA FOLHEAR</div><button id="r-ant" class="rseta" type="button" aria-label="Página anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button id="r-prox" class="rseta" type="button" aria-label="Próxima página"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button><button id="r-fs2" class="rcanto" type="button" aria-label="Ver a revista em tela cheia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button><div id="book">
 <div class="page r"><img src="arquivos/revista/p01.jpg" alt="Revista, página 1" draggable="false"></div>
 <div class="page l"><img src="arquivos/revista/p02.jpg" alt="Revista, página 2" draggable="false"></div>
 <div class="page r"><img src="arquivos/revista/p03.jpg" alt="Revista, página 3" draggable="false"></div>
@@ -1266,12 +1278,12 @@ addEventListener('keydown',function(e){if($('vz').classList.contains('on')){if(e
 
 /* ---------- REVISTA ---------- */
 var RATIO=595.5/842.25,book=$('book'),pf=null,revIniciada=false;
-function fit(){if(document.body.classList.contains('nolib'))return;var w=$('wrap'),vw=w.clientWidth,vh=w.clientHeight-8;if(!vw||!vh)return;var um=innerWidth<700,ph=Math.min(vh*0.99,(vw*0.985/(um?1:2))/RATIO);book.style.height=ph+'px';book.style.width=(ph*RATIO*(um?1:2))+'px';}
+function fit(){if(document.body.classList.contains('nolib'))return;var w=$('wrap'),vw=w.clientWidth,vh=w.clientHeight-8;if(!vw||!vh)return;var um=innerWidth<700,ph=Math.min(vh*0.99,(vw*0.985/(um?1:2))/RATIO);book.style.height=ph+'px';var bw=ph*RATIO*(um?1:2);book.style.width=bw+'px';try{var sz=$('r-prox').offsetWidth||56,lado=(vw-bw)/2,pos=lado>=sz+16?lado-sz-12:6;$('r-ant').style.left=pos+'px';$('r-prox').style.right=pos+'px';var ct=$('r-fs2');ct.style.right=Math.max(6,lado-(lado>=56?48:0))+'px';}catch(e){}}
 window._fit=function(){if(rota!=='revista')return;fit();try{pf&&pf.update();}catch(e){}};
 function label(){var i=pf.getCurrentPageIndex(),t;if(innerWidth<700){t=i<=0?'Capa':(i>=37?'Contracapa':'Pág. '+(i+1));$('pg').textContent=t;return;}if(i<=0)t='Capa';else if(i>=37)t='Contracapa';else{if(i%2===0)i-=1;t='Págs. '+(i+1)+'–'+(i+2);}$('pg').textContent=t;}
 function iniciaRevista(){if(revIniciada)return;revIniciada=true;fit();
  if(!window.St||!St.PageFlip){document.body.classList.add('nolib');$('hint').textContent='O efeito de folha precisa de internet e não carregou. As páginas aparecem em lista. Atualize para tentar de novo.';return;}
- pf=new St.PageFlip(book,{width:595,height:842,size:'stretch',minWidth:200,maxWidth:1800,minHeight:283,maxHeight:2546,showCover:true,usePortrait:innerWidth<700,drawShadow:true,maxShadowOpacity:0.55,flippingTime:1100,mobileScrollSupport:true,swipeDistance:18,clickEventForward:false,showPageCorners:true,disableFlipByClick:false,autoSize:true});
+ pf=new St.PageFlip(book,{width:595,height:842,size:'stretch',minWidth:200,maxWidth:1800,minHeight:283,maxHeight:2546,showCover:true,usePortrait:innerWidth<700,drawShadow:true,maxShadowOpacity:0.55,flippingTime:1100,mobileScrollSupport:true,swipeDistance:18,clickEventForward:false,showPageCorners:false,disableFlipByClick:true,useMouseEvents:false,autoSize:true});
  pf.loadFromHTML(document.querySelectorAll('.page'));
  try{var pc=pf.getPageCollection();var ps=pc.getPages?pc.getPages():pc.pages;ps.forEach(function(p){if(p.setDensity)p.setDensity('soft');});pf.update();}catch(e){}
  pf.on('flip',function(){label();$('hint').style.opacity=0;});
@@ -1283,16 +1295,18 @@ function iniciaRevista(){if(revIniciada)return;revIniciada=true;fit();
   var tr=$('t-revista');pf.on('changeState',function(e){var st=e&&e.data;if(st==='read'){solta();setTimeout(function(){tr.style.minHeight='';},400);return;}if(trava===null){trava=(yD!==null&&Date.now()-tD<2500)?yD:scrollY;tr.style.minHeight=tr.offsetHeight+'px';if(!raf)raf=requestAnimationFrame(segura);}});
   pf.on('flip',solta);})();
  $('nx').addEventListener('click',function(){pf.flipNext('top');});$('pv').addEventListener('click',function(){pf.flipPrev('top');});
+ $('r-prox').addEventListener('click',function(){pf.flipNext('top');});$('r-ant').addEventListener('click',function(){pf.flipPrev('top');});
+ function pontas(){var i=pf.getCurrentPageIndex(),n=pf.getPageCount?pf.getPageCount():38;$('r-ant').classList.toggle('off',i<=0);$('r-prox').classList.toggle('off',i>=n-(innerWidth<700?1:2));}pf.on('flip',pontas);pontas();
  setTimeout(function(){$('hint').style.opacity=0;},7000);}
 (function(){var w0=innerWidth,h0=innerHeight;addEventListener('resize',function(){var w=innerWidth,h=innerHeight;/* só a barra do navegador mexeu: não refaz a revista (evita o pulo) */if(w===w0&&Math.abs(h-h0)<170)return;w0=w;h0=h;window._fit();ajustaPainel();});})();
 $('rsobre').addEventListener('click',function(){var c=$('fcorpo');c.innerHTML='';$('folha').querySelector('.ftopo span').textContent='CARTOLA #13 — TEMPO REI';var x=infoEl(porId.revista);if(x)c.appendChild(x);$('folha').classList.add('on');});
 $('fx').addEventListener('click',function(){$('folha').classList.remove('on');});
 $('folha').addEventListener('click',function(e){if(e.target.id==='folha')$('folha').classList.remove('on');});
 $('rchat').addEventListener('click',function(){abreChat('revista');});
-(function(){var b=$('r-fs'),t=$('t-revista');var pode=!!(t.requestFullscreen||t.webkitRequestFullscreen);if(!pode){b.hidden=true;return;}
+(function(){var b=$('r-fs'),t=$('t-revista'),b2=$('r-fs2');b.hidden=true;b.style.display='none';var pode=!!(t.requestFullscreen||t.webkitRequestFullscreen);if(!pode){b2.hidden=true;return;}b2.addEventListener('click',function(){b.click();});
  function em(){return document.fullscreenElement||document.webkitFullscreenElement;}
  b.addEventListener('click',function(){try{if(em()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else{(t.requestFullscreen||t.webkitRequestFullscreen).call(t);}}catch(e){}});
- function muda(){var on=!!em();b.querySelector('span').textContent=on?'Sair da tela cheia':'Tela cheia';document.body.classList.toggle('rev-cheia',on);setTimeout(function(){fit();try{pf&&pf.update();}catch(e){}},120);}
+ function muda(){var on=!!em();b.querySelector('span').textContent=on?'Sair da tela cheia':'Tela cheia';b2.setAttribute('aria-label',on?'Sair da tela cheia':'Ver a revista em tela cheia');b2.classList.toggle('on',on);document.body.classList.toggle('rev-cheia',on);setTimeout(function(){fit();try{pf&&pf.update();}catch(e){}},120);}
  document.addEventListener('fullscreenchange',muda);document.addEventListener('webkitfullscreenchange',muda);})();
 
 /* ---------- ROTAS ---------- */
