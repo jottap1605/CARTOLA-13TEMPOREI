@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191522";</script>
+<script>var VERSAO="202611191527";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -459,6 +459,11 @@ html.claro .pf-tcc summary{color:#4A4E52}
  .sb-lista{max-width:none}
 }
 @media(min-width:1100px){.pf-top .pf-bio p{max-width:78ch;font-size:21px}}
+#voltar{display:none!important}
+body.em-materia #voltar{display:inline-flex!important;align-items:center;gap:4px;flex:none;margin-left:6px;margin-right:10px;padding:0 14px 0 9px;min-height:40px;border-radius:999px;border:1px solid var(--borda);background:none;color:#EDEDEA;font-size:13px;letter-spacing:.04em;cursor:pointer}
+#voltar svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:560px){body.em-materia #topo .marca{display:none}body.em-materia #voltar{margin-left:2px;margin-right:6px}}
+html.claro body.em-materia #voltar{color:#141414}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -542,7 +547,7 @@ html.claro #cst{color:#4A4E52}
 <header id="topo">
  <button id="abre" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
  <button class="marca" id="home" type="button" aria-label="JOTTA's house — início">JOTTA's house</button>
- <button id="voltar" type="button">‹ Início</button>
+ <button id="voltar" type="button" aria-label="Voltar para a página anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span>Voltar</span></button>
  <label id="busca"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Pesquisar matérias e textos" aria-label="Pesquisar" enterkeyhint="search" autocomplete="off"><button id="limpa" type="button" aria-label="Limpar busca">×</button></label>
  <button id="rod-editar" type="button" aria-label="Editar o site"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg><span>Editar</span></button>
 </header>
@@ -922,6 +927,9 @@ function telaSobre(c0){var c=c0||$('sb-corpo');c.innerHTML='';if(!c0){c.appendCh
 /* voltar ao topo */
 (function(){var b=el('button','',null);b.id='sobe';b.type='button';b.setAttribute('aria-label','Voltar ao topo');b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';document.body.appendChild(b);
  b.addEventListener('click',function(){scrollTo({top:0,behavior:'smooth'});});var f=function(){b.classList.toggle('on',scrollY>innerHeight*1.2&&!document.body.classList.contains('buscando'));};addEventListener('scroll',f,{passive:true});f();})();
+
+/* voltar à página anterior */
+(function(){var n=0;addEventListener('hashchange',function(){n++;});$('voltar').addEventListener('click',function(){if(n>0&&history.length>1){n-=2;history.back();}else ir('inicio');});})();
 /* ---------- LOGIN (só o dono) ---------- */
 function alertaTela(txt){var a=$('toast');a.textContent=txt;a.classList.add('on');clearTimeout(alertaTela.t);alertaTela.t=setTimeout(function(){a.classList.remove('on');},4200);}
 function carregaScript(src){return new Promise(function(ok,erro){var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=erro;document.head.appendChild(s);});}
