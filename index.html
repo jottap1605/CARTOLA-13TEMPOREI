@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191548";</script>
+<script>var VERSAO="202611191552";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -467,6 +467,15 @@ html.claro body.em-materia #voltar{color:#141414}
 .acoes a.baixar{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 16px 0 13px;border-radius:999px;border:1px solid var(--borda);background:rgba(237,237,234,.05);color:inherit;text-decoration:none;font-size:14px;letter-spacing:.02em}
 .acoes a.baixar svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 html.claro .acoes a.baixar{background:rgba(20,20,20,.05)}
+.pf-cv{margin:38px 0 0}
+.pf-aberto{display:inline-block;margin-bottom:18px;padding:8px 16px;border-radius:999px;background:#48503F;color:#EDEDEA;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.pf-cv-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px 40px;align-items:start}
+.pf-cv-b h3{margin:0 0 10px;font-family:inherit;font-weight:500;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8a8d90}
+.pf-cv-b .pf-cv-i{font-size:15px;line-height:1.6;color:#d8d8d4}
+.pf-cv-b .pf-cv-t{font-family:'Playfair Display',Georgia,serif;font-size:20px;margin-bottom:6px}
+.pf-cv-b p{margin:0 0 10px;font-family:"EB Garamond",Georgia,serif;font-size:17px;line-height:1.5;color:#d8d8d4}
+@media(min-width:900px){.pf-cv-b.longo{grid-column:span 2}}
+html.claro .pf-cv-b .pf-cv-i,html.claro .pf-cv-b p{color:#2C2E31}html.claro .pf-cv-b h3{color:#6E7174}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -1049,7 +1058,7 @@ function telaOrganizar(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcess
   bt.disabled=true;st.textContent='Salvando…';
   fb.database().ref('site').update(up).then(function(){Object.keys(tirar).forEach(function(id){delete DIN[id];});carregaSite();ir('inicio');alertaTela('Site organizado.');}).catch(function(){bt.disabled=false;st.textContent='Não foi possível salvar. Confira a internet e tente de novo.';});});}
 var REDES=[['instagram','Instagram','@seuperfil'],['email','E-mail','voce@gmail.com'],['whatsapp','WhatsApp','(47) 99999-9999'],['linkedin','LinkedIn','linkedin.com/in/voce'],['behance','Behance','behance.net/voce'],['pinterest','Pinterest','pinterest.com/voce'],['site','Site ou portfólio','seusite.com'],['outro','Outro link','endereço completo']];
-var PERFIL0={nome:'João Pedro de Oliveira',titulo:'Design de Moda · Univali',bio:'Estudante do Bacharelado em Design de Moda da Univali.\n\nO JOTTA\'s house é o meu portfólio. Aqui ficam a Cartola #13 — Tempo Rei, revista do meu Trabalho de Iniciação Científica (TIC II, 2026/2), os editoriais Tempo Rei e Uma São Paulo que não existe, o memorial do projeto e os próximos trabalhos, acadêmicos e profissionais.',foto:''};var CONT0={email:'jottap1605@gmail.com',instagram:'jottapedro.16'};
+var PERFIL0={"nome": "João Pedro de Oliveira", "titulo": "Moda / Styling / Criação", "bio": "Designer de Moda formado na UNIVALI, busco sempre aliar sensibilidade estética, funcionalidade e inovação, desenvolvendo projetos que expressem propósito e personalidade.\n\nAo longo da minha formação, construí uma visão ampla do universo da moda, explorando áreas como criação, styling, fotografia, desenvolvimento de produtos e comunicação visual.\n\nAcredito que cada projeto é uma oportunidade de transformar conceitos em experiências, utilizando formas, cores, texturas e detalhes para contar histórias e criar conexões.\n\nEste portfólio reúne alguns dos trabalhos que representam minha trajetória, meu processo criativo e minha constante busca por evolução como designer.", "foto": "https://res.cloudinary.com/wzjgmszm/image/upload/c_limit,w_900,q_auto,f_auto/v1795114301/perfil/h36on0bk1hwy0y8vkvq8.jpg"};var PERFIL_CV=[["Formação acadêmica", ["Design de Moda – UNIVALI", "Formação voltada ao desenvolvimento de produtos de moda, com vivência em todas as etapas do processo criativo e produtivo. Ao longo do curso, foram desenvolvidos projetos nas áreas de vestuário, acessórios, calçados, joias e fotografia de moda, abrangendo pesquisa de tendências, desenvolvimento de coleções, ilustração, modelagem, fichas técnicas, materiais e processos de confecção.", "A formação também inclui domínio de ferramentas técnicas e de criação, com experiência no pacote Adobe (Illustrator, Photoshop e InDesign) e no sistema Audaces para desenvolvimento de desenhos técnicos, modelagem e documentação de produtos, integrando conhecimentos de design, produção e comunicação visual."]], ["Experiência profissional", ["Visual Merchandiser – Tok&Stok", "Designer – SantaCosta"]], ["Habilidades técnicas", ["Adobe Photoshop e Illustrator", "AutoCAD, Revit, SketchUp, Vray e Promob", "Montagem e composição de ambientes", "Pesquisa de tendência, produção e styling"]], ["Idiomas", ["Português – Nativo", "Inglês – Intermediário", "Espanhol – Intermediário"]], ["Interesses", ["Styling de moda", "Design de espaços", "Criação de narrativas visuais", "Moda conceitual e direção criativa"]]];var CONT0={email:'jottap1605@gmail.com',instagram:'jottapedro.16'};
 function perfil(){var p=PERFIL||{},o={};for(var k in PERFIL0)o[k]=(p[k]!=null&&p[k]!=='')?String(p[k]):PERFIL0[k];
  var c=p.contatos,r={};if(c&&typeof c==='object'){REDES.forEach(function(x){if(c[x[0]])r[x[0]]=String(c[x[0]]);});}
  else if(typeof c==='string'&&c.trim()){c.split('\n').forEach(function(l){l=l.trim();if(!l)return;var k=null,low=l.toLowerCase();REDES.forEach(function(x){if(!k&&low.indexOf(x[1].toLowerCase())===0)k=x[0];});var v=l.indexOf(':')>0&&!/^https?:/i.test(l)?l.slice(l.indexOf(':')+1).trim():l;if(!k)k=/@[^\s]+\./.test(v)?'email':(/^@/.test(v)?'instagram':'outro');if(!r[k])r[k]=v;});}
@@ -1067,6 +1076,7 @@ function telaPerfil(){var c=$('pf-corpo');c.innerHTML='';var p=perfil();var top=
  var lk=el('div','pf-links'),tem=false;REDES.forEach(function(x){var v=p.contatos[x[0]];if(!v)return;var h=linkRede(x[0],v);if(!h)return;tem=true;var a=el('a','',x[1]);a.href=h;if(x[0]!=='email'){a.target='_blank';a.rel='noopener';}lk.appendChild(a);});if(tem)tx.appendChild(lk);
  if(editor){var ac=el('div','acoes');var be=el('button','ed','Editar perfil');be.type='button';be.addEventListener('click',function(){ir('editar-perfil');});ac.appendChild(be);tx.appendChild(ac);}
  top.appendChild(tx);c.appendChild(top);
+ var cv=el('section','pf-cv');cv.appendChild(el('div','pf-aberto','Aberto a oportunidades e colaborações'));var cg=el('div','pf-cv-g');PERFIL_CV.forEach(function(b){var x=el('div','pf-cv-b'+(b[1].length>2&&b[1][1].length>80?' longo':''));x.appendChild(el('h3','',b[0]));b[1].forEach(function(t,k){x.appendChild(el(t.length>80?'p':'div',k===0&&b[1].length>2&&b[1][1].length>80?'pf-cv-t':'pf-cv-i',t));});cg.appendChild(x);});cv.appendChild(cg);c.appendChild(cv);
  var ds=el('details','pf-tcc');var sm=el('summary','','Sobre o TCC · Cartola #13 — Tempo Rei');ds.appendChild(sm);var dv=el('div','pf-tcc-c');ds.appendChild(dv);telaSobre(dv);var e1=el('div','tcc-esq'),e2=el('div','tcc-dir');Array.prototype.slice.call(dv.children).forEach(function(x,i,a){(x.classList.contains('rot')||x.classList.contains('sb-lista')?e2:e1).appendChild(x);});dv.appendChild(e1);dv.appendChild(e2);c.appendChild(ds);
  if(editor){var sec=el('section','pf-fbs');sec.id='pf-fb';sec.appendChild(el('div','rot','FEEDBACKS'));sec.appendChild(el('h2','','Feedbacks dos visitantes'));var lst=el('div');sec.appendChild(lst);c.appendChild(sec);listaFeedbacks(lst);}
  c.appendChild(el('div','rot','PROJETOS'));var mu=el('section');mu.id='pf-mural';mu.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px';
