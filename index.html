@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191324";</script>
+<script>var VERSAO="202611191325";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -376,7 +376,7 @@ html.claro .rod-rot,html.claro .rod-link{color:#6E7174}html.claro .rbt{backgroun
 
 .cdata{display:block;margin-top:4px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#B8BBBD;font-family:Futura,"Jost",sans-serif}
 .mdata{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#B8BBBD;margin:-2px 0 12px;line-height:1.6}
-#filtros{margin:0 0 18px!important}
+#filtros{display:none!important}
 body.filtrando #dest,body.filtrando #rot-dest{display:none}
 html.claro .cdata,html.claro .mdata{color:#4A4E52}
 
@@ -720,7 +720,7 @@ function montaInicio(){var d=$('dest');d.innerHTML='';
  var ds=((CFG.destaques&&CFG.destaques.length)?CFG.destaques:['revista','temporei','cenarios']).filter(function(x){return porId[x];});
  if(ds.length){d.appendChild(card(porId[ds[0]],'principal inteira'));var lado=el('div','lado');ds.slice(1,5).forEach(function(x){lado.appendChild(card(porId[x],'inteira'));});if(lado.childNodes.length)d.appendChild(lado);}
  var gs=GRUPOS.filter(function(g){return M.some(function(m){return m.grupo===g;});});if(gs.indexOf(filtro)<0)filtro='';
- var fl=$('filtros');fl.innerHTML='';if(gs.length>1){[''].concat(gs).forEach(function(g){var b=el('button','chip'+(g===filtro?' on':''),g||'Todos');b.type='button';b.setAttribute('aria-pressed',g===filtro?'true':'false');b.addEventListener('click',function(){filtro=g;montaInicio();});fl.appendChild(b);});}
+ var fl=$('filtros');fl.innerHTML='';filtro='';if(false){[''].concat(gs).forEach(function(g){var b=el('button','chip'+(g===filtro?' on':''),g||'Todos');b.type='button';b.setAttribute('aria-pressed',g===filtro?'true':'false');b.addEventListener('click',function(){filtro=g;montaInicio();});fl.appendChild(b);});}
  document.body.classList.toggle('filtrando',!!filtro);var rm=$('rot-mural');if(rm)rm.textContent=filtro?filtro.toUpperCase():textos().lista.toUpperCase();
  var mu=$('mural');mu.innerHTML='';M.forEach(function(m){if(filtro&&m.grupo!==filtro)return;var p=el('div','pin');p.appendChild(card(m,'inteira'));mu.appendChild(p);});}
 
