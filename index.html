@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191830";</script>
+<script>var VERSAO="202611191900";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -98,7 +98,7 @@ body.gaveta:not(.com-lateral) #lateral{transform:none}
 #lateral .sub button::before{width:4px;height:4px;border-radius:0;transform:rotate(45deg)}
 #lateral .chatb{margin-top:6px;background:rgba(94,26,36,.55)!important;color:#EDEDEA!important}
 #lateral .rod{margin-top:auto;padding:16px 12px 0;font-size:11px;line-height:1.6;letter-spacing:.06em;color:#8a8d90}
-body.chat-fixo #pc,body.chat-fixo .acoes .chat{display:none}
+body.chat-fixo .acoes .chat{display:none}
 /* telas */
 .tela{display:none}
 .tela.on{display:block}
@@ -557,6 +557,13 @@ html.claro #ce button:active{background:rgba(20,20,20,.12)}
 html.claro #cst{color:#4A4E52}
 
 #rod-editar[hidden]{display:none!important}
+#ui .rfs{display:inline-flex;align-items:center;gap:7px;pointer-events:auto}#ui .rfs svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7}
+#ui .rfs[hidden]{display:none!important}
+#t-revista:fullscreen{background:#141414;margin:0;padding:14px 14px 10px;overflow:hidden}
+#t-revista:-webkit-full-screen{background:#141414;margin:0;padding:14px 14px 10px;overflow:hidden}
+body.rev-cheia #t-revista #r-cab,body.rev-cheia #t-revista #rodape,body.rev-cheia #t-revista #rod-editar,body.rev-cheia #hint{display:none!important}
+body.rev-cheia #wrap{height:calc(100vh - 74px)!important;max-height:none!important;min-height:0!important}
+html.claro #t-revista:fullscreen{background:#EDEDEA}
 html,body{overflow-anchor:none}
 .abas{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;margin:4px 0 18px;padding:4px;border:1px solid var(--borda);border-radius:999px;width:max-content;max-width:100%}
 .aba{min-height:42px;padding:0 18px;border-radius:999px;border:0;background:none;color:#B8BBBD;font:inherit;font-size:14px;letter-spacing:.04em;cursor:pointer}
@@ -666,7 +673,7 @@ body.chat-fixo .tela>#rodape{margin-right:calc(-1 * var(--pn));padding-right:4px
 <div class="page r"><img src="arquivos/revista/p37.jpg" alt="Revista, página 37" draggable="false"></div>
 <div class="page l"><img src="arquivos/revista/p38.jpg" alt="Revista, página 38" draggable="false"></div>
  </div></div>
- <div id="ui"><button id="pv" type="button" aria-label="Página anterior">‹</button><span id="pg">Capa</span><button id="nx" type="button" aria-label="Próxima página">›</button><button id="rsobre" type="button" class="txt">Sobre</button><button id="rchat" type="button" class="txt">Chat</button></div>
+ <div id="ui"><button id="pv" type="button" aria-label="Página anterior">‹</button><span id="pg">Capa</span><button id="nx" type="button" aria-label="Próxima página">›</button><button id="rsobre" type="button" class="txt">Sobre</button><button id="rchat" type="button" class="txt">Chat</button><button id="r-fs" type="button" class="txt rfs" aria-label="Ver a revista em tela cheia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Tela cheia</span></button></div>
 </section>
 <div id="folha" role="dialog" aria-label="Sobre a revista"><div class="fcx"><div class="ftopo"><span>CARTOLA #13 — TEMPO REI</span><button id="fx" type="button">Fechar</button></div><div id="fcorpo"></div></div></div>
 
@@ -724,12 +731,12 @@ function enviar(sala,n,m,st,ok){n=n.trim().slice(0,30);m=m.trim().slice(0,500);
 function apagaRecado(sala,k){if(!editor||!fb)return;if(!confirm('Apagar este recado?'))return;var cam=(sala==='revista'?'chat':'salas/'+sala)+'/'+k;
  fb.database().ref(cam).remove().then(function(){delete chat.msgs[k];render();alertaTela('Recado apagado.');}).catch(function(){alertaTela('Não foi possível apagar o recado.');});}
 function salaAtual(){return rota;}
-function abreChat(sala){sala=sala||salaAtual();$('panel').classList.add('open');chat.aberto=true;conecta(sala);ajustaPainel();}
+var chatFechado=ls('cartolaChat')==='0';function abreChat(sala){if(chatFechado){chatFechado=false;ls('cartolaChat','1');}sala=sala||salaAtual();$('panel').classList.add('open');chat.aberto=true;conecta(sala);ajustaPainel();}
 function fechaChat(){$('panel').classList.remove('open');chat.aberto=false;ajustaPainel();}
-function ajustaPainel(){var largo=innerWidth>=1100,lat=false,fixo=largo&&!!porId[rota];document.body.classList.toggle('com-lateral',lat);document.body.classList.toggle('chat-fixo',fixo);
+function ajustaPainel(){var largo=innerWidth>=1100,lat=false,fixo=largo&&!!porId[rota]&&!chatFechado;document.body.classList.toggle('com-lateral',lat);document.body.classList.toggle('chat-fixo',fixo);
  if(fixo&&!chat.aberto){$('panel').classList.add('open');chat.aberto=true;conecta(salaAtual());}
  var st=document.documentElement.style;st.setProperty('--sb',lat?'230px':'0px');st.setProperty('--pn',(chat.aberto&&innerWidth>=900)?'380px':'0px');setTimeout(function(){if(window._fit)window._fit();},30);}
-$('pc').addEventListener('click',fechaChat);
+$('pc').addEventListener('click',function(){if(innerWidth>=1100){chatFechado=true;ls('cartolaChat','0');}fechaChat();});
 function chatRodape(){var pn=$('panel'),rod=$('rodape');var d=0;if(document.body.classList.contains('chat-fixo')&&rod&&!rod.hidden&&rod.offsetParent){var t=rod.getBoundingClientRect().top;d=Math.max(0,innerHeight-t+1);}pn.style.transform=d?'translateY(-'+d+'px)':'';}
 (function(){var q=false;function f(){if(q)return;q=true;requestAnimationFrame(function(){q=false;chatRodape();});}addEventListener('scroll',f,{passive:true});addEventListener('resize',f);setInterval(chatRodape,800);})();
 $('cn').value=ls('cartolaNome')||'';
@@ -927,7 +934,7 @@ function leVisitas(){if(!fb)return;fb.database().ref('visitas').once('value').th
  if(navigator.share){$('rs-nat').hidden=false;$('rs-nat').addEventListener('click',function(){navigator.share({title:tit,url:url}).catch(function(){});});}
  $('rod-editar').addEventListener('click',function(){if(editor){if(confirm('Sair do modo de edição?')){fb.auth().signOut();ls('cartolaEditor','0');}}else entrar();});})();
 (function(){var t=$('rv-tema'),f=$('rv-fs');t.addEventListener('click',function(){$('l-tema').click();rvTema();});
- if(!temFs)f.hidden=true;f.addEventListener('click',function(){$('l-fs').click();});rvTema();})();
+ f.hidden=true;$('l-fs').style.display='none';rvTema();})();
 function rvTema(){var c=document.documentElement.classList.contains('claro');var e=$('rv-tema-t');if(e)e.textContent=c?'Modo escuro':'Modo claro';}
 function rodapeEd(){try{montaAutor();}catch(e){}var b=$('rod-editar');if(b){var sp=b.querySelector('span');(sp||b).textContent=editor?'Sair da edição':'Editar';b.setAttribute('aria-label',editor?'Sair do modo de edição':'Editar o site');b.classList.toggle('on',!!editor);}checaFb();var v=$('rod-vis');if(!v)return;
  if(VIS.site!=null){var tot=0;for(var k in VIS)if(k!=='site')tot+=Number(VIS[k])||0;v.textContent='Visitas: '+VIS.site+' ao site'+' · '+tot+' nos projetos';v.hidden=!editor;}else{v.textContent='';v.hidden=true;}}
@@ -1240,6 +1247,11 @@ $('rsobre').addEventListener('click',function(){var c=$('fcorpo');c.innerHTML=''
 $('fx').addEventListener('click',function(){$('folha').classList.remove('on');});
 $('folha').addEventListener('click',function(e){if(e.target.id==='folha')$('folha').classList.remove('on');});
 $('rchat').addEventListener('click',function(){abreChat('revista');});
+(function(){var b=$('r-fs'),t=$('t-revista');var pode=!!(t.requestFullscreen||t.webkitRequestFullscreen);if(!pode){b.hidden=true;return;}
+ function em(){return document.fullscreenElement||document.webkitFullscreenElement;}
+ b.addEventListener('click',function(){try{if(em()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else{(t.requestFullscreen||t.webkitRequestFullscreen).call(t);}}catch(e){}});
+ function muda(){var on=!!em();b.querySelector('span').textContent=on?'Sair da tela cheia':'Tela cheia';document.body.classList.toggle('rev-cheia',on);setTimeout(function(){fit();try{pf&&pf.update();}catch(e){}},120);}
+ document.addEventListener('fullscreenchange',muda);document.addEventListener('webkitfullscreenchange',muda);})();
 
 /* ---------- ROTAS ---------- */
 var pendente=null;
