@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191446";</script>
+<script>var VERSAO="202611191505";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -877,22 +877,23 @@ function montaAutor(){if(!$('ra-nome'))return;var p=perfil();$('ra-nome').textCo
  $('fb-ver').hidden=!editor;}
 function telaFeedback(){var f=$('folha'),c=$('fcorpo');c.innerHTML='';f.querySelector('.ftopo span').textContent='MANDAR FEEDBACK';
  c.appendChild(el('p','dica','Sua mensagem chega só para o criador do site. Não aparece para outras pessoas.'));
- var fm=el('form');fm.appendChild(campo('Seu nome (se quiser)','fb-n','input',ls('cartolaNome')||'',40));fm.appendChild(campo('Mensagem','fb-m','textarea','',1000));
+ var fm=el('form');fm.appendChild(campo('Seu nome (se quiser)','fb-n','input',ls('cartolaNome')||'',40));fm.appendChild(campo('Mensagem','fb-m','textarea','',500));
  var st=el('p','dica','');var b=el('button','btn','Enviar feedback');b.type='submit';fm.appendChild(b);fm.appendChild(st);c.appendChild(fm);
- fm.addEventListener('submit',function(e){e.preventDefault();var m=$('fb-m').value.trim().slice(0,1000);if(!m){st.textContent='Escreva a mensagem antes de enviar.';return;}
+ fm.addEventListener('submit',function(e){e.preventDefault();var m=$('fb-m').value.trim().slice(0,500);if(!m){st.textContent='Escreva a mensagem antes de enviar.';return;}
   if(Date.now()-(telaFeedback.u||0)<10000){st.textContent='Espere um instante antes de mandar outro.';return;}
-  b.disabled=true;st.textContent='Enviando…';var d={n:$('fb-n').value.trim().slice(0,40),m:m,t:{'.sv':'timestamp'}};
-  fetch(DB+'feedback.json',{method:'POST',body:JSON.stringify(d)}).then(function(r){return r.json();}).then(function(x){if(!x||!x.name)throw 0;telaFeedback.u=Date.now();f.classList.remove('on');alertaTela('Feedback enviado. Obrigado!');})
+  b.disabled=true;st.textContent='Enviando…';var d={n:($('fb-n').value.trim()||'Sem nome').slice(0,30),m:m,t:{'.sv':'timestamp'}};
+  fetch(DB+FBSALA+'.json',{method:'POST',body:JSON.stringify(d)}).then(function(r){return r.json();}).then(function(x){if(!x||!x.name)throw 0;telaFeedback.u=Date.now();f.classList.remove('on');alertaTela('Feedback enviado. Obrigado!');})
   .catch(function(){b.disabled=false;st.textContent='Não foi possível enviar. Confira a internet e tente de novo.';});});
  f.classList.add('on');setTimeout(function(){try{$('fb-m').focus();}catch(e){}},50);}
-function checaFb(){if(!editor||!fb||checaFb.feito)return;checaFb.feito=1;fb.database().ref('feedback').once('value').then(function(sn){var d=sn.val()||{},v=Number(ls('cartolaFbVisto')||0),n=0;for(var k in d)if((d[k].t||0)>v)n++;if(n)alertaTela(n+(n===1?' feedback novo. Veja no Perfil.':' feedbacks novos. Veja no Perfil.'));}).catch(function(){});}
+var FBSALA='salas/fb-67bb55e3ad723379b684';
+function checaFb(){if(!editor||!fb||checaFb.feito)return;checaFb.feito=1;fb.database().ref(FBSALA).once('value').then(function(sn){var d=sn.val()||{},v=Number(ls('cartolaFbVisto')||0),n=0;for(var k in d)if((d[k].t||0)>v)n++;if(n)alertaTela(n+(n===1?' feedback novo. Veja no Perfil.':' feedbacks novos. Veja no Perfil.'));}).catch(function(){});}
 function listaFeedbacks(c){c.innerHTML='';c.appendChild(el('p','dica','Carregando…'));
  if(!fb){c.innerHTML='';c.appendChild(el('p','dica','Entre no modo de edição para ver os feedbacks.'));return;}
- fb.database().ref('feedback').once('value').then(function(sn){var d=sn.val()||{},ks=Object.keys(d).sort(function(a,b){return(d[b].t||0)-(d[a].t||0);});c.innerHTML='';
+ fb.database().ref(FBSALA).once('value').then(function(sn){var d=sn.val()||{},ks=Object.keys(d).sort(function(a,b){return(d[b].t||0)-(d[a].t||0);});c.innerHTML='';
   if(!ks.length){c.appendChild(el('p','dica','Ainda não chegou nenhum feedback.'));return;}
   c.appendChild(el('p','dica',ks.length+(ks.length===1?' feedback recebido':' feedbacks recebidos')+' · só você vê'));ls('cartolaFbVisto',String(d[ks[0]].t||Date.now()));
   ks.forEach(function(k){var x=d[k],w=el('div','fbl'),h=el('div');h.appendChild(el('b','',x.n||'Sem nome'));h.appendChild(el('span','',x.t?hora(x.t):''));w.appendChild(h);w.appendChild(el('p','',String(x.m||'')));
-   var bx=el('button','rod-link','Apagar');bx.type='button';bx.addEventListener('click',function(){if(!confirm('Apagar este feedback?'))return;fb.database().ref('feedback/'+k).remove().then(function(){w.remove();alertaTela('Feedback apagado.');}).catch(function(){alertaTela('Não foi possível apagar.');});});w.appendChild(bx);c.appendChild(w);});})
+   var bx=el('button','rod-link','Apagar');bx.type='button';bx.addEventListener('click',function(){if(!confirm('Apagar este feedback?'))return;fb.database().ref(FBSALA+'/'+k).remove().then(function(){w.remove();alertaTela('Feedback apagado.');}).catch(function(){alertaTela('Não foi possível apagar.');});});w.appendChild(bx);c.appendChild(w);});})
  .catch(function(){c.innerHTML='';c.appendChild(el('p','dica','Não foi possível abrir os feedbacks.'));});}
 function verFeedbacks(){if(!editor)return;ir('perfil');setTimeout(function(){var x=$('pf-fb');if(x)x.scrollIntoView({behavior:'smooth',block:'start'});},250);}
 setTimeout(function(){try{montaAutor();}catch(e){}},0);$('fb-abre').addEventListener('click',telaFeedback);$('fb-ver').addEventListener('click',verFeedbacks);$('ra-perfil').addEventListener('click',function(){ir('perfil');});
