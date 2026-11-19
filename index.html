@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191242";</script>
+<script>var VERSAO="202611191253";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -389,6 +389,17 @@ html.claro .cdata,html.claro .mdata{color:#4A4E52}
 #r-cab{margin-bottom:18px}
 @media(max-width:700px){#wrap{height:calc((100vw - 32px) * 0.72 + 24px);min-height:0}}
 @media(min-width:1100px){#t-revista{padding-left:calc(var(--sb) + 32px);padding-right:32px;margin-left:0}}
+
+.cab-dir{margin-top:20px}
+.cab-rot{margin:0 0 6px!important}
+.cab-dir .info{margin-top:0;border-top:1px solid var(--borda)}
+.cab-dir .info summary{min-height:42px;font-size:11px;letter-spacing:.16em}
+.cab-dir .ic-corpo p{font-size:16px;line-height:1.5}
+.cab-dir .ic-corpo dd{font-size:16px}
+@media(min-width:900px){
+ .cab.duas{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,1fr);gap:48px;align-items:start;max-width:1300px}
+ .cab.duas .cab-dir{margin-top:6px}
+}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -769,7 +780,7 @@ function busca(){var bruto=$('q').value.trim(),q=semAcento(bruto);$('busca').cla
 /* ---------- MATÉRIA ---------- */
 function infoEl(m){if(!m.info)return null;var inf=el('div','info'),tem=false;[['sobre','Sobre'],['processo','Processo'],['creditos','Créditos']].forEach(function(x){var v=m.info[x[0]];if(!v||!v.length)return;tem=true;var d=el('details');d.appendChild(el('summary','',x[1]));var cx=el('div','ic-corpo');
   if(x[0]==='creditos'){var dl=el('dl');v.forEach(function(c){dl.appendChild(el('dt','',c[0]));dl.appendChild(el('dd','',c[1]));});cx.appendChild(dl);}else v.forEach(function(par){cx.appendChild(el('p','',par));});d.appendChild(cx);inf.appendChild(d);});return tem?inf:null;}
-function montaCab(m,cab){cab.innerHTML='';
+function montaCab(m,cab0){cab0.innerHTML='';var cab=el('div','cab-esq');cab0.appendChild(cab);
  cab.appendChild(el('span','tag'+(m.cor==='bo'?' bo':''),m.tag));cab.appendChild(el('h1','',m.titulo));if(m.data)cab.appendChild(el('div','mdata','Publicado em '+m.data));if(m.resumo)cab.appendChild(el('p','',m.resumo));if(m.ficha)cab.appendChild(el('div','ficha',m.ficha));
  if(m.rascunho)cab.insertBefore(el('span','tag rasc','Rascunho · só você vê'),cab.firstChild);
  var ac=el('div','acoes');var bc=el('button','chat',m.tipo==='revista'?'Chat da revista':'Chat desta matéria');bc.type='button';bc.addEventListener('click',function(){abreChat(m.id);});ac.appendChild(bc);
@@ -779,7 +790,7 @@ function montaCab(m,cab){cab.innerHTML='';
   {var bx=el('button','perigo','Apagar projeto');bx.type='button';bx.addEventListener('click',function(){apagar(m);});ac.appendChild(bx);}}
  cab.appendChild(ac);
  if(VIS[m.id]!=null)cab.appendChild(el('div','ficha vis-m',VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));
- var inf=infoEl(m);if(inf)cab.appendChild(inf);
+ var inf=infoEl(m);if(inf){var dir=el('aside','cab-dir');dir.appendChild(el('div','rot cab-rot','SAIBA MAIS'));dir.appendChild(inf);cab0.appendChild(dir);cab0.classList.add('duas');}else cab0.classList.remove('duas');
 }
 function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');c.innerHTML='';montaCab(m,cab);
  var lista=m.paginas.map(function(p,i){return{src:p.src,leg:m.curto+' · pág. '+(i+1)};});
