@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611192300";</script>
+<script>var VERSAO="202611192315";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -627,7 +627,9 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .rseta svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .rseta:active,.rcanto:active{background:rgba(20,20,20,.6)}
 .rseta.off{opacity:0;pointer-events:none}
-.rcanto{top:6px;width:42px;height:42px;border-radius:12px}
+.rcanto{position:fixed;top:auto;left:auto;right:calc(var(--pn) + max(16px,env(safe-area-inset-right)));bottom:calc(18px + env(safe-area-inset-bottom));width:46px;height:46px;border-radius:12px;z-index:60}
+body:not(.na-revista) .rcanto{display:none!important}
+#ui #pv,#ui #nx{display:none!important}
 .rcanto svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
 .rcanto[hidden]{display:none!important}
 body.nolib .rseta,body.nolib .rcanto{display:none!important}
@@ -1278,7 +1280,7 @@ addEventListener('keydown',function(e){if($('vz').classList.contains('on')){if(e
 
 /* ---------- REVISTA ---------- */
 var RATIO=595.5/842.25,book=$('book'),pf=null,revIniciada=false;
-function fit(){if(document.body.classList.contains('nolib'))return;var w=$('wrap'),vw=w.clientWidth,vh=w.clientHeight-8;if(!vw||!vh)return;var um=innerWidth<700,ph=Math.min(vh*0.99,(vw*0.985/(um?1:2))/RATIO);book.style.height=ph+'px';var bw=ph*RATIO*(um?1:2);book.style.width=bw+'px';try{var sz=$('r-prox').offsetWidth||56,lado=(vw-bw)/2,pos=lado>=sz+16?lado-sz-12:6;$('r-ant').style.left=pos+'px';$('r-prox').style.right=pos+'px';var ct=$('r-fs2');ct.style.right=Math.max(6,lado-(lado>=56?48:0))+'px';}catch(e){}}
+function fit(){if(document.body.classList.contains('nolib'))return;var w=$('wrap'),vw=w.clientWidth,vh=w.clientHeight-8;if(!vw||!vh)return;var um=innerWidth<700,ph=Math.min(vh*0.99,(vw*0.985/(um?1:2))/RATIO);book.style.height=ph+'px';var bw=ph*RATIO*(um?1:2);book.style.width=bw+'px';try{var sz=$('r-prox').offsetWidth||56,lado=(vw-bw)/2,pos=lado>=sz+16?lado-sz-12:6;$('r-ant').style.left=pos+'px';$('r-prox').style.right=pos+'px';}catch(e){}}
 window._fit=function(){if(rota!=='revista')return;fit();try{pf&&pf.update();}catch(e){}};
 function label(){var i=pf.getCurrentPageIndex(),t;if(innerWidth<700){t=i<=0?'Capa':(i>=37?'Contracapa':'Pág. '+(i+1));$('pg').textContent=t;return;}if(i<=0)t='Capa';else if(i>=37)t='Contracapa';else{if(i%2===0)i-=1;t='Págs. '+(i+1)+'–'+(i+2);}$('pg').textContent=t;}
 function iniciaRevista(){if(revIniciada)return;revIniciada=true;fit();
@@ -1303,7 +1305,7 @@ $('rsobre').addEventListener('click',function(){var c=$('fcorpo');c.innerHTML=''
 $('fx').addEventListener('click',function(){$('folha').classList.remove('on');});
 $('folha').addEventListener('click',function(e){if(e.target.id==='folha')$('folha').classList.remove('on');});
 $('rchat').addEventListener('click',function(){abreChat('revista');});
-(function(){var b=$('r-fs'),t=$('t-revista'),b2=$('r-fs2');b.hidden=true;b.style.display='none';var pode=!!(t.requestFullscreen||t.webkitRequestFullscreen);if(!pode){b2.hidden=true;return;}b2.addEventListener('click',function(){b.click();});
+(function(){var b=$('r-fs'),t=$('t-revista'),b2=$('r-fs2');b.hidden=true;b.style.display='none';var pode=!!(t.requestFullscreen||t.webkitRequestFullscreen);if(!pode){b2.hidden=true;return;}b2.addEventListener('click',function(){b.click();});t.appendChild(b2);
  function em(){return document.fullscreenElement||document.webkitFullscreenElement;}
  b.addEventListener('click',function(){try{if(em()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else{(t.requestFullscreen||t.webkitRequestFullscreen).call(t);}}catch(e){}});
  function muda(){var on=!!em();b.querySelector('span').textContent=on?'Sair da tela cheia':'Tela cheia';b2.setAttribute('aria-label',on?'Sair da tela cheia':'Ver a revista em tela cheia');b2.classList.toggle('on',on);document.body.classList.toggle('rev-cheia',on);setTimeout(function(){fit();try{pf&&pf.update();}catch(e){}},120);}
