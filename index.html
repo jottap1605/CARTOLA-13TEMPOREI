@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611192115";</script>
+<script>var VERSAO="202611192135";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -670,7 +670,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 <section id="t-revista" class="tela">
  <div class="cab" id="r-cab"></div>
  <div id="wrap"><div id="hint">TOQUE NA PÁGINA OU ARRASTE O CANTO PARA FOLHEAR</div><div id="book">
-<div class="page r"><img src="arquivos/revista/p01.jpg" alt="Revista, página 1" draggable="false"></div>
+<div class="page r" data-density="hard"><img src="arquivos/revista/p01.jpg" alt="Revista, página 1" draggable="false"></div>
 <div class="page l"><img src="arquivos/revista/p02.jpg" alt="Revista, página 2" draggable="false"></div>
 <div class="page r"><img src="arquivos/revista/p03.jpg" alt="Revista, página 3" draggable="false"></div>
 <div class="page l"><img src="arquivos/revista/p04.jpg" alt="Revista, página 4" draggable="false"></div>
@@ -707,7 +707,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 <div class="page r"><img src="arquivos/revista/p35.jpg" alt="Revista, página 35" draggable="false"></div>
 <div class="page l"><img src="arquivos/revista/p36.jpg" alt="Revista, página 36" draggable="false"></div>
 <div class="page r"><img src="arquivos/revista/p37.jpg" alt="Revista, página 37" draggable="false"></div>
-<div class="page l"><img src="arquivos/revista/p38.jpg" alt="Revista, página 38" draggable="false"></div>
+<div class="page l" data-density="hard"><img src="arquivos/revista/p38.jpg" alt="Revista, página 38" draggable="false"></div>
  </div></div>
  <div id="ui"><button id="pv" type="button" aria-label="Página anterior">‹</button><span id="pg">Capa</span><button id="nx" type="button" aria-label="Próxima página">›</button><button id="rsobre" type="button" class="txt">Sobre</button><button id="rchat" type="button" class="txt">Chat</button><button id="r-fs" type="button" class="txt rfs" aria-label="Ver a revista em tela cheia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Tela cheia</span></button></div>
 </section>
@@ -1267,13 +1267,14 @@ addEventListener('keydown',function(e){if($('vz').classList.contains('on')){if(e
 /* ---------- REVISTA ---------- */
 var RATIO=595.5/842.25,book=$('book'),pf=null,revIniciada=false;
 function fit(){if(document.body.classList.contains('nolib'))return;var w=$('wrap'),vw=w.clientWidth,vh=w.clientHeight-8;if(!vw||!vh)return;var um=innerWidth<700,ph=Math.min(vh*0.99,(vw*0.985/(um?1:2))/RATIO);book.style.height=ph+'px';book.style.width=(ph*RATIO*(um?1:2))+'px';}
-window._fit=function(){if(rota!=='revista')return;fit();try{pf&&pf.update();}catch(e){}};
+function virando(){try{return pf&&pf.getState&&pf.getState()!=='read';}catch(e){return false;}}
+window._fit=function(){if(rota!=='revista'||virando())return;fit();try{pf&&pf.update();}catch(e){}};
 function label(){var i=pf.getCurrentPageIndex(),t;if(innerWidth<700){t=i<=0?'Capa':(i>=37?'Contracapa':'Pág. '+(i+1));$('pg').textContent=t;return;}if(i<=0)t='Capa';else if(i>=37)t='Contracapa';else{if(i%2===0)i-=1;t='Págs. '+(i+1)+'–'+(i+2);}$('pg').textContent=t;}
 function iniciaRevista(){if(revIniciada)return;revIniciada=true;fit();
  if(!window.St||!St.PageFlip){document.body.classList.add('nolib');$('hint').textContent='O efeito de folha precisa de internet e não carregou. As páginas aparecem em lista. Atualize para tentar de novo.';return;}
  pf=new St.PageFlip(book,{width:595,height:842,size:'stretch',minWidth:200,maxWidth:1800,minHeight:283,maxHeight:2546,showCover:true,usePortrait:innerWidth<700,drawShadow:true,maxShadowOpacity:0.55,flippingTime:1100,mobileScrollSupport:true,swipeDistance:18,clickEventForward:false,showPageCorners:true,disableFlipByClick:false,autoSize:true});
  pf.loadFromHTML(document.querySelectorAll('.page'));
- try{var pc=pf.getPageCollection();var ps=pc.getPages?pc.getPages():pc.pages;ps.forEach(function(p){if(p.setDensity)p.setDensity('soft');});pf.update();}catch(e){}
+ try{var pc=pf.getPageCollection();var ps=pc.getPages?pc.getPages():pc.pages;ps.forEach(function(p,i){if(i===0||i===ps.length-1)return;if(p.setDensity)p.setDensity('soft');});pf.update();}catch(e){}
  pf.on('flip',function(){label();$('hint').style.opacity=0;});
  (function(){var yD=null,tD=0,trava=null,raf=0;function guarda(){yD=scrollY;tD=Date.now();}
   ['pointerdown','touchstart','mousedown'].forEach(function(ev){$('wrap').addEventListener(ev,guarda,{passive:true,capture:true});});$('nx').addEventListener('pointerdown',guarda);$('pv').addEventListener('pointerdown',guarda);
