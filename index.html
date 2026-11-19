@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191148";</script>
+<script>var VERSAO="202611191222";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -758,7 +758,7 @@ function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');cab.innerHTML='';c.
  if(editor){var be=el('button','ed','Editar projeto');be.type='button';be.addEventListener('click',function(){ir('editar/'+m.id);});ac.appendChild(be);
   {var bx=el('button','perigo','Apagar projeto');bx.type='button';bx.addEventListener('click',function(){apagar(m);});ac.appendChild(bx);}}
  cab.appendChild(ac);
- if(editor&&VIS[m.id]!=null)cab.appendChild(el('div','ficha',VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));
+ if(VIS[m.id]!=null)cab.appendChild(el('div','ficha vis-m',VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));
  var inf=infoEl(m);if(inf)cab.appendChild(inf);
  var lista=m.paginas.map(function(p,i){return{src:p.src,leg:m.curto+' · pág. '+(i+1)};});
  var ps=el('div','pags'+(m.tipo==='slides'?' slides':''));m.paginas.forEach(function(p,i){var b=el('button','pg');b.type='button';b.id='p-'+(i+1);var im=el('img');im.src=p.src;im.alt=m.curto+', página '+(i+1);im.width=p.w;im.height=p.h;im.loading=i<2?'eager':'lazy';im.decoding='async';b.appendChild(im);b.appendChild(el('span','n',(i+1)+' / '+m.paginas.length));
@@ -790,7 +790,7 @@ function leVisitas(){if(!fb)return;fb.database().ref('visitas').once('value').th
  if(!temFs)f.hidden=true;f.addEventListener('click',function(){$('l-fs').click();});rvTema();})();
 function rvTema(){var c=document.documentElement.classList.contains('claro');var e=$('rv-tema-t');if(e)e.textContent=c?'Modo escuro':'Modo claro';}
 function rodapeEd(){var b=$('rod-editar');if(b)b.textContent=editor?'Sair do modo de edição':'Editar o site';var v=$('rod-vis');if(!v)return;
- if(editor&&VIS.site!=null){var tot=0;for(var k in VIS)if(k!=='site')tot+=Number(VIS[k])||0;v.textContent=VIS.site+(VIS.site===1?' visita ao site':' visitas ao site')+' · '+tot+' nos projetos';v.hidden=false;}else{v.textContent='';v.hidden=true;}}
+ if(VIS.site!=null){var tot=0;for(var k in VIS)if(k!=='site')tot+=Number(VIS[k])||0;v.textContent=VIS.site+(VIS.site===1?' visita ao site':' visitas ao site')+' · '+tot+' nos projetos';v.hidden=false;}else{v.textContent='';v.hidden=true;}}
 /* ---------- LOGIN (só o dono) ---------- */
 function alertaTela(txt){var a=$('toast');a.textContent=txt;a.classList.add('on');clearTimeout(alertaTela.t);alertaTela.t=setTimeout(function(){a.classList.remove('on');},4200);}
 function carregaScript(src){return new Promise(function(ok,erro){var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=erro;document.head.appendChild(s);});}
@@ -1065,6 +1065,8 @@ lerHash();ajustaPainel();
 carregaSite();
 if(ls('cartolaEditor')==='1'&&FB)carregaFirebase().catch(function(){});
 contaVisitaSite();rodapeEd();
+function carregaVisitas(){fetch(DB+'visitas.json').then(function(r){return r.json();}).then(function(d){if(!d||d.error)return;VIS=d;rodapeEd();var a=document.querySelector('#m-cab .vis-m');if(porId[rota]&&$('t-mat').classList.contains('on')&&!a){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}}).catch(function(){});}
+setTimeout(carregaVisitas,1200);
 /* versão nova: se o aparelho guardou uma cópia antiga, troca sozinho */
 (function(){try{fetch(location.pathname+'?ver='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var m=t.match(/var VERSAO="(\d+)"/);if(!m||m[1]===window.VERSAO)return;
  var k='cartolaVer'+m[1];if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+m[1]+location.hash);}).catch(function(){});}catch(e){}})();
