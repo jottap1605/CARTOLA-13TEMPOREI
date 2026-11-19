@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191222";</script>
+<script>var VERSAO="202611191228";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -373,6 +373,12 @@ html.claro .rod-rot,html.claro .rod-link{color:#6E7174}html.claro .rbt{backgroun
  .pags.slides{max-width:1700px}
  .fotos{column-count:5}
 }
+
+.cdata{display:block;margin-top:4px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#B8BBBD;font-family:Futura,"Jost",sans-serif}
+.mdata{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#B8BBBD;margin:-2px 0 10px}
+#filtros{margin:0 0 18px!important}
+body.filtrando #dest,body.filtrando #rot-dest{display:none}
+html.claro .cdata,html.claro .mdata{color:#4A4E52}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -476,10 +482,10 @@ html.claro #cst{color:#4A4E52}
   <section id="res"><div class="rot" id="res-t">RESULTADOS</div><div id="res-l"></div></section>
   <div id="normal">
    <div id="ed-barra"><button type="button" class="prim" data-ed="nova">+ Novo projeto</button><button type="button" data-ed="organizar">Organizar o site</button><button type="button" data-ed="editar-perfil">Editar perfil</button></div>
+   <div id="filtros" role="group" aria-label="Filtrar projetos"></div>
    <div class="rot" style="margin-top:0" id="rot-dest">EM DESTAQUE</div>
    <section id="dest"></section>
    <div class="rot" id="rot-mural">MATÉRIAS E PROCESSO</div>
-   <div id="filtros" role="group" aria-label="Filtrar projetos"></div>
    <section id="mural"></section>
   </div>
   <footer id="rodape"><div class="rod-grid">
@@ -613,7 +619,7 @@ $('cf').addEventListener('submit',function(e){e.preventDefault();var cs=$('cs');
 var FB=window.FB_CONFIG||null,CLD=window.CLD_CONFIG||null,DONO=(window.DONO_EMAIL||'').toLowerCase();
 var fb=null,eu=null,editor=false;
 var ORIG={};M.forEach(function(m){ORIG[m.id]=JSON.parse(JSON.stringify({titulo:m.titulo,resumo:m.resumo,info:m.info||{},grupo:m.grupo,tag:m.tag,paginas:m.paginas,textos:m.textos||[],capa:m.capa,cw:m.cw,ch:m.ch,tipo:m.tipo,fotos:m.fotos||null}));});
-var VIS={},filtro='';
+var VIS={},filtro='';M.forEach(function(m){m.data='2026';});
 var CFG={},PERFIL=null;
 var ESTATICAS=M.slice(),DIN={},EDIT={};
 var SING={Revistas:'Revista',Editoriais:'Editorial',Processo:'Processo'};function sing(g){return SING[g]||g;}function npg(n){return n+(n===1?' página':' páginas');}
@@ -625,10 +631,12 @@ function deDB(id,r){if(!r||!r.paginas||!r.paginas.length)return null;var p0=r.pa
  var g=String(r.grupo||'Editoriais');var m={id:id,din:true,grupo:g,titulo:String(r.titulo||'Sem título'),curto:String(r.titulo||''),resumo:r.resumo||'',ficha:'',
   info:{sobre:linhas(r.sobre),processo:linhas(r.processo),creditos:creditos(r.creditos)},
   paginas:r.paginas.map(function(p){return{src:p.s,w:p.w,h:p.h};}),tipo:(p0.w>p0.h?'slides':'editorial'),textos:r.textos||[],t:r.t||0,ano:r.ano?String(r.ano):'',rascunho:!!r.rascunho};
- poeCapa(m,r.capa);m.tag=sing(g)+' · '+npg(m.paginas.length)+(m.ano?' · '+m.ano:'');return m;}
+ poeCapa(m,r.capa);m.tag=sing(g)+' · '+npg(m.paginas.length);m.data=m.ano||mesAno(m.t);return m;}
+var MESES=['jan.','fev.','mar.','abr.','maio','jun.','jul.','ago.','set.','out.','nov.','dez.'];
+function mesAno(t){if(!t)return '';var d=new Date(t);return MESES[d.getMonth()]+' '+d.getFullYear();}
 function poeCapa(m,n){n=parseInt(n,10)||1;var p=m.paginas[Math.min(Math.max(n,1),m.paginas.length)-1];if(p){m.capa=p.src;m.cw=p.w;m.ch=p.h;m.capaPg=n;}}
 function aplicaEdicao(m){var o=ORIG[m.id],e=EDIT[m.id];if(!o)return;
- m.titulo=o.titulo;m.resumo=o.resumo;m.info=JSON.parse(JSON.stringify(o.info));m.grupo=o.grupo;m.tag=o.tag;m.paginas=o.paginas;m.textos=o.textos;m.capa=o.capa;m.cw=o.cw;m.ch=o.ch;m.tipo=o.tipo;m.fotos=o.fotos;m.ano='';m.rascunho=false;m.capaPg=0;
+ m.titulo=o.titulo;m.resumo=o.resumo;m.info=JSON.parse(JSON.stringify(o.info));m.grupo=o.grupo;m.tag=o.tag;m.paginas=o.paginas;m.textos=o.textos;m.capa=o.capa;m.cw=o.cw;m.ch=o.ch;m.tipo=o.tipo;m.fotos=o.fotos;m.ano='';m.rascunho=false;m.capaPg=0;m.data='2026';
  if(!e)return;var mudou=false;
  if(e.paginas&&e.paginas.length&&m.tipo!=='revista'){m.paginas=e.paginas.map(function(p){return{src:p.s,w:p.w,h:p.h};});m.textos=e.textos||[];m.tipo=e.paginas[0].w>e.paginas[0].h?'slides':'editorial';m.fotos=null;poeCapa(m,1);mudou=true;}
  if(e.capa&&m.tipo!=='revista'){poeCapa(m,e.capa);}
@@ -636,7 +644,7 @@ function aplicaEdicao(m){var o=ORIG[m.id],e=EDIT[m.id];if(!o)return;
  if(e.titulo)m.titulo=String(e.titulo);if(e.resumo!=null)m.resumo=String(e.resumo);
  if(e.sobre!=null)m.info.sobre=linhas(e.sobre);if(e.processo!=null)m.info.processo=linhas(e.processo);if(e.creditos!=null)m.info.creditos=creditos(e.creditos);
  if(e.ano)m.ano=String(e.ano);m.rascunho=!!e.rascunho;
- if(m.tipo!=='revista'&&mudou)m.tag=sing(m.grupo)+' · '+npg(m.paginas.length);if(m.ano)m.tag+=' · '+m.ano;}
+ if(m.tipo!=='revista'&&mudou)m.tag=sing(m.grupo)+' · '+npg(m.paginas.length);m.data=m.ano||'2026';}
 function ocultos(){return (CFG.ocultos||[]).map(String);}
 function refaz(){M.length=0;var oc=ocultos();ESTATICAS.forEach(function(m){aplicaEdicao(m);if(oc.indexOf(m.id)<0)M.push(m);});
  Object.keys(DIN).sort(function(a,b){return(DIN[a].t||0)-(DIN[b].t||0);}).forEach(function(k){var m=deDB(k,DIN[k]);if(m){ORIG[k]=null;M.push(m);}});
@@ -647,7 +655,7 @@ function refaz(){M.length=0;var oc=ocultos();ESTATICAS.forEach(function(m){aplic
 var TX0={rodape:'Cartola #13 — Tempo Rei\nTIC II · Design de Moda · Univali · 2026/2',destaques:'Em destaque',lista:'Matérias e processo'};
 function textos(){var t=CFG.textos||{},o={};for(var k in TX0)o[k]=(t[k]!=null&&String(t[k]).trim()!=='')?String(t[k]):TX0[k];return o;}
 function aplicaTextos(){var t=textos(),r=$('rod-p');r.innerHTML='';String(t.rodape).split('\n').forEach(function(l,i){if(i)r.appendChild(el('br'));r.appendChild(document.createTextNode(l));});
- $('rot-dest').textContent=t.destaques.toUpperCase();$('rot-mural').textContent=t.lista.toUpperCase();}
+ $('rot-dest').textContent=t.destaques.toUpperCase();$('rot-mural').textContent=filtro?filtro.toUpperCase():t.lista.toUpperCase();}
 function carregaSite(){fetch(DB+'site.json').then(function(r){return r.json();}).then(function(d){if(!d||d.error)return;DIN=d.materias||{};EDIT=d.edicoes||{};CFG=d.config||{};PERFIL=d.perfil||null;refaz();if(pendente){var p=pendente;pendente=null;mostra(p.id,p.pg);}}).catch(function(){});}
 
 /* ---------- MENU ---------- */
@@ -684,13 +692,14 @@ $('home').addEventListener('click',function(){ir('inicio');});
 /* ---------- INÍCIO ---------- */
 function card(m,cls){var b=el('button','card '+(cls||''));b.type='button';var i=el('img');i.src=m.capa;i.alt=m.titulo;i.loading=/principal/.test(cls||'')?'eager':'lazy';i.decoding='async';if(m.cw){i.width=m.cw;i.height=m.ch;}b.appendChild(i);
  if(/principal/.test(cls||''))b.appendChild(el('span','sel',m.tipo==='revista'?'A REVISTA':'EM DESTAQUE'));
- var t=el('div','tx');if(m.rascunho)t.appendChild(el('span','tag rasc','Rascunho'));t.appendChild(el('span','tag'+(m.cor==='bo'?' bo':''),m.tag));t.appendChild(el('h3','',m.titulo));if(m.resumo)t.appendChild(el('p','',m.resumo));b.appendChild(t);
+ var t=el('div','tx');if(m.rascunho)t.appendChild(el('span','tag rasc','Rascunho'));t.appendChild(el('span','tag'+(m.cor==='bo'?' bo':''),m.tag));t.appendChild(el('h3','',m.titulo));if(m.data)t.appendChild(el('span','cdata',m.data));if(m.resumo)t.appendChild(el('p','',m.resumo));b.appendChild(t);
  b.addEventListener('click',function(){ir(m.id);});return b;}
 function montaInicio(){var d=$('dest');d.innerHTML='';
  var ds=((CFG.destaques&&CFG.destaques.length)?CFG.destaques:['revista','temporei','cenarios']).filter(function(x){return porId[x];});
  if(ds.length){d.appendChild(card(porId[ds[0]],'principal inteira'));var lado=el('div','lado');ds.slice(1,5).forEach(function(x){lado.appendChild(card(porId[x],'inteira'));});if(lado.childNodes.length)d.appendChild(lado);}
  var gs=GRUPOS.filter(function(g){return M.some(function(m){return m.grupo===g;});});if(gs.indexOf(filtro)<0)filtro='';
  var fl=$('filtros');fl.innerHTML='';if(gs.length>1){[''].concat(gs).forEach(function(g){var b=el('button','chip'+(g===filtro?' on':''),g||'Todos');b.type='button';b.setAttribute('aria-pressed',g===filtro?'true':'false');b.addEventListener('click',function(){filtro=g;montaInicio();});fl.appendChild(b);});}
+ document.body.classList.toggle('filtrando',!!filtro);var rm=$('rot-mural');if(rm)rm.textContent=filtro?filtro.toUpperCase():textos().lista.toUpperCase();
  var mu=$('mural');mu.innerHTML='';M.forEach(function(m){if(filtro&&m.grupo!==filtro)return;var p=el('div','pin');p.appendChild(card(m,'inteira'));mu.appendChild(p);});}
 
 /* ---------- BUSCA ---------- */
@@ -750,7 +759,7 @@ function busca(){var bruto=$('q').value.trim(),q=semAcento(bruto);$('busca').cla
 function infoEl(m){if(!m.info)return null;var inf=el('div','info'),tem=false;[['sobre','Sobre'],['processo','Processo'],['creditos','Créditos']].forEach(function(x){var v=m.info[x[0]];if(!v||!v.length)return;tem=true;var d=el('details');d.appendChild(el('summary','',x[1]));var cx=el('div','ic-corpo');
   if(x[0]==='creditos'){var dl=el('dl');v.forEach(function(c){dl.appendChild(el('dt','',c[0]));dl.appendChild(el('dd','',c[1]));});cx.appendChild(dl);}else v.forEach(function(par){cx.appendChild(el('p','',par));});d.appendChild(cx);inf.appendChild(d);});return tem?inf:null;}
 function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');cab.innerHTML='';c.innerHTML='';
- cab.appendChild(el('span','tag'+(m.cor==='bo'?' bo':''),m.tag));cab.appendChild(el('h1','',m.titulo));if(m.resumo)cab.appendChild(el('p','',m.resumo));if(m.ficha)cab.appendChild(el('div','ficha',m.ficha));
+ cab.appendChild(el('span','tag'+(m.cor==='bo'?' bo':''),m.tag));cab.appendChild(el('h1','',m.titulo));if(m.data)cab.appendChild(el('div','mdata','Publicado em '+m.data));if(m.resumo)cab.appendChild(el('p','',m.resumo));if(m.ficha)cab.appendChild(el('div','ficha',m.ficha));
  if(m.rascunho)cab.insertBefore(el('span','tag rasc','Rascunho · só você vê'),cab.firstChild);
  var ac=el('div','acoes');var bc=el('button','chat','Chat desta matéria');bc.type='button';bc.addEventListener('click',function(){abreChat(m.id);});ac.appendChild(bc);
  var bs=el('button','','Compartilhar');bs.type='button';bs.addEventListener('click',function(){compartilha(m);});ac.appendChild(bs);
