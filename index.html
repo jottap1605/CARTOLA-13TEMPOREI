@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191510";</script>
+<script>var VERSAO="202611191518";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -443,6 +443,13 @@ html.claro .sb-item{background:rgba(20,20,20,.04)}html.claro .sb-item span{color
 #sobe.on{opacity:1;pointer-events:auto}#sobe svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 html.claro #sobe{background:rgba(237,237,234,.9);color:#141414}
 #ra-perfil{display:none!important}
+.pf-tcc{margin:34px 0 0;max-width:860px;border-top:1px solid var(--borda);border-bottom:1px solid var(--borda)}
+.pf-tcc summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#B8BBBD}
+.pf-tcc summary::-webkit-details-marker{display:none}
+.pf-tcc summary::after{content:"";flex:none;width:8px;height:8px;border-right:1.5px solid #B8BBBD;border-bottom:1.5px solid #B8BBBD;transform:rotate(45deg) translate(-2px,-2px);transition:transform .2s}
+.pf-tcc[open] summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
+.pf-tcc-c{padding:4px 0 26px}.pf-tcc-c .pf-bio{margin-top:0}
+html.claro .pf-tcc summary{color:#4A4E52}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -532,7 +539,7 @@ html.claro #cst{color:#4A4E52}
 </header>
 <aside id="lateral" aria-label="Navegação">
  <button class="marca" id="home2" type="button" aria-label="JOTTA's house — início">JOTTA's house</button>
- <nav><button data-ir="inicio" class="it">Início</button><button data-ir="perfil" class="it">Perfil</button><button data-ir="sobre" class="it">Sobre o TCC</button>
+ <nav><button data-ir="inicio" class="it">Início</button><button data-ir="perfil" class="it">Perfil</button>
  <div id="lat-mat"></div>
  <div id="lat-conta"></div>
  <button id="g-vis" class="it grupo" type="button" aria-expanded="false">Visualização<span class="seta"></span></button><div class="sub" id="s-vis"><button id="l-fs" type="button">Tela cheia</button><button id="l-tema" type="button">Modo claro</button></div></nav>
@@ -899,7 +906,7 @@ function listaFeedbacks(c){c.innerHTML='';c.appendChild(el('p','dica','Carregand
 function verFeedbacks(){if(!editor)return;ir('perfil');setTimeout(function(){var x=$('pf-fb');if(x)x.scrollIntoView({behavior:'smooth',block:'start'});},250);}
 setTimeout(function(){try{montaAutor();}catch(e){}},0);$('fb-abre').addEventListener('click',telaFeedback);$('fb-ver').addEventListener('click',verFeedbacks);$('ra-perfil').addEventListener('click',function(){ir('perfil');});
 
-function telaSobre(){var c=$('sb-corpo');c.innerHTML='';c.appendChild(el('div','rot','SOBRE O TCC')).style.margin='0 0 6px';c.appendChild(el('h1','','Cartola #13 — Tempo Rei'));
+function telaSobre(c0){var c=c0||$('sb-corpo');c.innerHTML='';if(!c0){c.appendChild(el('div','rot','SOBRE O TCC')).style.margin='0 0 6px';c.appendChild(el('h1','','Cartola #13 — Tempo Rei'));}
  var bio=el('div','pf-bio');['A Cartola #13 — Tempo Rei é a revista do Trabalho de Iniciação Científica (TIC II) de João Pedro de Oliveira, no Bacharelado em Design de Moda da Univali, em 2026/2.','Neste site estão a revista completa para folhear, os editoriais Tempo Rei e Uma São Paulo que não existe, com as fotos uma a uma, e o memorial descritivo do trabalho.'].forEach(function(t){bio.appendChild(el('p','',t));});c.appendChild(bio);
  var fx=el('dl','sb-ficha');[['Revista','João Pedro de Oliveira, Naila Sperotto e Nicole Reiser'],['Editorial e memorial','João Pedro de Oliveira'],['Orientação','Caroline Santos da Silva'],['Curso','Bacharelado em Design de Moda · Univali'],['Semestre','2026/2']].forEach(function(x){fx.appendChild(el('dt','',x[0]));fx.appendChild(el('dd','',x[1]));});c.appendChild(fx);
  var ids=['revista','temporei','cenarios','memorial'].filter(function(i){return porId[i];});if(ids.length){c.appendChild(el('div','rot','O QUE VOCÊ ENCONTRA AQUI')).style.margin='34px 0 10px';var l=el('div','sb-lista');ids.forEach(function(i){var m=porId[i],b=el('button','sb-item');b.type='button';b.appendChild(el('b','',m.titulo));if(m.resumo)b.appendChild(el('span','',m.resumo));b.addEventListener('click',function(){ir(i);});l.appendChild(b);});c.appendChild(l);}}
@@ -1040,6 +1047,7 @@ function telaPerfil(){var c=$('pf-corpo');c.innerHTML='';var p=perfil();var top=
  var lk=el('div','pf-links'),tem=false;REDES.forEach(function(x){var v=p.contatos[x[0]];if(!v)return;var h=linkRede(x[0],v);if(!h)return;tem=true;var a=el('a','',x[1]);a.href=h;if(x[0]!=='email'){a.target='_blank';a.rel='noopener';}lk.appendChild(a);});if(tem)tx.appendChild(lk);
  if(editor){var ac=el('div','acoes');var be=el('button','ed','Editar perfil');be.type='button';be.addEventListener('click',function(){ir('editar-perfil');});ac.appendChild(be);tx.appendChild(ac);}
  top.appendChild(tx);c.appendChild(top);
+ var ds=el('details','pf-tcc');var sm=el('summary','','Sobre o TCC · Cartola #13 — Tempo Rei');ds.appendChild(sm);var dv=el('div','pf-tcc-c');ds.appendChild(dv);telaSobre(dv);c.appendChild(ds);
  if(editor){var sec=el('section','pf-fbs');sec.id='pf-fb';sec.appendChild(el('div','rot','FEEDBACKS'));sec.appendChild(el('h2','','Feedbacks dos visitantes'));var lst=el('div');sec.appendChild(lst);c.appendChild(sec);listaFeedbacks(lst);}
  c.appendChild(el('div','rot','PROJETOS'));var mu=el('section');mu.id='pf-mural';mu.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px';
  M.forEach(function(m){var pn=el('div','pin');pn.appendChild(card(m,'inteira'));mu.appendChild(pn);});c.appendChild(mu);}
