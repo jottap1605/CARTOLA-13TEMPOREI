@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191518";</script>
+<script>var VERSAO="202611191522";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -450,6 +450,15 @@ html.claro #sobe{background:rgba(237,237,234,.9);color:#141414}
 .pf-tcc[open] summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
 .pf-tcc-c{padding:4px 0 26px}.pf-tcc-c .pf-bio{margin-top:0}
 html.claro .pf-tcc summary{color:#4A4E52}
+@media(min-width:1100px){
+ .pf-top{grid-template-columns:minmax(240px,26%) 1fr!important;gap:48px!important}
+ .pf-top h1{font-size:clamp(56px,5vw,84px)}
+ .pf-tcc,.pf-fbs{max-width:none}
+ .pf-tcc-c{display:grid;grid-template-columns:1.1fr 1fr;gap:0 56px;align-items:start}
+ .tcc-dir>.rot{margin-top:0!important}
+ .sb-lista{max-width:none}
+}
+@media(min-width:1100px){.pf-top .pf-bio p{max-width:78ch;font-size:21px}}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -1029,7 +1038,7 @@ function telaOrganizar(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcess
   bt.disabled=true;st.textContent='Salvando…';
   fb.database().ref('site').update(up).then(function(){Object.keys(tirar).forEach(function(id){delete DIN[id];});carregaSite();ir('inicio');alertaTela('Site organizado.');}).catch(function(){bt.disabled=false;st.textContent='Não foi possível salvar. Confira a internet e tente de novo.';});});}
 var REDES=[['instagram','Instagram','@seuperfil'],['email','E-mail','voce@gmail.com'],['whatsapp','WhatsApp','(47) 99999-9999'],['linkedin','LinkedIn','linkedin.com/in/voce'],['behance','Behance','behance.net/voce'],['pinterest','Pinterest','pinterest.com/voce'],['site','Site ou portfólio','seusite.com'],['outro','Outro link','endereço completo']];
-var PERFIL0={nome:'João Pedro de Oliveira',titulo:'Design de Moda · Univali',bio:'Estudante do Bacharelado em Design de Moda da Univali.\n\nO JOTTA\'s house é o meu portfólio. Aqui ficam a Cartola #13 — Tempo Rei, revista do meu Trabalho de Iniciação Científica (TIC II, 2026/2), os editoriais Tempo Rei e Uma São Paulo que não existe, o memorial do projeto e os próximos trabalhos, acadêmicos e profissionais.',foto:''};var CONT0={email:'jottap1605@gmail.com'};
+var PERFIL0={nome:'João Pedro de Oliveira',titulo:'Design de Moda · Univali',bio:'Estudante do Bacharelado em Design de Moda da Univali.\n\nO JOTTA\'s house é o meu portfólio. Aqui ficam a Cartola #13 — Tempo Rei, revista do meu Trabalho de Iniciação Científica (TIC II, 2026/2), os editoriais Tempo Rei e Uma São Paulo que não existe, o memorial do projeto e os próximos trabalhos, acadêmicos e profissionais.',foto:''};var CONT0={email:'jottap1605@gmail.com',instagram:'jottapedro.16'};
 function perfil(){var p=PERFIL||{},o={};for(var k in PERFIL0)o[k]=(p[k]!=null&&p[k]!=='')?String(p[k]):PERFIL0[k];
  var c=p.contatos,r={};if(c&&typeof c==='object'){REDES.forEach(function(x){if(c[x[0]])r[x[0]]=String(c[x[0]]);});}
  else if(typeof c==='string'&&c.trim()){c.split('\n').forEach(function(l){l=l.trim();if(!l)return;var k=null,low=l.toLowerCase();REDES.forEach(function(x){if(!k&&low.indexOf(x[1].toLowerCase())===0)k=x[0];});var v=l.indexOf(':')>0&&!/^https?:/i.test(l)?l.slice(l.indexOf(':')+1).trim():l;if(!k)k=/@[^\s]+\./.test(v)?'email':(/^@/.test(v)?'instagram':'outro');if(!r[k])r[k]=v;});}
@@ -1047,9 +1056,9 @@ function telaPerfil(){var c=$('pf-corpo');c.innerHTML='';var p=perfil();var top=
  var lk=el('div','pf-links'),tem=false;REDES.forEach(function(x){var v=p.contatos[x[0]];if(!v)return;var h=linkRede(x[0],v);if(!h)return;tem=true;var a=el('a','',x[1]);a.href=h;if(x[0]!=='email'){a.target='_blank';a.rel='noopener';}lk.appendChild(a);});if(tem)tx.appendChild(lk);
  if(editor){var ac=el('div','acoes');var be=el('button','ed','Editar perfil');be.type='button';be.addEventListener('click',function(){ir('editar-perfil');});ac.appendChild(be);tx.appendChild(ac);}
  top.appendChild(tx);c.appendChild(top);
- var ds=el('details','pf-tcc');var sm=el('summary','','Sobre o TCC · Cartola #13 — Tempo Rei');ds.appendChild(sm);var dv=el('div','pf-tcc-c');ds.appendChild(dv);telaSobre(dv);c.appendChild(ds);
+ var ds=el('details','pf-tcc');var sm=el('summary','','Sobre o TCC · Cartola #13 — Tempo Rei');ds.appendChild(sm);var dv=el('div','pf-tcc-c');ds.appendChild(dv);telaSobre(dv);var e1=el('div','tcc-esq'),e2=el('div','tcc-dir');Array.prototype.slice.call(dv.children).forEach(function(x,i,a){(x.classList.contains('rot')||x.classList.contains('sb-lista')?e2:e1).appendChild(x);});dv.appendChild(e1);dv.appendChild(e2);c.appendChild(ds);
  if(editor){var sec=el('section','pf-fbs');sec.id='pf-fb';sec.appendChild(el('div','rot','FEEDBACKS'));sec.appendChild(el('h2','','Feedbacks dos visitantes'));var lst=el('div');sec.appendChild(lst);c.appendChild(sec);listaFeedbacks(lst);}
- c.appendChild(el('div','rot','PROJETOS'));var mu=el('section');mu.id='pf-mural';mu.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px';
+ c.appendChild(el('div','rot','PROJETOS'));var mu=el('section');mu.id='pf-mural';mu.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px';
  M.forEach(function(m){var pn=el('div','pin');pn.appendChild(card(m,'inteira'));mu.appendChild(pn);});c.appendChild(mu);}
 function reduzImagem(file,lado){return new Promise(function(ok,erro){var im=new Image();im.onload=function(){var sc=Math.min(1,lado/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*sc);cv.height=Math.round(im.height*sc);
  cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);cv.toBlob(function(b){b?ok(b):erro();},'image/jpeg',0.85);};im.onerror=erro;im.src=URL.createObjectURL(file);});}
