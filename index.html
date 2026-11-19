@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191320";</script>
+<script>var VERSAO="202611191322";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -674,7 +674,7 @@ function refaz(){M.length=0;var oc=ocultos();ESTATICAS.forEach(function(m){aplic
  porId={};M.forEach(function(m){porId[m.id]=m;});grupos();indexa();montaLateral();montaInicio();aplicaTextos();if(rota==='perfil')telaPerfil();
  if(porId[rota]&&rota!=='revista'&&$('t-mat').classList.contains('on')){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}
  if(rota==='revista'&&porId.revista&&$('t-revista').classList.contains('on'))montaCab(porId.revista,$('r-cab'));}
-var TX0={rodape:'Cartola #13 — Tempo Rei\nTIC II · Design de Moda · Univali · 2026/2',destaques:'Em destaque',lista:'Matérias e processo'};
+var TX0={rodape:"JOTTA's house\nTIC II · Design de Moda · Univali · 2026/2",destaques:'Em destaque',lista:'Matérias e processo'};
 function textos(){var t=CFG.textos||{},o={};for(var k in TX0)o[k]=(t[k]!=null&&String(t[k]).trim()!=='')?String(t[k]):TX0[k];return o;}
 function aplicaTextos(){var t=textos(),r=$('rod-p');r.innerHTML='';String(t.rodape).split('\n').forEach(function(l,i){if(i)r.appendChild(el('br'));r.appendChild(document.createTextNode(l));});
  $('rot-dest').textContent=t.destaques.toUpperCase();$('rot-mural').textContent=filtro?filtro.toUpperCase():t.lista.toUpperCase();}
