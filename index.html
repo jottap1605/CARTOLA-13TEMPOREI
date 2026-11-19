@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191140";</script>
+<script>var VERSAO="202611191148";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -353,6 +353,26 @@ html.claro #rod-p{color:#6E7174}
 @media(max-width:900px){.rod-grid{grid-template-columns:1fr 1fr}.rod-ficha{grid-column:1/-1;align-items:center;text-align:center}.rod-ficha #rod-p{text-align:center}.rod-ed{align-items:center}.rod-share{align-items:flex-start}.rod-vis{align-items:flex-end}}
 @media(max-width:560px){.rbt{padding:0 11px 0 10px;gap:6px;font-size:13px}.rod-bts{gap:6px}.rod-grid{grid-template-columns:1fr;gap:22px}.rod-share,.rod-vis{align-items:center}.rod-bts{justify-content:center}.rod-ficha{order:3}}
 html.claro .rod-rot,html.claro .rod-link{color:#6E7174}html.claro .rbt{background:rgba(20,20,20,.06)}html.claro #rs-wa{background:#48503F;color:#EDEDEA}html.claro #rod-vis{color:#4A4E52}
+
+/* editar só no rodapé */
+#lateral .rod{display:none}
+/* computador: ocupar a tela toda */
+@media(min-width:1100px){
+ #t-inicio,#t-mat,#t-form,#t-perfil{padding-left:calc(var(--sb) + 32px);padding-right:32px}
+ #t-inicio,#t-mat,#t-form,#t-perfil{margin-left:0}
+ .cx,.perfil{max-width:none}
+ #mural{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+ #dest{grid-template-columns:minmax(360px,34%) 1fr;gap:18px}
+ #dest .lado{grid-template-columns:1fr 1fr;gap:18px}
+ .cab{max-width:1100px}
+ .fotos{max-width:none;column-count:4}
+ .rgrade{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+}
+@media(min-width:1400px){
+ .pags{max-width:1500px;display:grid;grid-template-columns:1fr 1fr;align-items:start}
+ .pags.slides{max-width:1700px}
+ .fotos{column-count:5}
+}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -779,9 +799,20 @@ function carregaFirebase(){if(fb)return Promise.resolve(fb);if(!FB)return Promis
  return p.then(function(){fb=firebase.initializeApp(FB);fb.auth().onAuthStateChanged(function(u){eu=u||null;var ok=!!(eu&&eu.email&&eu.email.toLowerCase()===DONO);
   if(eu&&!ok){alertaTela('Só o dono do site pode editar.');fb.auth().signOut();}
   editor=ok;ls('cartolaEditor',ok?'1':'0');refaz();rodapeEd();if(ok)leVisitas();if(porId[rota]&&$('t-mat').classList.contains('on'))abreMateria(porId[rota]);if(['nova','organizar','editar-perfil','perfil'].indexOf(rota)>=0||rota.indexOf('editar/')===0)lerHash();if(chat.sala)render();});return fb;});}
+function popupGoogle(){var pr=new firebase.auth.GoogleAuthProvider();pr.setCustomParameters({prompt:'select_account'});
+ return fb.auth().signInWithPopup(pr).catch(function(e){var c=e&&e.code||'';
+  if(c==='auth/popup-blocked'||c==='auth/operation-not-supported-in-this-environment'||c==='auth/web-storage-unsupported'){alertaTela('O navegador bloqueou a janela de login. Abra o site no Safari ou no Chrome (não dentro do Instagram/WhatsApp) e tente de novo.');return;}
+  if(c==='auth/unauthorized-domain'){alertaTela('Este endereço não está autorizado para login.');return;}
+  if(c!=='auth/popup-closed-by-user'&&c!=='auth/cancelled-popup-request')alertaTela('Não foi possível entrar ('+(c||'erro')+'). Tente de novo.');});}
 function entrar(){if(!FB||!DONO){alertaTela('O modo de edição ainda está sendo configurado.');return;}
- carregaFirebase().then(function(){if(editor){alertaTela('Você já está no modo de edição.');return;}var pr=new firebase.auth.GoogleAuthProvider();pr.setCustomParameters({prompt:'select_account'});
-  return fb.auth().signInWithPopup(pr).catch(function(e){if(e&&(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'))return fb.auth().signInWithRedirect(pr);if(e&&e.code!=='auth/popup-closed-by-user')alertaTela('Não foi possível entrar. Tente de novo.');});})
+ if(editor){alertaTela('Você já está no modo de edição.');return;}
+ /* com o login já carregado, abre a janela do Google no mesmo toque (o celular bloqueia se demorar) */
+ if(fb&&window.firebase&&firebase.auth){popupGoogle();return;}
+ alertaTela('Preparando o login…');
+ carregaFirebase().then(function(){if(editor)return;
+  var f=$('folha'),c=$('fcorpo');c.innerHTML='';f.querySelector('.ftopo span').textContent='EDITAR O SITE';
+  c.appendChild(el('p','dica','Entre com a sua conta Google para editar.')).style.marginTop='4px';
+  var ac=el('div','acoes');var b=el('button','btn','Entrar com Google');b.type='button';b.addEventListener('click',function(){f.classList.remove('on');popupGoogle();});ac.appendChild(b);c.appendChild(ac);f.classList.add('on');})
   .catch(function(){alertaTela('Não foi possível carregar o login. Confira a internet.');});}
 
 /* ---------- FORMULÁRIOS ---------- */
