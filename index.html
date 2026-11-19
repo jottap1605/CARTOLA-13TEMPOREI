@@ -2,6 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
+<script>var VERSAO="202611191135";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -328,6 +329,11 @@ html.claro .capai{background:#E4E4E0}html.claro .pv{color:#6E7174}
 .rmais{min-height:42px;border-radius:999px;border:1px dashed #B8BBBD;background:none;padding:0 16px;cursor:pointer;font-size:13px;letter-spacing:.04em;margin:2px 0 0}
 .rconta{font-family:Futura,"Jost",sans-serif!important;font-size:12px!important;letter-spacing:.04em;color:#B8BBBD!important}
 html.claro .rgcab small{color:#6E7174}html.claro .rmais{border-color:#4A4E52}html.claro .rconta{color:#4A4E52!important}
+
+#rodape{margin:56px 0 0;padding:24px 4px 8px;border-top:1px solid var(--borda);text-align:center}
+#rod-p{font-size:12px;line-height:1.8;letter-spacing:.12em;text-transform:uppercase;color:#8a8d90}
+body.buscando #rodape{display:none}
+html.claro #rod-p{color:#6E7174}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -420,7 +426,7 @@ html.claro #cst{color:#4A4E52}
  <div id="lat-mat"></div>
  <div id="lat-conta"></div>
  <button id="g-vis" class="it grupo" type="button" aria-expanded="false">Visualização<span class="seta"></span></button><div class="sub" id="s-vis"><button id="l-fs" type="button">Tela cheia</button><button id="l-tema" type="button">Modo claro</button></div></nav>
- <div class="rod"><span id="rod-t">Cartola #13 — Tempo Rei<br>TIC II · Design de Moda · Univali · 2026/2</span><br><button id="l-editar" type="button" class="editar">Editar o site</button></div>
+ <div class="rod"><span id="rod-t" hidden></span><button id="l-editar" type="button" class="editar">Editar o site</button></div>
 </aside>
 <div id="veu"></div>
 
@@ -437,6 +443,7 @@ html.claro #cst{color:#4A4E52}
    <div id="filtros" role="group" aria-label="Filtrar projetos"></div>
    <section id="mural"></section>
   </div>
+  <footer id="rodape"><div id="rod-p"></div></footer>
  </div>
 </main>
 
@@ -596,7 +603,7 @@ function refaz(){M.length=0;var oc=ocultos();ESTATICAS.forEach(function(m){aplic
  if(porId[rota]&&rota!=='revista'&&$('t-mat').classList.contains('on')){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}}
 var TX0={rodape:'Cartola #13 — Tempo Rei\nTIC II · Design de Moda · Univali · 2026/2',destaques:'Em destaque',lista:'Matérias e processo'};
 function textos(){var t=CFG.textos||{},o={};for(var k in TX0)o[k]=(t[k]!=null&&String(t[k]).trim()!=='')?String(t[k]):TX0[k];return o;}
-function aplicaTextos(){var t=textos(),r=$('rod-t');r.innerHTML='';String(t.rodape).split('\n').forEach(function(l,i){if(i)r.appendChild(el('br'));r.appendChild(document.createTextNode(l));});
+function aplicaTextos(){var t=textos(),r=$('rod-p');r.innerHTML='';String(t.rodape).split('\n').forEach(function(l,i){if(i)r.appendChild(el('br'));r.appendChild(document.createTextNode(l));});
  $('rot-dest').textContent=t.destaques.toUpperCase();$('rot-mural').textContent=t.lista.toUpperCase();}
 function carregaSite(){fetch(DB+'site.json').then(function(r){return r.json();}).then(function(d){if(!d||d.error)return;DIN=d.materias||{};EDIT=d.edicoes||{};CFG=d.config||{};PERFIL=d.perfil||null;refaz();if(pendente){var p=pendente;pendente=null;mostra(p.id,p.pg);}}).catch(function(){});}
 
@@ -817,7 +824,7 @@ function telaOrganizar(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcess
  ow.appendChild(mk);f.appendChild(ow);
  f.appendChild(el('div','rot','TEXTOS DO SITE')).style.margin='14px 2px 0';
  f.appendChild(campo('Título acima dos destaques','or-tdest','input',tx.destaques,60));f.appendChild(campo('Título acima da lista de projetos','or-tlista','input',tx.lista,60));
- var rw0=campo('Rodapé do menu (uma informação por linha)','or-rod','textarea',tx.rodape,300);rw0.querySelector('textarea').rows=3;f.appendChild(rw0);
+ var rw0=campo('Rodapé da página inicial (uma informação por linha)','or-rod','textarea',tx.rodape,300);rw0.querySelector('textarea').rows=3;f.appendChild(rw0);
  var st=el('div','st'),ac=el('div','acoes');var bt=el('button','btn','Salvar');bt.type='submit';var bv=el('button','','Cancelar');bv.type='button';bv.addEventListener('click',function(){ir('inicio');});ac.appendChild(bt);ac.appendChild(bv);f.appendChild(ac);f.appendChild(st);c.appendChild(f);
  desenhaG();atualizaSel();
  f.addEventListener('submit',function(e){e.preventDefault();var nm=linhasG.map(function(x){return x.nome.trim().slice(0,40);});
@@ -986,9 +993,12 @@ addEventListener('hashchange',lerHash);
 function ph(){$('q').placeholder=innerWidth<560?'Pesquisar':'Pesquisar matérias e textos';}ph();addEventListener('resize',ph);
 Array.prototype.forEach.call(document.querySelectorAll('#ed-barra [data-ed]'),function(b){b.addEventListener('click',function(){ir(b.getAttribute('data-ed'));});});
 Array.prototype.forEach.call(document.querySelectorAll('#lateral [data-ir="perfil"]'),function(b){b.addEventListener('click',function(){menu(false);ir('perfil');});});
-grupos();indexa();montaLateral();montaInicio();
+grupos();indexa();montaLateral();montaInicio();aplicaTextos();
 lerHash();ajustaPainel();
 carregaSite();
 if(ls('cartolaEditor')==='1'&&FB)carregaFirebase().catch(function(){});
+/* versão nova: se o aparelho guardou uma cópia antiga, troca sozinho */
+(function(){try{fetch(location.pathname+'?ver='+Date.now(),{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){var m=t.match(/var VERSAO="(\d+)"/);if(!m||m[1]===window.VERSAO)return;
+ var k='cartolaVer'+m[1];if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+m[1]+location.hash);}).catch(function(){});}catch(e){}})();
 })();
 </script></body></html>
