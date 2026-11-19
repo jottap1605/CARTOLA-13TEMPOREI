@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611191358";</script>
+<script>var VERSAO="202611191446";</script>
 <script>try{if(localStorage.getItem("cartolaTema")==="claro"){document.documentElement.classList.add("claro");document.querySelector('meta[name="theme-color"]').content="#EDEDEA";}}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -248,7 +248,7 @@ body.chat-fixo #rchat{display:none}
 @media(hover:hover){.card:hover img{transform:scale(1.02)}.card img{transition:transform .5s}}
 
 /* perfil, organizar, moderação */
-#t-perfil{padding:calc(var(--hh) + env(safe-area-inset-top) + 18px) max(16px,env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));margin-right:var(--pn);margin-left:var(--sb)}
+#t-sobre,#t-perfil{padding:calc(var(--hh) + env(safe-area-inset-top) + 18px) max(16px,env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));margin-right:var(--pn);margin-left:var(--sb)}
 .perfil{max-width:1180px;margin:0 auto}
 .pf-top{display:grid;grid-template-columns:minmax(160px,300px) 1fr;gap:28px;align-items:start}
 .pf-foto{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:18px;background:#1d1d1d;display:block}
@@ -358,8 +358,8 @@ html.claro .rod-rot,html.claro .rod-link{color:#6E7174}html.claro .rbt{backgroun
 #lateral .rod{display:none}
 /* computador: ocupar a tela toda */
 @media(min-width:1100px){
- #t-inicio,#t-mat,#t-form,#t-perfil{padding-left:calc(var(--sb) + 32px);padding-right:32px}
- #t-inicio,#t-mat,#t-form,#t-perfil{margin-left:0}
+ #t-inicio,#t-mat,#t-form,#t-sobre,#t-perfil{padding-left:calc(var(--sb) + 32px);padding-right:32px}
+ #t-inicio,#t-mat,#t-form,#t-sobre,#t-perfil{margin-left:0}
  .cx,.perfil{max-width:none}
  #mural{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
  #dest{grid-template-columns:minmax(360px,34%) 1fr;gap:18px}
@@ -387,7 +387,7 @@ html.claro .cdata,html.claro .mdata{color:#4A4E52}
 #ui{position:static;margin:12px 0 0}
 #ui #rsobre,#ui #rchat{display:none}
 #r-cab{margin-bottom:18px}
-@media(max-width:700px){#wrap{height:calc((100vw - 32px) * 0.72 + 24px);min-height:0}}
+@media(max-width:700px){#wrap{height:calc((100vw - 32px) * 1.415 + 12px);max-height:calc(100dvh - var(--hh) - 60px);min-height:0}}
 @media(min-width:1100px){#t-revista{padding-left:calc(var(--sb) + 32px);padding-right:32px;margin-left:0}}
 
 .cab-dir{margin-top:20px}
@@ -429,6 +429,19 @@ html.claro .rf-logo{color:#141414}html.claro .rf-tit{color:#6E7174}html.claro .r
 .tela>#rodape{margin-top:64px}
 #ra-links:empty{display:none}
 .pf-base{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px 20px;margin-top:40px;padding-top:14px;border-top:1px solid var(--borda)}
+#rod-editar{flex:none;display:flex;align-items:center;gap:7px;height:40px;margin-left:10px;padding:0 14px 0 12px;border-radius:999px;border:1px solid var(--borda);background:none;color:#B8BBBD;font-size:13px;letter-spacing:.04em;cursor:pointer}
+#rod-editar svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}
+#rod-editar.on{background:#5E1A24;border-color:#5E1A24;color:#EDEDEA}
+@media(max-width:560px){#rod-editar{width:40px;padding:0;justify-content:center;margin-left:8px}#rod-editar span{display:none}}
+html.claro #rod-editar{color:#4A4E52}html.claro #rod-editar.on{color:#EDEDEA}
+.pf-base{border-top:0!important;margin-top:24px!important}
+.sb-ficha{display:grid;grid-template-columns:auto 1fr;gap:8px 22px;margin:26px 0 0;max-width:640px;font-size:15px}.sb-ficha dt{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8a8d90;padding-top:3px}.sb-ficha dd{margin:0}
+.sb-lista{display:grid;gap:10px;max-width:760px}.sb-item{display:flex;flex-direction:column;gap:4px;text-align:left;background:rgba(237,237,234,.05);border:1px solid var(--borda);border-radius:14px;padding:14px 16px;cursor:pointer;color:inherit;font:inherit}.sb-item b{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:400}.sb-item span{font-size:14px;line-height:1.5;color:#B8BBBD}
+html.claro .sb-item{background:rgba(20,20,20,.04)}html.claro .sb-item span{color:#4A4E52}
+@media(max-width:560px){.sb-ficha{grid-template-columns:1fr;gap:2px}.sb-ficha dd{margin-bottom:10px}}
+#sobe{position:fixed;left:max(16px,env(safe-area-inset-left));bottom:calc(18px + env(safe-area-inset-bottom));z-index:60;width:46px;height:46px;border-radius:50%;border:1px solid var(--borda);background:rgba(20,20,20,.85);color:#EDEDEA;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#sobe.on{opacity:1;pointer-events:auto}#sobe svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html.claro #sobe{background:rgba(237,237,234,.9);color:#141414}
 /* modo claro */
 html.claro{--borda:rgba(20,20,20,.14)}html.claro #lateral{background:#E4E4E0}html.claro #topo{background:rgba(237,237,234,.92)}
 html.claro,html.claro body{background:#EDEDEA;color:#141414}
@@ -514,10 +527,11 @@ html.claro #cst{color:#4A4E52}
  <button class="marca" id="home" type="button" aria-label="JOTTA's house — início">JOTTA's house</button>
  <button id="voltar" type="button">‹ Início</button>
  <label id="busca"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Pesquisar matérias e textos" aria-label="Pesquisar" enterkeyhint="search" autocomplete="off"><button id="limpa" type="button" aria-label="Limpar busca">×</button></label>
+ <button id="rod-editar" type="button" aria-label="Editar o site"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg><span>Editar</span></button>
 </header>
 <aside id="lateral" aria-label="Navegação">
  <button class="marca" id="home2" type="button" aria-label="JOTTA's house — início">JOTTA's house</button>
- <nav><button data-ir="inicio" class="it">Início</button><button data-ir="perfil" class="it">Perfil</button>
+ <nav><button data-ir="inicio" class="it">Início</button><button data-ir="perfil" class="it">Perfil</button><button data-ir="sobre" class="it">Sobre o TCC</button>
  <div id="lat-mat"></div>
  <div id="lat-conta"></div>
  <button id="g-vis" class="it grupo" type="button" aria-expanded="false">Visualização<span class="seta"></span></button><div class="sub" id="s-vis"><button id="l-fs" type="button">Tela cheia</button><button id="l-tema" type="button">Modo claro</button></div></nav>
@@ -548,7 +562,8 @@ html.claro #cst{color:#4A4E52}
 </main>
 
 <main id="t-form" class="tela"><div id="fm-corpo"></div></main>
-<main id="t-perfil" class="tela"><div class="perfil" id="pf-corpo"></div><div class="perfil pf-base"><span id="rod-vis" hidden></span><button id="rod-editar" type="button" class="rod-link">Editar o site</button></div></main>
+<main id="t-perfil" class="tela"><div class="perfil" id="pf-corpo"></div><div class="perfil pf-base"><span id="rod-vis" hidden></span></div></main>
+<main id="t-sobre" class="tela"><div class="perfil" id="sb-corpo"></div></main>
 <div id="toast" role="status"></div>
 <main id="t-mat" class="tela"><div class="cab" id="m-cab"></div><div id="m-corpo"></div></main>
 
@@ -819,7 +834,7 @@ function montaCab(m,cab0){cab0.innerHTML='';var cab=el('div','cab-esq');cab0.app
  if(editor){var be=el('button','ed','Editar projeto');be.type='button';be.addEventListener('click',function(){ir('editar/'+m.id);});ac.appendChild(be);
   {var bx=el('button','perigo','Apagar projeto');bx.type='button';bx.addEventListener('click',function(){apagar(m);});ac.appendChild(bx);}}
  cab.appendChild(ac);
- if(VIS[m.id]!=null)cab.appendChild(el('div','ficha vis-m',VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));
+ if(editor&&VIS[m.id]!=null)cab.appendChild(el('div','ficha vis-m',VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));
  var inf=infoEl(m);if(inf){var dir=el('aside','cab-dir');dir.appendChild(el('div','rot cab-rot','SAIBA MAIS'));dir.appendChild(inf);cab0.appendChild(dir);cab0.classList.add('duas');}else cab0.classList.remove('duas');
 }
 function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');c.innerHTML='';montaCab(m,cab);
@@ -852,7 +867,7 @@ function leVisitas(){if(!fb)return;fb.database().ref('visitas').once('value').th
 (function(){var t=$('rv-tema'),f=$('rv-fs');t.addEventListener('click',function(){$('l-tema').click();rvTema();});
  if(!temFs)f.hidden=true;f.addEventListener('click',function(){$('l-fs').click();});rvTema();})();
 function rvTema(){var c=document.documentElement.classList.contains('claro');var e=$('rv-tema-t');if(e)e.textContent=c?'Modo escuro':'Modo claro';}
-function rodapeEd(){try{montaAutor();}catch(e){}var b=$('rod-editar');if(b)b.textContent=editor?'Sair do modo de edição':'Editar o site';var v=$('rod-vis');if(!v)return;
+function rodapeEd(){try{montaAutor();}catch(e){}var b=$('rod-editar');if(b){var sp=b.querySelector('span');(sp||b).textContent=editor?'Sair da edição':'Editar';b.setAttribute('aria-label',editor?'Sair do modo de edição':'Editar o site');b.classList.toggle('on',!!editor);}checaFb();var v=$('rod-vis');if(!v)return;
  if(VIS.site!=null){var tot=0;for(var k in VIS)if(k!=='site')tot+=Number(VIS[k])||0;v.textContent='Visitas: '+VIS.site+' ao site'+' · '+tot+' nos projetos';v.hidden=!editor;}else{v.textContent='';v.hidden=true;}}
 
 /* ---------- RODAPÉ: criador e feedback ---------- */
@@ -870,16 +885,25 @@ function telaFeedback(){var f=$('folha'),c=$('fcorpo');c.innerHTML='';f.querySel
   fetch(DB+'feedback.json',{method:'POST',body:JSON.stringify(d)}).then(function(r){return r.json();}).then(function(x){if(!x||!x.name)throw 0;telaFeedback.u=Date.now();f.classList.remove('on');alertaTela('Feedback enviado. Obrigado!');})
   .catch(function(){b.disabled=false;st.textContent='Não foi possível enviar. Confira a internet e tente de novo.';});});
  f.classList.add('on');setTimeout(function(){try{$('fb-m').focus();}catch(e){}},50);}
+function checaFb(){if(!editor||!fb||checaFb.feito)return;checaFb.feito=1;fb.database().ref('feedback').once('value').then(function(sn){var d=sn.val()||{},v=Number(ls('cartolaFbVisto')||0),n=0;for(var k in d)if((d[k].t||0)>v)n++;if(n)alertaTela(n+(n===1?' feedback novo. Veja no Perfil.':' feedbacks novos. Veja no Perfil.'));}).catch(function(){});}
 function listaFeedbacks(c){c.innerHTML='';c.appendChild(el('p','dica','Carregando…'));
  if(!fb){c.innerHTML='';c.appendChild(el('p','dica','Entre no modo de edição para ver os feedbacks.'));return;}
  fb.database().ref('feedback').once('value').then(function(sn){var d=sn.val()||{},ks=Object.keys(d).sort(function(a,b){return(d[b].t||0)-(d[a].t||0);});c.innerHTML='';
   if(!ks.length){c.appendChild(el('p','dica','Ainda não chegou nenhum feedback.'));return;}
-  c.appendChild(el('p','dica',ks.length+(ks.length===1?' feedback recebido':' feedbacks recebidos')+' · só você vê'));
+  c.appendChild(el('p','dica',ks.length+(ks.length===1?' feedback recebido':' feedbacks recebidos')+' · só você vê'));ls('cartolaFbVisto',String(d[ks[0]].t||Date.now()));
   ks.forEach(function(k){var x=d[k],w=el('div','fbl'),h=el('div');h.appendChild(el('b','',x.n||'Sem nome'));h.appendChild(el('span','',x.t?hora(x.t):''));w.appendChild(h);w.appendChild(el('p','',String(x.m||'')));
    var bx=el('button','rod-link','Apagar');bx.type='button';bx.addEventListener('click',function(){if(!confirm('Apagar este feedback?'))return;fb.database().ref('feedback/'+k).remove().then(function(){w.remove();alertaTela('Feedback apagado.');}).catch(function(){alertaTela('Não foi possível apagar.');});});w.appendChild(bx);c.appendChild(w);});})
  .catch(function(){c.innerHTML='';c.appendChild(el('p','dica','Não foi possível abrir os feedbacks.'));});}
 function verFeedbacks(){if(!editor)return;ir('perfil');setTimeout(function(){var x=$('pf-fb');if(x)x.scrollIntoView({behavior:'smooth',block:'start'});},250);}
 setTimeout(function(){try{montaAutor();}catch(e){}},0);$('fb-abre').addEventListener('click',telaFeedback);$('fb-ver').addEventListener('click',verFeedbacks);$('ra-perfil').addEventListener('click',function(){ir('perfil');});
+
+function telaSobre(){var c=$('sb-corpo');c.innerHTML='';c.appendChild(el('div','rot','SOBRE O TCC')).style.margin='0 0 6px';c.appendChild(el('h1','','Cartola #13 — Tempo Rei'));
+ var bio=el('div','pf-bio');['A Cartola #13 — Tempo Rei é a revista do Trabalho de Iniciação Científica (TIC II) de João Pedro de Oliveira, no Bacharelado em Design de Moda da Univali, em 2026/2.','Neste site estão a revista completa para folhear, os editoriais Tempo Rei e Uma São Paulo que não existe, com as fotos uma a uma, e o memorial descritivo do trabalho.'].forEach(function(t){bio.appendChild(el('p','',t));});c.appendChild(bio);
+ var fx=el('dl','sb-ficha');[['Revista','João Pedro de Oliveira, Naila Sperotto e Nicole Reiser'],['Editorial e memorial','João Pedro de Oliveira'],['Orientação','Caroline Santos da Silva'],['Curso','Bacharelado em Design de Moda · Univali'],['Semestre','2026/2']].forEach(function(x){fx.appendChild(el('dt','',x[0]));fx.appendChild(el('dd','',x[1]));});c.appendChild(fx);
+ var ids=['revista','temporei','cenarios','memorial'].filter(function(i){return porId[i];});if(ids.length){c.appendChild(el('div','rot','O QUE VOCÊ ENCONTRA AQUI')).style.margin='34px 0 10px';var l=el('div','sb-lista');ids.forEach(function(i){var m=porId[i],b=el('button','sb-item');b.type='button';b.appendChild(el('b','',m.titulo));if(m.resumo)b.appendChild(el('span','',m.resumo));b.addEventListener('click',function(){ir(i);});l.appendChild(b);});c.appendChild(l);}}
+/* voltar ao topo */
+(function(){var b=el('button','',null);b.id='sobe';b.type='button';b.setAttribute('aria-label','Voltar ao topo');b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';document.body.appendChild(b);
+ b.addEventListener('click',function(){scrollTo({top:0,behavior:'smooth'});});var f=function(){b.classList.toggle('on',scrollY>innerHeight*1.2&&!document.body.classList.contains('buscando'));};addEventListener('scroll',f,{passive:true});f();})();
 /* ---------- LOGIN (só o dono) ---------- */
 function alertaTela(txt){var a=$('toast');a.textContent=txt;a.classList.add('on');clearTimeout(alertaTela.t);alertaTela.t=setTimeout(function(){a.classList.remove('on');},4200);}
 function carregaScript(src){return new Promise(function(ok,erro){var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=erro;document.head.appendChild(s);});}
@@ -996,11 +1020,11 @@ function telaOrganizar(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcess
   bt.disabled=true;st.textContent='Salvando…';
   fb.database().ref('site').update(up).then(function(){Object.keys(tirar).forEach(function(id){delete DIN[id];});carregaSite();ir('inicio');alertaTela('Site organizado.');}).catch(function(){bt.disabled=false;st.textContent='Não foi possível salvar. Confira a internet e tente de novo.';});});}
 var REDES=[['instagram','Instagram','@seuperfil'],['email','E-mail','voce@gmail.com'],['whatsapp','WhatsApp','(47) 99999-9999'],['linkedin','LinkedIn','linkedin.com/in/voce'],['behance','Behance','behance.net/voce'],['pinterest','Pinterest','pinterest.com/voce'],['site','Site ou portfólio','seusite.com'],['outro','Outro link','endereço completo']];
-var PERFIL0={nome:'João Pedro de Oliveira',titulo:'Design de Moda · Univali',bio:'',foto:''};
+var PERFIL0={nome:'João Pedro de Oliveira',titulo:'Design de Moda · Univali',bio:'Estudante do Bacharelado em Design de Moda da Univali.\n\nO JOTTA\'s house é o meu portfólio. Aqui ficam a Cartola #13 — Tempo Rei, revista do meu Trabalho de Iniciação Científica (TIC II, 2026/2), os editoriais Tempo Rei e Uma São Paulo que não existe, o memorial do projeto e os próximos trabalhos, acadêmicos e profissionais.',foto:''};var CONT0={email:'jottap1605@gmail.com'};
 function perfil(){var p=PERFIL||{},o={};for(var k in PERFIL0)o[k]=(p[k]!=null&&p[k]!=='')?String(p[k]):PERFIL0[k];
  var c=p.contatos,r={};if(c&&typeof c==='object'){REDES.forEach(function(x){if(c[x[0]])r[x[0]]=String(c[x[0]]);});}
  else if(typeof c==='string'&&c.trim()){c.split('\n').forEach(function(l){l=l.trim();if(!l)return;var k=null,low=l.toLowerCase();REDES.forEach(function(x){if(!k&&low.indexOf(x[1].toLowerCase())===0)k=x[0];});var v=l.indexOf(':')>0&&!/^https?:/i.test(l)?l.slice(l.indexOf(':')+1).trim():l;if(!k)k=/@[^\s]+\./.test(v)?'email':(/^@/.test(v)?'instagram':'outro');if(!r[k])r[k]=v;});}
- o.contatos=r;return o;}
+ if(!Object.keys(r).length&&!(p.contatos&&typeof p.contatos==='object'&&Object.keys(p.contatos).length))for(var q in CONT0)r[q]=CONT0[q];o.contatos=r;return o;}
 function url(v){v=v.trim();return /^https?:\/\//i.test(v)?v:'https://'+v.replace(/^\/+/,'');}
 function linkRede(k,v){v=String(v).trim();if(!v)return null;
  if(k==='email')return 'mailto:'+v.replace(/^mailto:/i,'');
@@ -1108,12 +1132,12 @@ addEventListener('keydown',function(e){if($('vz').classList.contains('on')){if(e
 
 /* ---------- REVISTA ---------- */
 var RATIO=595.5/842.25,book=$('book'),pf=null,revIniciada=false;
-function fit(){if(document.body.classList.contains('nolib'))return;var w=$('wrap'),vw=w.clientWidth,vh=w.clientHeight-8;if(!vw||!vh)return;var ph=Math.min(vh*0.99,(vw*0.985/2)/RATIO);book.style.height=ph+'px';book.style.width=(ph*RATIO*2)+'px';}
+function fit(){if(document.body.classList.contains('nolib'))return;var w=$('wrap'),vw=w.clientWidth,vh=w.clientHeight-8;if(!vw||!vh)return;var um=innerWidth<700,ph=Math.min(vh*0.99,(vw*0.985/(um?1:2))/RATIO);book.style.height=ph+'px';book.style.width=(ph*RATIO*(um?1:2))+'px';}
 window._fit=function(){if(rota!=='revista')return;fit();try{pf&&pf.update();}catch(e){}};
-function label(){var i=pf.getCurrentPageIndex(),t;if(i<=0)t='Capa';else if(i>=37)t='Contracapa';else{if(i%2===0)i-=1;t='Págs. '+(i+1)+'–'+(i+2);}$('pg').textContent=t;}
+function label(){var i=pf.getCurrentPageIndex(),t;if(innerWidth<700){t=i<=0?'Capa':(i>=37?'Contracapa':'Pág. '+(i+1));$('pg').textContent=t;return;}if(i<=0)t='Capa';else if(i>=37)t='Contracapa';else{if(i%2===0)i-=1;t='Págs. '+(i+1)+'–'+(i+2);}$('pg').textContent=t;}
 function iniciaRevista(){if(revIniciada)return;revIniciada=true;fit();
  if(!window.St||!St.PageFlip){document.body.classList.add('nolib');$('hint').textContent='O efeito de folha precisa de internet e não carregou. As páginas aparecem em lista. Atualize para tentar de novo.';return;}
- pf=new St.PageFlip(book,{width:595,height:842,size:'stretch',minWidth:200,maxWidth:1800,minHeight:283,maxHeight:2546,showCover:true,usePortrait:false,drawShadow:true,maxShadowOpacity:0.55,flippingTime:1100,mobileScrollSupport:true,swipeDistance:18,clickEventForward:false,showPageCorners:true,disableFlipByClick:false,autoSize:true});
+ pf=new St.PageFlip(book,{width:595,height:842,size:'stretch',minWidth:200,maxWidth:1800,minHeight:283,maxHeight:2546,showCover:true,usePortrait:innerWidth<700,drawShadow:true,maxShadowOpacity:0.55,flippingTime:1100,mobileScrollSupport:true,swipeDistance:18,clickEventForward:false,showPageCorners:true,disableFlipByClick:false,autoSize:true});
  pf.loadFromHTML(document.querySelectorAll('.page'));
  try{var pc=pf.getPageCollection();var ps=pc.getPages?pc.getPages():pc.pages;ps.forEach(function(p){if(p.setDensity)p.setDensity('soft');});pf.update();}catch(e){}
  pf.on('flip',function(){label();$('hint').style.opacity=0;});
@@ -1129,7 +1153,7 @@ $('rchat').addEventListener('click',function(){abreChat('revista');});
 var pendente=null;
 function ir(id,pg){var h='#'+(id==='inicio'?'':id)+(pg?'/'+pg:'');if(location.hash!==h&&!(h==='#'&&!location.hash)){location.hash=h;}else mostra(id,pg);}
 function mostra(id,pg){var tipo='inicio';
- if(id==='nova'||id==='organizar'||id==='editar-perfil'||id.indexOf('editar/')===0)tipo='form';else if(id==='perfil')tipo='perfil';else if(porId[id])tipo='materia';
+ if(id==='nova'||id==='organizar'||id==='editar-perfil'||id.indexOf('editar/')===0)tipo='form';else if(id==='perfil')tipo='perfil';else if(id==='sobre')tipo='sobre';else if(porId[id])tipo='materia';
  else if(/^m[a-z0-9]{6,}$/.test(id)){tipo='espera';}else id='inicio';
  rota=id;pendente=tipo==='espera'?{id:id,pg:pg}:null;
  Array.prototype.forEach.call(document.querySelectorAll('.tela'),function(t){t.classList.remove('on');});
@@ -1137,10 +1161,11 @@ function mostra(id,pg){var tipo='inicio';
  if(tipo!=='inicio'){$('q').value='';busca();}
  Array.prototype.forEach.call(document.querySelectorAll('[data-ir]'),function(b){b.classList.toggle('atual',b.getAttribute('data-ir')===id);});
  if(m){abreGrupo(m.grupo);contaVisita(m.id);}
- document.title=(m?m.titulo+' — ':(id==='perfil'?'Perfil — ':''))+"JOTTA's house";
+ document.title=(m?m.titulo+' — ':(id==='perfil'?'Perfil — ':(id==='sobre'?'Sobre o TCC — ':'')))+"JOTTA's house";
  if(tipo==='inicio'){$('t-inicio').classList.add('on');if(!pg)scrollTo(0,0);}
  else if(tipo==='form'){$('t-form').classList.add('on');scrollTo(0,0);if(id==='nova')telaNova();else if(id==='organizar')telaOrganizar();else if(id==='editar-perfil')telaEditarPerfil();else telaEditar(id.slice(7));}
  else if(tipo==='perfil'){$('t-perfil').classList.add('on');scrollTo(0,0);telaPerfil();}
+ else if(tipo==='sobre'){$('t-sobre').classList.add('on');scrollTo(0,0);telaSobre();}
  else if(tipo==='espera'){$('t-form').classList.add('on');$('fm-corpo').innerHTML='';$('fm-corpo').appendChild(el('div','aviso','Carregando…'));}
  else if(id==='revista'){montaCab(porId.revista,$('r-cab'));$('t-revista').classList.add('on');iniciaRevista();setTimeout(window._fit,20);if(pg&&pf){try{pf.turnToPage(Math.max(0,Math.min(37,pg-1)));label();}catch(e){}}}
  else{$('t-mat').classList.add('on');abreMateria(m,pg);}
@@ -1151,6 +1176,7 @@ addEventListener('hashchange',lerHash);
 function ph(){$('q').placeholder=innerWidth<560?'Pesquisar':'Pesquisar matérias e textos';}ph();addEventListener('resize',ph);
 Array.prototype.forEach.call(document.querySelectorAll('#ed-barra [data-ed]'),function(b){b.addEventListener('click',function(){ir(b.getAttribute('data-ed'));});});
 Array.prototype.forEach.call(document.querySelectorAll('#lateral [data-ir="perfil"]'),function(b){b.addEventListener('click',function(){menu(false);ir('perfil');});});
+Array.prototype.forEach.call(document.querySelectorAll('#lateral [data-ir="sobre"]'),function(b){b.addEventListener('click',function(){menu(false);ir('sobre');});});
 grupos();indexa();montaLateral();montaInicio();aplicaTextos();
 lerHash();ajustaPainel();
 carregaSite();
