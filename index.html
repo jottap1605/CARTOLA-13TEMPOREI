@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611201620";</script>
+<script>var VERSAO="202611201745";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -580,6 +580,13 @@ html.claro #cst{color:#4A4E52}
 body.rev-cheia #t-revista #r-cab,body.rev-cheia #t-revista #rodape,body.rev-cheia #t-revista #rod-editar,body.rev-cheia #hint{display:none!important}
 body.rev-cheia #wrap{height:calc(100vh - 74px)!important;max-height:none!important;min-height:0!important}
 html.claro #t-revista:fullscreen{background:#EDEDEA}
+/* tela cheia dentro da página (sem a tela cheia do navegador, que mostra aviso de 'arraste para sair') */
+html.cheio,html.cheio body{overflow:hidden!important}
+#t-revista.cheia{position:fixed!important;inset:0!important;z-index:950!important;background:#141414;margin:0!important;padding:calc(14px + env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))!important;overflow:hidden}
+html.claro #t-revista.cheia{background:#EDEDEA}
+html.cheio #panel{z-index:960}
+#t-revista.cheia,.apwrap.cheia{right:var(--pn,0px)!important}
+body.rev-cheia #wrap{height:calc(100dvh - 74px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important}
 html,body{overflow-anchor:none}
 body:not(.nolib) #wrap{contain:size layout}
 body:not(.gaveta) #lateral{box-shadow:none!important;visibility:hidden;transition:transform .25s ease,visibility 0s .25s}body.gaveta #lateral{visibility:visible;transition:transform .25s ease}
@@ -784,6 +791,9 @@ body.rev-cheia #modo-v{display:none!important}
 .apwrap:fullscreen .pags.m-apres .pg.on img{max-height:calc(100vh - 90px)}
 .apwrap:-webkit-full-screen .pags.m-apres .pg.on img{max-height:calc(100vh - 90px)}
 .apwrap:fullscreen .pg .n{display:none}
+.apwrap.cheia{position:fixed!important;inset:0!important;z-index:950!important;background:#111;display:flex;flex-direction:column;justify-content:center;padding:calc(12px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom));margin:0!important}
+.apwrap.cheia .pags.m-apres .pg.on img{max-height:calc(100dvh - 90px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+.apwrap.cheia .pg .n{display:none}
 </style></head><body>
 <header id="topo">
  <button id="abre" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -1164,10 +1174,10 @@ function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');c.innerHTML='';mont
   b.addEventListener('click',function(){abreVz(lista,i);});ps.appendChild(b);});c.appendChild(ps);
  if(md==='apres'){var at=0,tot=PG.length,nav=el('div','apnav'),ba=el('button','apb','‹'),bp=el('button','apb','›'),ct=el('span','apct','');ba.type=bp.type='button';ba.setAttribute('aria-label','Página anterior');bp.setAttribute('aria-label','Próxima página');nav.appendChild(ba);nav.appendChild(ct);nav.appendChild(bp);var apw=el('div','apwrap');c.insertBefore(apw,ps);apw.appendChild(ps);apw.appendChild(nav);
   var fsb=el('button','apfs');fsb.type='button';fsb.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Tela cheia</span>';
-  if(apw.requestFullscreen||apw.webkitRequestFullscreen){nav.appendChild(fsb);fsb.addEventListener('click',function(){var em=document.fullscreenElement||document.webkitFullscreenElement;try{if(em)(document.exitFullscreen||document.webkitExitFullscreen).call(document);else(apw.requestFullscreen||apw.webkitRequestFullscreen).call(apw);}catch(e){}});
-   var mudaFs=function(){var on=(document.fullscreenElement||document.webkitFullscreenElement)===apw;fsb.querySelector('span').textContent=on?'Sair da tela cheia':'Tela cheia';};document.addEventListener('fullscreenchange',mudaFs);document.addEventListener('webkitfullscreenchange',mudaFs);}
+  nav.appendChild(fsb);var mudaFs=function(on){apw.classList.toggle('cheia',on);document.documentElement.classList.toggle('cheio',on);fsb.querySelector('span').textContent=on?'Sair da tela cheia':'Tela cheia';};fsb.addEventListener('click',function(){mudaFs(!apw.classList.contains('cheia'));});
+  var saiFs=function(e){if((!e.key||e.key==='Escape')&&apw.classList.contains('cheia'))mudaFs(false);};addEventListener('keydown',saiFs);addEventListener('hashchange',saiFs);
   /* na tela cheia: tocar na metade direita avança, na esquerda volta */
-  ps.addEventListener('click',function(e){if((document.fullscreenElement||document.webkitFullscreenElement)!==apw)return;e.stopPropagation();e.preventDefault();var r=ps.getBoundingClientRect();vai(e.clientX>r.left+r.width/2?at+1:at-1);},true);
+  ps.addEventListener('click',function(e){if(!apw.classList.contains('cheia'))return;e.stopPropagation();e.preventDefault();var r=ps.getBoundingClientRect();vai(e.clientX>r.left+r.width/2?at+1:at-1);},true);
   function vai(k){at=Math.max(0,Math.min(tot-1,k));Array.prototype.forEach.call(ps.children,function(b,j){b.classList.toggle('on',j===at);});ct.textContent=(at+1)+' / '+tot;ba.disabled=at===0;bp.disabled=at===tot-1;}
   ba.addEventListener('click',function(){vai(at-1);});bp.addEventListener('click',function(){vai(at+1);});vai(pg?pg-1:0);abreMateria.apres=vai;abreMateria.apAt=function(){return at;};pg=0;}else abreMateria.apres=null;
  if(m.fotos&&m.fotos.length&&md!=='apres'){c.appendChild(el('div','rot cx','FOTOS DO EDITORIAL')).style.maxWidth='1100px';var fs=el('div','fotos');m.fotos.forEach(function(f,i){var b=el('button','pg');b.type='button';var im=el('img');im.src=f.p;im.alt=m.curto+', foto '+(i+1);im.width=f.w;im.height=f.h;im.loading='lazy';im.decoding='async';b.appendChild(im);
@@ -1553,11 +1563,11 @@ $('rsobre').addEventListener('click',function(){var c=$('fcorpo');c.innerHTML=''
 $('fx').addEventListener('click',function(){$('folha').classList.remove('on');});
 $('folha').addEventListener('click',function(e){if(e.target.id==='folha')$('folha').classList.remove('on');});
 $('rchat').addEventListener('click',function(){abreChat(rota);});
-(function(){var b=$('r-fs'),t=$('t-revista'),b2=$('r-fs2');b.hidden=true;b.style.display='none';var pode=!!(t.requestFullscreen||t.webkitRequestFullscreen);if(!pode){b2.hidden=true;return;}b2.addEventListener('click',function(){b.click();});t.appendChild(b2);
- function em(){return document.fullscreenElement||document.webkitFullscreenElement;}
- b.addEventListener('click',function(){try{if(em()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else{(t.requestFullscreen||t.webkitRequestFullscreen).call(t);}}catch(e){}});
- function muda(){var on=!!em();b.querySelector('span').textContent=on?'Sair da tela cheia':'Tela cheia';b2.setAttribute('aria-label',on?'Sair da tela cheia':'Ver a revista em tela cheia');b2.classList.toggle('on',on);document.body.classList.toggle('rev-cheia',on);setTimeout(function(){fit();try{pf&&pf.update();}catch(e){}},120);}
- document.addEventListener('fullscreenchange',muda);document.addEventListener('webkitfullscreenchange',muda);})();
+(function(){var b=$('r-fs'),t=$('t-revista'),b2=$('r-fs2');b.hidden=true;b.style.display='none';b2.addEventListener('click',function(){b.click();});t.appendChild(b2);
+ /* tela cheia dentro da própria página: sem a tela cheia do navegador (que mostra o aviso de arrastar para sair) */
+ var on=false;b.addEventListener('click',function(){on=!on;muda();});
+ function muda(){t.classList.toggle('cheia',on);document.documentElement.classList.toggle('cheio',on);b.querySelector('span').textContent=on?'Sair da tela cheia':'Tela cheia';b2.setAttribute('aria-label',on?'Sair da tela cheia':'Ver a revista em tela cheia');b2.classList.toggle('on',on);document.body.classList.toggle('rev-cheia',on);setTimeout(function(){fit();try{pf&&pf.update();}catch(e){}},120);}
+ function sai(e){if(on&&(!e.key||e.key==='Escape')){on=false;muda();}}addEventListener('keydown',sai);addEventListener('hashchange',sai);})();
 
 /* ---------- ROTAS ---------- */
 var pendente=null;
