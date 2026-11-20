@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611201200";</script>
+<script>var VERSAO="202611201215";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -616,6 +616,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .card{background:#212121}
 .tag,.tag.bo{background:#48503F;color:#EDEDEA}
 .tag.rasc{background:#4A4E52}
+.tag.priv{background:#4A4E52}
 .acoes .mais-bt,.acoes button.comp,.pf-links .pf-mais{background:#48503F!important;border-color:#48503F!important;color:#EDEDEA!important}
 #chat-bt,.acoes a.baixar,#fb-abre{background:#5E1A24!important;border-color:#5E1A24!important;color:#EDEDEA!important}
 #chat-bt.on{background:#5E1A24!important;border-color:#5E1A24!important;color:#EDEDEA!important}
@@ -850,20 +851,20 @@ function txtCred(a){return (a||[]).map(function(c){return c[0]?c[0]+': '+c[1]:c[
 function deDB(id,r){if(!r||!r.paginas||!r.paginas.length)return null;var p0=r.paginas[0];
  var g=String(r.grupo||'Editoriais');var m={id:id,din:true,grupo:g,titulo:String(r.titulo||'Sem título'),curto:String(r.titulo||''),resumo:r.resumo||'',ficha:'',
   info:{sobre:linhas(r.sobre),processo:linhas(r.processo),creditos:creditos(r.creditos)},
-  paginas:r.paginas.map(function(p){return{src:p.s,w:p.w,h:p.h};}),tipo:(p0.w>p0.h?'slides':'editorial'),textos:r.textos||[],t:r.t||0,mod:r.mod||r.t||0,ano:r.ano?String(r.ano):'',rascunho:!!r.rascunho};
+  paginas:r.paginas.map(function(p){return{src:p.s,w:p.w,h:p.h};}),tipo:(p0.w>p0.h?'slides':'editorial'),textos:r.textos||[],t:r.t||0,mod:r.mod||r.t||0,ano:r.ano?String(r.ano):'',rascunho:!!r.rascunho,privado:!!r.privado};
  poeCapa(m,r.capa);m.tag=sing(g)+' · '+npg(m.paginas.length);m.data=mesAno(m.t)||m.ano;return m;}
 var MESES=['jan.','fev.','mar.','abr.','maio','jun.','jul.','ago.','set.','out.','nov.','dez.'];
 function mesAno(t){if(!t)return '';var d=new Date(t);return MESES[d.getMonth()]+' '+d.getFullYear();}
 function poeCapa(m,n){n=parseInt(n,10)||1;var p=m.paginas[Math.min(Math.max(n,1),m.paginas.length)-1];if(p){m.capa=p.src;m.cw=p.w;m.ch=p.h;m.capaPg=n;}}
 function aplicaEdicao(m){var o=ORIG[m.id],e=EDIT[m.id];if(!o)return;
- m.titulo=o.titulo;m.resumo=o.resumo;m.info=JSON.parse(JSON.stringify(o.info));m.grupo=o.grupo;m.tag=o.tag;m.paginas=o.paginas;m.textos=o.textos;m.capa=o.capa;m.cw=o.cw;m.ch=o.ch;m.tipo=o.tipo;m.fotos=o.fotos;m.ano='';m.rascunho=false;m.capaPg=0;m.data='2026';m.t=0;m.mod=0;
+ m.titulo=o.titulo;m.resumo=o.resumo;m.info=JSON.parse(JSON.stringify(o.info));m.grupo=o.grupo;m.tag=o.tag;m.paginas=o.paginas;m.textos=o.textos;m.capa=o.capa;m.cw=o.cw;m.ch=o.ch;m.tipo=o.tipo;m.fotos=o.fotos;m.ano='';m.rascunho=false;m.privado=false;m.capaPg=0;m.data='2026';m.t=0;m.mod=0;
  if(!e)return;var mudou=false;
  if(e.paginas&&e.paginas.length&&m.tipo!=='revista'){m.paginas=e.paginas.map(function(p){return{src:p.s,w:p.w,h:p.h};});m.textos=e.textos||[];m.tipo=e.paginas[0].w>e.paginas[0].h?'slides':'editorial';m.fotos=null;poeCapa(m,1);mudou=true;}
  if(e.capa&&m.tipo!=='revista'){poeCapa(m,e.capa);}
  if(e.grupo&&e.grupo!==o.grupo){m.grupo=String(e.grupo);mudou=true;}
  if(e.titulo)m.titulo=String(e.titulo);if(e.resumo!=null)m.resumo=String(e.resumo);
  if(e.sobre!=null)m.info.sobre=linhas(e.sobre);if(e.processo!=null)m.info.processo=linhas(e.processo);if(e.creditos!=null)m.info.creditos=creditos(e.creditos);
- if(e.ano)m.ano=String(e.ano);m.rascunho=!!e.rascunho;m.mod=e.mod||0;
+ if(e.ano)m.ano=String(e.ano);m.rascunho=!!e.rascunho;m.privado=!!e.privado;m.mod=e.mod||0;
  if(m.tipo!=='revista'&&mudou)m.tag=sing(m.grupo)+' · '+npg(m.paginas.length);m.data='2026';}
 var ORDENS=[['novos','Mais novos no site primeiro'],['antigos','Mais antigos no site primeiro'],['mod','Modificados por último primeiro'],['az','Título de A a Z'],['za','Título de Z a A']];
 function ordena(L){var o=CFG.ordenar||'novos',pos={};L.forEach(function(m,i){pos[m.id]=i;});var col=(window.Intl&&Intl.Collator)?new Intl.Collator('pt-BR',{sensitivity:'base',numeric:true}):null;
@@ -871,7 +872,7 @@ function ordena(L){var o=CFG.ordenar||'novos',pos={};L.forEach(function(m,i){pos
 function ocultos(){return (CFG.ocultos||[]).map(String);}
 function refaz(){M.length=0;var oc=ocultos();ESTATICAS.forEach(function(m){aplicaEdicao(m);if(oc.indexOf(m.id)<0)M.push(m);});
  Object.keys(DIN).sort(function(a,b){return(DIN[a].t||0)-(DIN[b].t||0);}).forEach(function(k){var m=deDB(k,DIN[k]);if(m){ORIG[k]=null;M.push(m);}});
- if(!editor){for(var i=M.length-1;i>=0;i--)if(M[i].rascunho)M.splice(i,1);}
+ if(!editor){for(var i=M.length-1;i>=0;i--)if(M[i].rascunho||M[i].privado)M.splice(i,1);}
  ordena(M);
  porId={};M.forEach(function(m){porId[m.id]=m;});grupos();indexa();montaLateral();montaInicio();aplicaTextos();if(rota==='perfil')telaPerfil();if(rota==='sobre')telaSobre();
  if(porId[rota]&&rota!=='revista'&&$('t-mat').classList.contains('on')){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}
@@ -880,7 +881,7 @@ var TX0={rodape:"JOTTA's house\nTIC II · Design de Moda · Univali · 2026/2",d
 function textos(){var t=CFG.textos||{},o={};for(var k in TX0)o[k]=(t[k]!=null&&String(t[k]).trim()!=='')?String(t[k]):TX0[k];return o;}
 function aplicaTextos(){var t=textos(),r=$('rod-p');r.innerHTML='';String(t.rodape).split('\n').forEach(function(l,i){if(!i){r.appendChild(el('div','rf-logo',l));return;}if(i>1)r.appendChild(el('br'));r.appendChild(document.createTextNode(l));});
  $('rot-dest').textContent=t.destaques.toUpperCase();$('rot-mural').textContent=filtro?filtro.toUpperCase():t.lista.toUpperCase();}
-function carregaSite(cb){fetch(DB+'site.json').then(function(r){return r.json();}).then(function(d){if(!d||d.error)return;DIN=d.materias||{};EDIT=d.edicoes||{};CFG=d.config||{};PERFIL=d.perfil||null;refaz();try{montaAutor();}catch(e){}try{montaEu();}catch(e){}if(cb)try{cb();}catch(e){}if(!carregaSite.ok){carregaSite.ok=1;if(rota==='organizar')telaOrganizar();else if(rota==='editar-perfil')telaEditarPerfil();else if(rota==='editar-sobre')telaEditarSobre();}if(pendente){var p=pendente;pendente=null;mostra(p.id,p.pg);}}).catch(function(){});}
+function carregaSite(cb){fetch(DB+'site.json').then(function(r){return r.json();}).then(function(d){if(!d||d.error)return;DIN=d.materias||{};EDIT=d.edicoes||{};CFG=d.config||{};PERFIL=d.perfil||null;refaz();try{montaAutor();}catch(e){}try{montaEu();}catch(e){}if(cb)try{cb();}catch(e){}if(!carregaSite.ok){carregaSite.ok=1;if(rota==='organizar')telaOrganizar();else if(rota==='editar-perfil')telaEditarPerfil();else if(rota==='editar-sobre')telaEditarSobre();else if(rota.indexOf('editar/')===0)telaEditar(rota.slice(7));}if(pendente){var p=pendente;pendente=null;mostra(p.id,p.pg);}}).catch(function(){});}
 
 /* ---------- MENU ---------- */
 function menu(on){document.body.classList.toggle('gaveta',on);$('veu').classList.toggle('on',on);$('abre').setAttribute('aria-expanded',on?'true':'false');}
@@ -916,7 +917,7 @@ $('home').addEventListener('click',function(){ir('inicio');});
 /* ---------- INÍCIO ---------- */
 function card(m,cls){var b=el('button','card '+(cls||''));b.type='button';var i=el('img');i.src=m.capa;i.alt=m.titulo;i.loading=/principal/.test(cls||'')?'eager':'lazy';i.decoding='async';if(m.cw){i.width=m.cw;i.height=m.ch;}b.appendChild(i);
  if(/principal/.test(cls||''))b.appendChild(el('span','sel',m.tipo==='revista'?'A REVISTA':'EM DESTAQUE'));
- var t=el('div','tx');if(m.rascunho)t.appendChild(el('span','tag rasc','Rascunho'));t.appendChild(el('span','tag'+(m.cor==='bo'?' bo':''),m.tag));t.appendChild(el('h3','',m.titulo));if(m.data)t.appendChild(el('span','cdata',m.data));if(m.resumo)t.appendChild(el('p','',m.resumo));b.appendChild(t);
+ var t=el('div','tx');if(m.rascunho)t.appendChild(el('span','tag rasc','Rascunho'));if(m.privado)t.appendChild(el('span','tag rasc priv','Privado'));t.appendChild(el('span','tag'+(m.cor==='bo'?' bo':''),m.tag));t.appendChild(el('h3','',m.titulo));if(m.data)t.appendChild(el('span','cdata',m.data));if(m.resumo)t.appendChild(el('p','',m.resumo));b.appendChild(t);
  b.addEventListener('click',function(){ir(m.id);});return b;}
 function montaInicio(){var d=$('dest');d.innerHTML='';
  var ds=((CFG.destaques&&CFG.destaques.length)?CFG.destaques:['revista','temporei','cenarios']).filter(function(x){return porId[x];});
@@ -984,7 +985,7 @@ function infoEl(m){if(!m.info)return null;var inf=el('div','info'),tem=false;[['
   if(x[0]==='creditos'){var dl=el('dl');v.forEach(function(c){dl.appendChild(el('dt','',c[0]));dl.appendChild(el('dd','',c[1]));});cx.appendChild(dl);}else v.forEach(function(par){cx.appendChild(el('p','',par));});d.appendChild(cx);inf.appendChild(d);});return tem?inf:null;}
 function montaCab(m,cab0){cab0.innerHTML='';var cab=el('div','cab-esq');cab0.appendChild(cab);
  cab.appendChild(el('span','tag'+(m.cor==='bo'?' bo':''),m.tag));cab.appendChild(el('h1','',m.titulo));var lp=m.data?'Publicado em '+m.data:'',fi=String(m.ficha||'');if(fi){if(/^Publicado na /.test(fi))lp=lp?lp+' na '+fi.slice(13):fi;else lp=lp?lp+' · '+fi:fi;}if(lp)cab.appendChild(el('div','mdata',lp));if(m.resumo)cab.appendChild(el('p','',m.resumo));
- if(m.rascunho)cab.insertBefore(el('span','tag rasc','Rascunho · só você vê'),cab.firstChild);
+ if(m.rascunho)cab.insertBefore(el('span','tag rasc','Rascunho · só você vê'),cab.firstChild);if(m.privado)cab.insertBefore(el('span','tag rasc priv','Privado · só você vê'),cab.firstChild);
  var ac=el('div','acoes');var inf=infoEl(m),temF=m.fotos&&m.fotos.length,mp=null;
  if(inf||temF){mp=el('div','mais-p');mp.hidden=true;if(inf)mp.appendChild(inf);
   if(temF){var bf=el('button','mais-fotos','Ver as fotos uma a uma');bf.type='button';bf.addEventListener('click',function(){abreVz(m.fotos.map(function(f,i){return{src:f.g,leg:m.curto+' · foto '+(i+1)};}),0);});
@@ -1118,6 +1119,7 @@ function campoGrupo(id,val){var w=el('label','campo');w.appendChild(el('span',''
  var ni=el('input');ni.type='text';ni.maxLength=40;ni.placeholder='Nome do grupo novo';ni.style.display='none';ni.id=id+'-novo';w.appendChild(ni);
  sel.addEventListener('change',function(){ni.style.display=sel.value==='__novo'?'block':'none';if(sel.value==='__novo')ni.focus();});
  w.valor=function(){return sel.value==='__novo'?(ni.value.trim().slice(0,40)||''):sel.value;};return w;}
+function campoVis(id,priv){var w=el('label','campo');w.appendChild(el('span','','Quem pode ver'));var sl=el('select');sl.id=id;[['pub','Público (todo mundo vê)'],['priv','Privado (só você vê)']].forEach(function(x){var o=el('option','',x[1]);o.value=x[0];sl.appendChild(o);});sl.value=priv?'priv':'pub';w.appendChild(sl);w.appendChild(el('small','','Público é o padrão. Privado esconde o projeto de quem visita, mesmo depois de pronto.'));return w;}
 function caixa(id,txt,val){var w=el('div','marcas');var l=el('label');var cb=el('input');cb.type='checkbox';cb.id=id;cb.checked=!!val;l.appendChild(cb);l.appendChild(document.createTextNode(txt));w.appendChild(l);return w;}
 function semAcesso(c){c.appendChild(el('div','aviso','Esta página é só para o dono do site. Para editar, use "Editar o site" no menu.'));}
 function telaEditar(id){var c=$('fm-corpo');c.innerHTML='';var m=porId[id];if(!editor){semAcesso(c);return;}if(!m){c.appendChild(el('div','aviso','Projeto não encontrado.'));return;}
@@ -1133,12 +1135,12 @@ function telaEditar(id){var c=$('fm-corpo');c.innerHTML='';var m=porId[id];if(!e
   ca.fi.addEventListener('change',function(){novo=null;pv.innerHTML='';if(!ca.fi.files.length){opcoes(m.paginas.length);cs.value=m.capaPg||1;mostraCapa();return;}st0.textContent='Preparando…';
    converteArquivos(ca.fi.files,pv,st0).then(function(r){novo=r;novo.prev=r.paginas.map(function(p){return URL.createObjectURL(p.blob);});opcoes(r.paginas.length);cs.value=1;mostraCapa();st0.textContent=r.paginas.length+(r.paginas.length===1?' página nova':' páginas novas')+'. Elas entram quando você salvar.';})
     .catch(function(e){st0.textContent=e&&e.msg?e.msg:'Não foi possível ler esse arquivo.';});});}
- f.appendChild(caixa('ed-rasc','Rascunho (esconde o projeto de quem visita; só você vê)',m.rascunho));
+ f.appendChild(campoVis('ed-vis',m.privado));f.appendChild(caixa('ed-rasc','Rascunho (esconde o projeto de quem visita; só você vê)',m.rascunho));
  f.appendChild(campo('Sobre','ed-sobre','textarea',txtPar(m.info&&m.info.sobre),6000));f.appendChild(campo('Processo','ed-processo','textarea',txtPar(m.info&&m.info.processo),6000));f.appendChild(campo('Créditos','ed-creditos','textarea',txtCred(m.info&&m.info.creditos),3000));
  var st=el('div','st'),ac=el('div','acoes');var bt=el('button','btn','Salvar');bt.type='submit';var bv=el('button','','Cancelar');bv.type='button';bv.addEventListener('click',function(){ir(id);});ac.appendChild(bt);ac.appendChild(bv);
  if(!m.din&&EDIT[id]){var br=el('button','','Voltar ao original');br.type='button';br.addEventListener('click',function(){if(!confirm('Voltar este projeto ao original (textos, capa, arquivo e grupo)?'))return;fb.database().ref('site/edicoes/'+id).remove().then(function(){delete EDIT[id];refaz();ir(id);alertaTela('Projeto original de volta.');});});ac.appendChild(br);}
  f.appendChild(ac);f.appendChild(st);c.appendChild(f);
- f.addEventListener('submit',function(e){e.preventDefault();var d={titulo:$('ed-titulo').value.trim().slice(0,120)||m.titulo,resumo:$('ed-resumo').value.trim().slice(0,300),mod:Date.now(),rascunho:$('ed-rasc').checked,sobre:$('ed-sobre').value.trim().slice(0,6000),processo:$('ed-processo').value.trim().slice(0,6000),creditos:$('ed-creditos').value.trim().slice(0,3000)};
+ f.addEventListener('submit',function(e){e.preventDefault();var d={titulo:$('ed-titulo').value.trim().slice(0,120)||m.titulo,resumo:$('ed-resumo').value.trim().slice(0,300),mod:Date.now(),rascunho:$('ed-rasc').checked,privado:$('ed-vis').value==='priv',sobre:$('ed-sobre').value.trim().slice(0,6000),processo:$('ed-processo').value.trim().slice(0,6000),creditos:$('ed-creditos').value.trim().slice(0,3000)};
   if(cg){var gv=cg.valor();if(!gv){st.textContent='Escreva o nome do grupo novo.';return;}d.grupo=gv;}if(capaSel)d.capa=parseInt(capaSel.value,10)||1;
   bt.disabled=true;st.textContent='Salvando…';var ref=m.din?fb.database().ref('site/materias/'+id):fb.database().ref('site/edicoes/'+id);
   var passo=novo?sobeTodas(novo,'materias/'+id+'-'+Date.now().toString(36),st).then(function(urls){d.paginas=urls;d.textos=novo.paginas.map(function(p){return p.txt;});}):Promise.resolve();
@@ -1171,7 +1173,7 @@ function telaOrganizar(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcess
  function grupoDe(m){if(escolha[m.id])return escolha[m.id];for(var i=0;i<linhasG.length;i++)if(linhasG[i].orig===m.grupo)return linhasG[i];return null;}
  var pw2=el('div','campo');pw2.appendChild(el('span','','Projetos: grupo, Editar e ✕ para apagar'));var pl=el('div','plista');var bn=el('button','gadd','+ Novo projeto');bn.type='button';bn.style.margin='0 0 10px';bn.addEventListener('click',function(){ir('nova');});paineis.proj.appendChild(bn);paineis.proj.appendChild(busca0('Procurar projeto pelo nome',pl));pw2.appendChild(pl);paineis.proj.appendChild(pw2);
  var ow0=el('label','campo');ow0.appendChild(el('span','','Ordem dos projetos no site'));var osel=el('select');osel.id='or-ordem';ORDENS.forEach(function(x){var o=el('option','',x[1]);o.value=x[0];osel.appendChild(o);});osel.value=CFG.ordenar||'novos';ow0.appendChild(osel);ow0.appendChild(el('small','','Escolha em que ordem os projetos aparecem no site.'));paineis.proj.insertBefore(ow0,paineis.proj.children[1]);
- var sels=[],tirar={},volta={};M.forEach(function(m){var r=el('div','prow');r.setAttribute('data-id',m.id);r.setAttribute('data-t',m.titulo+' '+m.grupo);var tt=el('span','pt',m.titulo);if(VIS[m.id]!=null)tt.appendChild(el('small','pv',' · '+VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));if(m.rascunho)tt.appendChild(el('small','pv',' · rascunho'));r.appendChild(tt);
+ var sels=[],tirar={},volta={};M.forEach(function(m){var r=el('div','prow');r.setAttribute('data-id',m.id);r.setAttribute('data-t',m.titulo+' '+m.grupo);var tt=el('span','pt',m.titulo);if(m.privado)tt.appendChild(el('small','pv',' · privado'));if(m.rascunho)tt.appendChild(el('small','pv',' · rascunho'));if(VIS[m.id]!=null)tt.appendChild(el('small','pv',' · '+VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));if(m.rascunho)tt.appendChild(el('small','pv',' · rascunho'));r.appendChild(tt);
   var sl=el('select');sl.setAttribute('aria-label','Grupo de '+m.titulo);if(m.tipo==='revista')sl.disabled=true;r.appendChild(sl);
   var bE=el('button','gb ged','Editar');bE.type='button';bE.setAttribute('aria-label','Editar '+m.titulo);bE.addEventListener('click',function(){window.VOLTA_ORG=true;ir('editar/'+m.id);});r.appendChild(bE);
   var bx=el('button','gb gx','✕');bx.type='button';bx.setAttribute('aria-label','Apagar '+m.titulo);
@@ -1265,7 +1267,7 @@ function telaNova(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcesso(c);
  f.appendChild(campo('Sobre (separe parágrafos com uma linha em branco)','nm-sobre','textarea','',6000));
  f.appendChild(campo('Processo (opcional)','nm-processo','textarea','',6000));
  f.appendChild(campo('Créditos (um por linha: Função: Nome)','nm-creditos','textarea','',3000));
- var rw=caixa('nm-rasc','Salvar como rascunho (só você vê, até publicar)',false);f.appendChild(rw);
+ f.appendChild(campoVis('nm-vis',false));var rw=caixa('nm-rasc','Salvar como rascunho (só você vê, até publicar)',false);f.appendChild(rw);
  var st=el('div','st');var bt=el('button','btn','Publicar');bt.type='submit';bt.disabled=true;var ac0=el('div','acoes');ac0.appendChild(bt);f.appendChild(ac0);f.appendChild(st);c.appendChild(f);
  $('nm-rasc').addEventListener('change',function(){bt.textContent=$('nm-rasc').checked?'Salvar rascunho':'Publicar';});
  var conv=null;
@@ -1274,7 +1276,7 @@ function telaNova(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcesso(c);
   st.textContent='Preparando…';converteArquivos(fs,prev,st).then(function(r){conv=r;bt.disabled=false;st.textContent=r.paginas.length+(r.paginas.length===1?' página':' páginas')+' · '+mb(r.total)+'. Pronto.';})
    .catch(function(e){st.textContent=e&&e.msg?e.msg:'Não foi possível ler esse arquivo. Confira e tente de novo.';});});
  f.addEventListener('submit',function(e){e.preventDefault();if(!conv)return;var tit=$('nm-titulo').value.trim();if(!tit){st.textContent='Escreva o título.';return;}var gv=gw.valor();if(!gv){st.textContent='Escreva o nome do grupo novo.';return;}
-  var rasc=$('nm-rasc').checked;bt.disabled=true;fi.disabled=true;publica(conv,{titulo:tit.slice(0,120),grupo:gv,resumo:$('nm-resumo').value.trim().slice(0,300),rascunho:rasc,sobre:$('nm-sobre').value.trim().slice(0,6000),processo:$('nm-processo').value.trim().slice(0,6000),creditos:$('nm-creditos').value.trim().slice(0,3000)},st)
+  var rasc=$('nm-rasc').checked;bt.disabled=true;fi.disabled=true;publica(conv,{titulo:tit.slice(0,120),grupo:gv,resumo:$('nm-resumo').value.trim().slice(0,300),rascunho:rasc,privado:$('nm-vis').value==='priv',sobre:$('nm-sobre').value.trim().slice(0,6000),processo:$('nm-processo').value.trim().slice(0,6000),creditos:$('nm-creditos').value.trim().slice(0,3000)},st)
    .then(function(id){carregaSite();setTimeout(function(){ir(id);},600);alertaTela(rasc?'Rascunho salvo.':'Projeto publicado!');}).catch(function(){bt.disabled=false;fi.disabled=false;st.textContent='Não foi possível publicar. Confira a internet e tente de novo.';});});}
 function ehPdf(f){return /pdf/i.test(f.type)||/\.pdf$/i.test(f.name);}
 function converteArquivos(files,prev,st){files=Array.prototype.slice.call(files||[]);if(!files.length)return Promise.reject({msg:'Escolha um arquivo.'});
@@ -1302,7 +1304,7 @@ function novoId(){return 'm'+Date.now().toString(36)+Math.random().toString(36).
 function sobeCloudinary(blob,pasta,nome){var fd=new FormData();fd.append('file',blob,nome);fd.append('upload_preset',CLD.preset);fd.append('folder',pasta);fd.append('public_id',nome.replace(/\.jpg$/,''));
  return fetch('https://api.cloudinary.com/v1_1/'+CLD.cloud+'/image/upload',{method:'POST',body:fd}).then(function(r){return r.json();}).then(function(d){if(!d||!d.secure_url)throw d;return d.secure_url.replace('/upload/','/upload/f_auto,q_auto/');});}
 function publica(conv,dados,st){var id=novoId();
- return sobeTodas(conv,'materias/'+id,st).then(function(urls){st.textContent='Salvando…';var reg={titulo:dados.titulo,grupo:dados.grupo,resumo:dados.resumo,sobre:dados.sobre,processo:dados.processo,creditos:dados.creditos,ano:dados.ano||'',rascunho:!!dados.rascunho,paginas:urls,textos:conv.paginas.map(function(p){return p.txt;}),t:firebase.database.ServerValue.TIMESTAMP};
+ return sobeTodas(conv,'materias/'+id,st).then(function(urls){st.textContent='Salvando…';var reg={titulo:dados.titulo,grupo:dados.grupo,resumo:dados.resumo,sobre:dados.sobre,processo:dados.processo,creditos:dados.creditos,ano:dados.ano||'',rascunho:!!dados.rascunho,privado:!!dados.privado,paginas:urls,textos:conv.paginas.map(function(p){return p.txt;}),t:firebase.database.ServerValue.TIMESTAMP};
   return fb.database().ref('site/materias/'+id).set(reg);}).then(function(){return id;});}
 function apagar(m){
  if(m.din){if(!confirm('Apagar o projeto "'+m.titulo+'" do site? Isso não pode ser desfeito.'))return;
