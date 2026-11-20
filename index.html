@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611200020";</script>
+<script>var VERSAO="202611200030";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -635,12 +635,6 @@ body:not(.na-revista) .rcanto{display:none!important}
 body.nolib .rseta,body.nolib .rcanto{display:none!important}
 @media(max-width:700px){.rseta{width:48px;height:48px;margin-top:-24px}}
 
-/* chat: campos com rótulo (nome e recado) */
-#cf .clab{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#C9CBCC;margin:2px 6px -3px}
-#cf .clab[hidden],#cf input[hidden],#cquem[hidden]{display:none!important}
-#cquem{font-size:13px;color:#B8BBBD;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:2px 6px}
-#cquem b{color:#EDEDEA;font-weight:500}
-#ctroca{margin-left:auto;background:none;border:0;color:#C9CBCC;text-decoration:underline;font:inherit;font-size:12px;min-height:32px;cursor:pointer;padding:0 4px}
 /* revista: setas bem visíveis por cima da página */
 .rseta{background:rgba(20,20,20,.62);border-color:rgba(237,237,234,.6);box-shadow:0 2px 12px rgba(0,0,0,.45)}
 @media(max-width:700px){.rseta{background:rgba(20,20,20,.78);border:1.5px solid rgba(237,237,234,.85)}}
@@ -738,7 +732,7 @@ body.nolib .rseta,body.nolib .rcanto{display:none!important}
 <div id="folha" role="dialog" aria-label="Sobre a revista"><div class="fcx"><div class="ftopo"><span>CARTOLA #13 — TEMPO REI</span><button id="fx" type="button">Fechar</button></div><div id="fcorpo"></div></div></div>
 
 <aside id="panel" aria-label="Chat"><div id="ph"><span>CHAT · <b id="sala-t">GERAL</b></span><button id="pc" type="button">Fechar</button></div>
- <div id="pbody"><div id="cl" aria-live="polite"></div><form id="cf" autocomplete="off"><div id="cquem" hidden>Comentando como <b id="cqn"></b><button type="button" id="ctroca">trocar nome</button></div><label class="clab" id="cnl" for="cn">1. Seu nome</label><input id="cn" type="text" maxlength="30" placeholder="Ex.: Maria" enterkeyhint="next"><div id="ce" aria-label="Emojis"></div><label class="clab" id="cml" for="cm">2. Seu recado</label><div class="crow"><button id="cem" type="button" aria-label="Emojis">😊</button><input id="cm" type="text" maxlength="500" placeholder="Escreva aqui o que achou" enterkeyhint="send"><button id="cs" type="submit">Enviar</button></div><div id="cst" role="status"></div></form></div>
+ <div id="pbody"><div id="cl" aria-live="polite"></div><form id="cf" autocomplete="off"><input id="cn" type="text" maxlength="30" placeholder="Seu nome" aria-label="Seu nome" enterkeyhint="next"><div id="ce" aria-label="Emojis"></div><div class="crow"><button id="cem" type="button" aria-label="Emojis">😊</button><input id="cm" type="text" maxlength="500" placeholder="Escreva um recado" aria-label="Recado" enterkeyhint="send"><button id="cs" type="submit">Enviar</button></div><div id="cst" role="status"></div></form></div>
 </aside>
 
 <div id="vz" role="dialog" aria-label="Imagem ampliada"><div class="vt"><span id="vz-t"></span><button id="vz-x" type="button" aria-label="Fechar">✕</button></div><img id="vz-i" alt=""><div class="vb"><button id="vz-p" type="button" aria-label="Anterior">‹</button><button id="vz-n" type="button" aria-label="Próxima">›</button></div></div>
@@ -786,7 +780,7 @@ function enviar(sala,n,m,st,ok){n=n.trim().slice(0,30);m=m.trim().slice(0,500);
  st.textContent='Enviando…';ls('cartolaNome',n);$('cn').value=n;
  fetch(caminho(sala)+'.json',{method:'POST',body:JSON.stringify({n:n,m:m,t:{'.sv':'timestamp'}})}).then(function(r){return r.json();}).then(function(d){
   if(!d||!d.name)throw 0;chat.ultimo=Date.now();chat.meus[d.name]=1;ls('cartolaMeus',JSON.stringify(chat.meus));st.textContent='';
-  if(chat.sala===sala&&!chat.msgs[d.name]){chat.msgs[d.name]={n:n,m:m,t:Date.now()};render();}chat.trocando=false;try{quem();}catch(x){}ok&&ok();
+  if(chat.sala===sala&&!chat.msgs[d.name]){chat.msgs[d.name]={n:n,m:m,t:Date.now()};render();}ok&&ok();
  }).catch(function(){st.textContent='Não foi possível enviar. Confira a internet e tente de novo.';ok&&ok(true);});return true;}
 function apagaRecado(sala,k){if(!editor||!fb)return;if(!confirm('Apagar este recado?'))return;var cam=(sala==='revista'?'chat':'salas/'+sala)+'/'+k;
  fb.database().ref(cam).remove().then(function(){delete chat.msgs[k];render();alertaTela('Recado apagado.');}).catch(function(){alertaTela('Não foi possível apagar o recado.');});}
@@ -802,8 +796,6 @@ $('pc').addEventListener('click',function(){if(innerWidth>=1100){chatFechado=tru
 function chatRodape(){var pn=$('panel'),rod=$('rodape');var d=0;if(document.body.classList.contains('chat-fixo')&&rod&&!rod.hidden&&rod.offsetParent){var t=rod.getBoundingClientRect().top;d=Math.max(0,innerHeight-t+1);}pn.style.transform=d?'translateY(-'+d+'px)':'';}
 (function(){var q=false;function f(){if(q)return;q=true;requestAnimationFrame(function(){q=false;chatRodape();});}addEventListener('scroll',f,{passive:true});addEventListener('resize',f);setInterval(chatRodape,800);})();
 $('cn').value=ls('cartolaNome')||'';
-function quem(){var n=ls('cartolaNome')||'',tem=!!n&&!chat.trocando;$('cquem').hidden=!tem;$('cn').hidden=tem;$('cnl').hidden=tem;$('cqn').textContent=n;$('cml').textContent=tem?'Seu recado':'2. Seu recado';}
-$('ctroca').addEventListener('click',function(){chat.trocando=true;quem();$('cn').focus();$('cn').select&&$('cn').select();});quem();
 ['😀','😂','🥹','😍','🥰','😎','🤩','😮','😭','👏','🙌','🔥','✨','💛','❤️','🖤','🎩','👑','⏳','🕰️','📖','🌹','🎉','🥂'].forEach(function(em){var b=el('button','',em);b.type='button';b.setAttribute('aria-label',em);
  b.addEventListener('click',function(){var cm=$('cm'),s=cm.selectionStart,e=cm.selectionEnd;if(s==null){cm.value+=em;}else{cm.value=cm.value.slice(0,s)+em+cm.value.slice(e);var p=s+em.length;try{cm.setSelectionRange(p,p);}catch(x){}}cm.focus();});$('ce').appendChild(b);});
 $('cem').addEventListener('click',function(){$('ce').classList.toggle('on');});
