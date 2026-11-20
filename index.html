@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611201445";</script>
+<script>var VERSAO="202611201505";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -1119,7 +1119,7 @@ function leVisitas(){if(!fb)return;fb.database().ref('visitas').once('value').th
  $('rs-wa').hidden=true;$('rs-cp').hidden=true;var nat=$('rs-nat');nat.hidden=false;nat.classList.add('rs-um');nat.querySelector('span').textContent='Compartilhar';nat.setAttribute('aria-label','Compartilhar o site');
  function copia(){var ok=function(){alertaTela('Link do site copiado.');};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(ok).catch(function(){prompt('Copie o link:',url);});else prompt('Copie o link:',url);}
  nat.addEventListener('click',function(){if(navigator.share)navigator.share({title:tit,url:url}).catch(function(){});else copia();});
- $('rod-editar').addEventListener('click',function(){if(editor){if(confirm('Sair do modo de edição?')){fb.auth().signOut();ls('cartolaEditor','0');}}else entrar();});})();
+ $('rod-editar').addEventListener('click',function(){if(editor){querEd(false);aplicaEd();}else entrar();});})();
 (function(){var t=$('rv-tema'),f=$('rv-fs');t.addEventListener('click',function(){$('l-tema').click();rvTema();});
  f.hidden=true;$('l-fs').style.display='none';rvTema();})();
 function rvTema(){var c=document.documentElement.classList.contains('claro');var e=$('rv-tema-t');if(e)e.textContent=c?'Modo escuro':'Modo claro';}
@@ -1186,9 +1186,11 @@ function alertaTela(txt){var a=$('toast');a.textContent=txt;a.classList.add('on'
 function carregaScript(src){return new Promise(function(ok,erro){var s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=erro;document.head.appendChild(s);});}
 function carregaFirebase(){if(fb)return Promise.resolve(fb);if(!FB)return Promise.reject('config');var v='https://www.gstatic.com/firebasejs/10.14.1/firebase-';
  var p=window.firebase&&firebase.initializeApp?Promise.resolve():carregaScript(v+'app-compat.js').then(function(){return carregaScript(v+'auth-compat.js');}).then(function(){return carregaScript(v+'database-compat.js');});
- return p.then(function(){fb=firebase.initializeApp(FB);fb.auth().onAuthStateChanged(function(u){eu=u||null;var ok=!!(eu&&eu.email&&eu.email.toLowerCase()===DONO);
+ return p.then(function(){fb=firebase.initializeApp(FB);fb.auth().onAuthStateChanged(function(u){eu=u||null;aplicaEd();});return fb;});}
+function querEd(v){try{if(v!==undefined)sessionStorage.setItem('jhEditando',v?'1':'0');return sessionStorage.getItem('jhEditando')==='1';}catch(e){return !!v;}}
+function aplicaEd(){var ok=!!(eu&&eu.email&&eu.email.toLowerCase()===DONO);
   if(eu&&!ok){alertaTela('Só o dono do site pode editar.');fb.auth().signOut();}
-  editor=ok;ls('cartolaEditor',ok?'1':'0');refaz();rodapeEd();if(ok)leVisitas();if(porId[rota]&&$('t-mat').classList.contains('on'))abreMateria(porId[rota]);if(['nova','organizar','editar-perfil','perfil'].indexOf(rota)>=0||rota.indexOf('editar/')===0)lerHash();if(chat.sala)render();});return fb;});}
+  ls('cartolaEditor',ok?'1':'0');/* abrir o site não entra na edição: só depois de tocar em Editar (vale até fechar a aba) */editor=ok&&querEd();refaz();rodapeEd();if(editor)leVisitas();if(porId[rota]&&$('t-mat').classList.contains('on'))abreMateria(porId[rota]);if(['nova','organizar','editar-perfil','perfil'].indexOf(rota)>=0||rota.indexOf('editar/')===0)lerHash();if(chat.sala)render();}
 function popupGoogle(){var pr=new firebase.auth.GoogleAuthProvider();pr.setCustomParameters({prompt:'select_account'});
  return fb.auth().signInWithPopup(pr).catch(function(e){var c=e&&e.code||'';
   if(c==='auth/popup-blocked'||c==='auth/operation-not-supported-in-this-environment'||c==='auth/web-storage-unsupported'){alertaTela('O navegador bloqueou a janela de login. Abra o site no Safari ou no Chrome (não dentro do Instagram/WhatsApp) e tente de novo.');return;}
@@ -1196,6 +1198,7 @@ function popupGoogle(){var pr=new firebase.auth.GoogleAuthProvider();pr.setCusto
   if(c!=='auth/popup-closed-by-user'&&c!=='auth/cancelled-popup-request')alertaTela('Não foi possível entrar ('+(c||'erro')+'). Tente de novo.');});}
 function entrar(){if(!FB||!DONO){alertaTela('O modo de edição ainda está sendo configurado.');return;}
  if(editor){alertaTela('Você já está no modo de edição.');return;}
+ querEd(true);if(fb&&eu&&eu.email&&eu.email.toLowerCase()===DONO){aplicaEd();return;}
  /* com o login já carregado, abre a janela do Google no mesmo toque (o celular bloqueia se demorar) */
  if(fb&&window.firebase&&firebase.auth){popupGoogle();return;}
  alertaTela('Preparando o login…');
@@ -1510,7 +1513,7 @@ function mostra(id,pg){var tipo='inicio';
 function lerHash(){var raw=location.hash.replace(/^#\/?/,''),h=raw.split('/');var id=h[0]||'inicio',pg=parseInt(h[1],10)||0;if(id==='editar'){id='editar/'+(h[1]||'');pg=0;}mostra(id,pg);}
 addEventListener('hashchange',lerHash);
 function ph(){$('q').placeholder=innerWidth<560?'Pesquisar':'Pesquisar matérias e textos';}ph();addEventListener('resize',ph);
-Array.prototype.forEach.call(document.querySelectorAll('#barra-ed [data-be]'),function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-be');if(k==='sair'){try{fb.auth().signOut();}catch(e){}ls('cartolaEditor','0');return;}window.VOLTA_ORG=false;ir(k);});});
+Array.prototype.forEach.call(document.querySelectorAll('#barra-ed [data-be]'),function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-be');if(k==='sair'){querEd(false);aplicaEd();alertaTela('Você saiu do modo de edição.');return;}window.VOLTA_ORG=false;ir(k);});});
 Array.prototype.forEach.call(document.querySelectorAll('#ed-barra [data-ed]'),function(b){b.addEventListener('click',function(){ir(b.getAttribute('data-ed'));});});
 Array.prototype.forEach.call(document.querySelectorAll('#lateral [data-ir="perfil"]'),function(b){b.addEventListener('click',function(){menu(false);ir('perfil');});});
 Array.prototype.forEach.call(document.querySelectorAll('#lateral [data-ir="sobre"]'),function(b){b.addEventListener('click',function(){menu(false);ir('sobre');});});
