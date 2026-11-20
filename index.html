@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611200030";</script>
+<script>var VERSAO="202611201200";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -638,6 +638,31 @@ body.nolib .rseta,body.nolib .rcanto{display:none!important}
 /* revista: setas bem visíveis por cima da página */
 .rseta{background:rgba(20,20,20,.62);border-color:rgba(237,237,234,.6);box-shadow:0 2px 12px rgba(0,0,0,.45)}
 @media(max-width:700px){.rseta{background:rgba(20,20,20,.78);border:1.5px solid rgba(237,237,234,.85)}}
+
+/* 20/11: barra suspensa do modo de edição */
+#ed-barra{display:none!important}
+#barra-ed{position:fixed;left:var(--sb,0px);right:var(--pn,0px);bottom:calc(14px + env(safe-area-inset-bottom));z-index:90;display:none;justify-content:center;pointer-events:none;padding:0 12px}
+body.editando #barra-ed{display:flex}
+#barra-ed .be-in{pointer-events:auto;display:flex;gap:4px;padding:6px;border-radius:999px;background:rgba(24,24,24,.74);border:1px solid rgba(237,237,234,.22);box-shadow:0 8px 30px rgba(0,0,0,.45);max-width:100%;overflow-x:auto}
+#barra-ed button{display:flex;align-items:center;gap:7px;min-height:44px;padding:0 14px;border-radius:999px;border:0;background:transparent;color:#EDEDEA;font:inherit;font-size:13.5px;letter-spacing:.03em;white-space:nowrap;cursor:pointer}
+#barra-ed button:active{background:rgba(237,237,234,.12)}
+#barra-ed button.be-prim{background:#5E1A24}
+#barra-ed svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:620px){#barra-ed button span{display:none}#barra-ed button{padding:0 14px}#barra-ed .be-in{gap:2px}}
+body.editando #rod-editar{display:none!important}
+body.editando #sobe{bottom:calc(84px + env(safe-area-inset-bottom))!important}
+body.editando .rcanto{bottom:calc(84px + env(safe-area-inset-bottom))!important}
+body.editando .tela{padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}
+/* perfil fixo embaixo da barra lateral */
+#lat-eu{margin-top:auto;display:flex;align-items:center;gap:10px;width:100%;min-height:58px;padding:9px 10px;border-radius:14px;border:1px solid var(--borda);background:rgba(237,237,234,.05);color:#EDEDEA;font:inherit;text-align:left;cursor:pointer}
+#lat-eu:active{background:rgba(237,237,234,.1)}
+.le-foto{flex:none;width:40px;height:40px;border-radius:50%;overflow:hidden;background:#48503F;display:flex;align-items:center;justify-content:center;font-size:14px;letter-spacing:.04em;color:#EDEDEA}
+.le-foto img{width:100%;height:100%;object-fit:cover}
+.le-tx{display:flex;flex-direction:column;min-width:0;line-height:1.25}
+.le-rot{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#B8BBBD}
+.le-nome{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.le-seta{margin-left:auto;color:#B8BBBD;font-size:20px}
+#lateral nav{flex:none}
 </style></head><body>
 <header id="topo">
  <button id="abre" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -649,13 +674,20 @@ body.nolib .rseta,body.nolib .rcanto{display:none!important}
 <button id="rod-editar" type="button" aria-label="Editar o site"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg><span>Editar</span></button>
 <aside id="lateral" aria-label="Navegação">
  <button class="marca" id="home2" type="button" aria-label="JOTTA's house — início">JOTTA's house</button>
- <nav><button data-ir="inicio" class="it">Início</button><button data-ir="perfil" class="it">Perfil</button>
+ <nav><button data-ir="inicio" class="it">Início</button>
  <div id="lat-mat"></div>
  <div id="lat-conta"></div>
  <button id="g-vis" class="it grupo" type="button" aria-expanded="false">Visualização<span class="seta"></span></button><div class="sub" id="s-vis"><button id="l-fs" type="button">Tela cheia</button><button id="l-tema" type="button">Modo claro</button></div></nav>
+ <button id="lat-eu" type="button" aria-label="Abrir o perfil"><span id="le-foto" class="le-foto"></span><span class="le-tx"><span class="le-rot">Perfil</span><span id="le-nome" class="le-nome"></span></span><span class="le-seta" aria-hidden="true">›</span></button>
  <div class="rod"><span id="rod-t" hidden></span><button id="l-editar" type="button" class="editar">Editar o site</button></div>
 </aside>
 <div id="veu"></div>
+<div id="barra-ed" role="toolbar" aria-label="Modo de edição"><div class="be-in">
+ <button type="button" data-be="nova" class="be-prim"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo projeto</span></button>
+ <button type="button" data-be="organizar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Organizar o site</span></button>
+ <button type="button" data-be="editar-perfil"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Editar perfil</span></button>
+ <button type="button" data-be="sair"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg><span>Sair da edição</span></button>
+</div></div>
 
 
 <main id="t-inicio" class="tela">
@@ -848,7 +880,7 @@ var TX0={rodape:"JOTTA's house\nTIC II · Design de Moda · Univali · 2026/2",d
 function textos(){var t=CFG.textos||{},o={};for(var k in TX0)o[k]=(t[k]!=null&&String(t[k]).trim()!=='')?String(t[k]):TX0[k];return o;}
 function aplicaTextos(){var t=textos(),r=$('rod-p');r.innerHTML='';String(t.rodape).split('\n').forEach(function(l,i){if(!i){r.appendChild(el('div','rf-logo',l));return;}if(i>1)r.appendChild(el('br'));r.appendChild(document.createTextNode(l));});
  $('rot-dest').textContent=t.destaques.toUpperCase();$('rot-mural').textContent=filtro?filtro.toUpperCase():t.lista.toUpperCase();}
-function carregaSite(){fetch(DB+'site.json').then(function(r){return r.json();}).then(function(d){if(!d||d.error)return;DIN=d.materias||{};EDIT=d.edicoes||{};CFG=d.config||{};PERFIL=d.perfil||null;refaz();try{montaAutor();}catch(e){}if(!carregaSite.ok){carregaSite.ok=1;if(rota==='organizar')telaOrganizar();else if(rota==='editar-perfil')telaEditarPerfil();else if(rota==='editar-sobre')telaEditarSobre();}if(pendente){var p=pendente;pendente=null;mostra(p.id,p.pg);}}).catch(function(){});}
+function carregaSite(cb){fetch(DB+'site.json').then(function(r){return r.json();}).then(function(d){if(!d||d.error)return;DIN=d.materias||{};EDIT=d.edicoes||{};CFG=d.config||{};PERFIL=d.perfil||null;refaz();try{montaAutor();}catch(e){}try{montaEu();}catch(e){}if(cb)try{cb();}catch(e){}if(!carregaSite.ok){carregaSite.ok=1;if(rota==='organizar')telaOrganizar();else if(rota==='editar-perfil')telaEditarPerfil();else if(rota==='editar-sobre')telaEditarSobre();}if(pendente){var p=pendente;pendente=null;mostra(p.id,p.pg);}}).catch(function(){});}
 
 /* ---------- MENU ---------- */
 function menu(on){document.body.classList.toggle('gaveta',on);$('veu').classList.toggle('on',on);$('abre').setAttribute('aria-expanded',on?'true':'false');}
@@ -868,7 +900,7 @@ function montaLateral(){var box=$('lat-mat');box.innerHTML='';
 function abreGrupo(g){gruposAbertos[g]=true;Array.prototype.forEach.call(document.querySelectorAll('#lat-mat .sub'),function(sb){if(sb.getAttribute('data-g')===g){sb.classList.add('on');sb.previousSibling.setAttribute('aria-expanded','true');}});}
 function montaConta(){var c=$('lat-conta');c.innerHTML='';
  function it(txt,fn,cls){var b=el('button','it'+(cls?' '+cls:''),txt);b.type='button';b.addEventListener('click',function(){menu(false);fn();});c.appendChild(b);}
- if(editor){c.appendChild(el('h4','','MODO DE EDIÇÃO'));it('+ Novo projeto',function(){ir('nova');},'chatb');it('Organizar o site',function(){ir('organizar');});it('Editar perfil',function(){ir('editar-perfil');});it('Sair do modo de edição',function(){fb.auth().signOut();ls('cartolaEditor','0');});}
+ 
  document.body.classList.toggle('editando',editor);}
 Array.prototype.forEach.call(document.querySelectorAll('#lateral [data-ir="inicio"]'),function(b){b.addEventListener('click',function(){menu(false);ir('inicio');});});
 $('home2').addEventListener('click',function(){menu(false);ir('inicio');});
@@ -959,7 +991,8 @@ function montaCab(m,cab0){cab0.innerHTML='';var cab=el('div','cab-esq');cab0.app
    var ds0=inf?inf.querySelectorAll('details'):[],dep=null;Array.prototype.forEach.call(ds0,function(d){if(d.querySelector('summary').textContent==='Sobre')dep=d;});
    if(dep&&dep.nextSibling)inf.insertBefore(bf,dep.nextSibling);else if(dep)inf.appendChild(bf);else if(inf)inf.insertBefore(bf,inf.firstChild);else mp.appendChild(bf);}
   var bm=el('button','mais-bt','Saiba mais');bm.type='button';bm.setAttribute('aria-expanded','false');bm.addEventListener('click',function(){var on=mp.hidden;mp.hidden=!on;bm.setAttribute('aria-expanded',on?'true':'false');});ac.appendChild(bm);}
- var bs=el('button','comp','Compartilhar');bs.type='button';bs.addEventListener('click',function(){compartilha(m);});ac.appendChild(bs);if(m.pdf&&!(EDIT[m.id]&&EDIT[m.id].paginas)){var bd=el('a','baixar');bd.href=m.pdf;bd.setAttribute('download',m.pdf.split('/').pop());bd.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';bd.appendChild(el('span','','Baixar PDF'+(m.pdfmb?' · '+m.pdfmb+' MB':'')));ac.appendChild(bd);}
+ var bs=el('button','comp','Compartilhar');bs.type='button';bs.addEventListener('click',function(){compartilha(m);});ac.appendChild(bs);if(!(m.pdf&&!(EDIT[m.id]&&EDIT[m.id].paginas))&&m.paginas&&m.paginas.length){var bg=el('a','baixar');bg.href='#';bg.setAttribute('role','button');bg.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>Baixar PDF</span>';bg.addEventListener('click',function(e){e.preventDefault();geraPdf(m,bg);});ac.appendChild(bg);}
+  if(m.pdf&&!(EDIT[m.id]&&EDIT[m.id].paginas)){var bd=el('a','baixar');bd.href=m.pdf;bd.setAttribute('download',m.pdf.split('/').pop());bd.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';bd.appendChild(el('span','','Baixar PDF'+(m.pdfmb?' · '+m.pdfmb+' MB':'')));ac.appendChild(bd);}
  if(editor){var be=el('button','ed','Editar projeto');be.type='button';be.addEventListener('click',function(){ir('editar/'+m.id);});ac.appendChild(be);
   {var bx=el('button','perigo','Apagar projeto');bx.type='button';bx.addEventListener('click',function(){apagar(m);});ac.appendChild(bx);}}
  cab.appendChild(ac);if(mp)cab.appendChild(mp);
@@ -1000,6 +1033,14 @@ function rodapeEd(){try{montaAutor();}catch(e){}var b=$('rod-editar');if(b){var 
  if(VIS.site!=null){var tot=0;for(var k in VIS)if(k!=='site')tot+=Number(VIS[k])||0;v.textContent='Visitas: '+VIS.site+' ao site'+' · '+tot+' nos projetos';v.hidden=!editor;}else{v.textContent='';v.hidden=true;}}
 
 /* ---------- RODAPÉ: criador e feedback ---------- */
+function jsPdfLib(){return new Promise(function(ok,erro){if(window.jspdf)return ok(window.jspdf);var sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js';sc.onload=function(){window.jspdf?ok(window.jspdf):erro();};sc.onerror=erro;document.head.appendChild(sc);});}
+function imgDados(src){return fetch(src,{mode:'cors'}).then(function(r){if(!r.ok)throw 0;return r.blob();}).then(function(b){return new Promise(function(ok,erro){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){ok({d:fr.result,w:im.naturalWidth,h:im.naturalHeight});};im.onerror=erro;im.src=fr.result;};fr.onerror=erro;fr.readAsDataURL(b);});});}
+function geraPdf(m,bt){if(bt.dataset.ocupado)return;bt.dataset.ocupado='1';var sp=bt.querySelector('span'),t0=sp.textContent;sp.textContent='Preparando…';
+ jsPdfLib().then(function(L){var doc=null,i=0,n=m.paginas.length;function prox(){if(i>=n){doc.save((m.titulo||'projeto').replace(/[\\/:*?"<>|]+/g,'').trim()+'.pdf');sp.textContent=t0;delete bt.dataset.ocupado;return;}
+   sp.textContent='Preparando '+(i+1)+'/'+n;var pg=m.paginas[i];imgDados(pg.src).then(function(r){var w=r.w,h=r.h,o=w>h?'l':'p';if(!doc)doc=new L.jsPDF({orientation:o,unit:'px',format:[w,h],hotfixes:['px_scaling'],compress:true});else doc.addPage([w,h],o);doc.addImage(r.d,'JPEG',0,0,w,h,undefined,'FAST');i++;prox();}).catch(function(){sp.textContent=t0;delete bt.dataset.ocupado;alertaTela('Não foi possível gerar o PDF. Confira a internet e tente de novo.');});}
+  prox();}).catch(function(){sp.textContent=t0;delete bt.dataset.ocupado;alertaTela('Não foi possível gerar o PDF agora. Tente de novo.');});}
+function montaEu(){var p=perfil(),f=$('le-foto');if(!f)return;$('le-nome').textContent=p.nome;f.innerHTML='';if(p.foto){var im=el('img');im.src=p.foto;im.alt='';im.loading='lazy';f.appendChild(im);f.classList.remove('vazia');}else{f.textContent=p.nome.split(/\s+/).map(function(x){return x[0]||'';}).slice(0,2).join('').toUpperCase();f.classList.add('vazia');}}
+$('lat-eu').addEventListener('click',function(){menu(false);ir('perfil');});try{montaEu();}catch(e){}
 function montaAutor(){if(!$('ra-nome'))return;var p=perfil();$('ra-nome').textContent=p.nome;$('ra-tit').textContent=p.titulo||'';$('ra-tit').hidden=!p.titulo;
  var lk=$('ra-links');lk.innerHTML='';var tem=false;REDES.forEach(function(x){var v=p.contatos&&p.contatos[x[0]];if(!v)return;var h=linkRede(x[0],v);if(!h)return;tem=true;var a=el('a','rbt');a.href=h;if(x[0]!=='email'){a.target='_blank';a.rel='noopener';}a.appendChild(el('span','',x[1]));lk.appendChild(a);});
  if(!tem&&editor){lk.appendChild(el('span','rod-rot','Preencha o perfil para seus contatos aparecerem aqui'));}
@@ -1101,13 +1142,13 @@ function telaEditar(id){var c=$('fm-corpo');c.innerHTML='';var m=porId[id];if(!e
   if(cg){var gv=cg.valor();if(!gv){st.textContent='Escreva o nome do grupo novo.';return;}d.grupo=gv;}if(capaSel)d.capa=parseInt(capaSel.value,10)||1;
   bt.disabled=true;st.textContent='Salvando…';var ref=m.din?fb.database().ref('site/materias/'+id):fb.database().ref('site/edicoes/'+id);
   var passo=novo?sobeTodas(novo,'materias/'+id+'-'+Date.now().toString(36),st).then(function(urls){d.paginas=urls;d.textos=novo.paginas.map(function(p){return p.txt;});}):Promise.resolve();
-  passo.then(function(){st.textContent='Salvando…';return ref.update(d);}).then(function(){if(m.din){for(var k in d)DIN[id][k]=d[k];}else{EDIT[id]=EDIT[id]||{};for(var k2 in d)EDIT[id][k2]=d[k2];}refaz();ir(id);alertaTela('Projeto salvo.');}).catch(function(){bt.disabled=false;st.textContent='Não foi possível salvar. Confira a internet e tente de novo.';});});}
+  passo.then(function(){st.textContent='Salvando…';return ref.update(d);}).then(function(){if(m.din){for(var k in d)DIN[id][k]=d[k];}else{EDIT[id]=EDIT[id]||{};for(var k2 in d)EDIT[id][k2]=d[k2];}refaz();if(window.VOLTA_ORG){window.VOLTA_ORG=false;ir('organizar');}else ir(id);alertaTela('Projeto salvo.');}).catch(function(){bt.disabled=false;st.textContent='Não foi possível salvar. Confira a internet e tente de novo.';});});}
 function telaOrganizar(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcesso(c);return;}
  var f=el('form','form');f.appendChild(el('h1','','Organizar o site'));
  f.appendChild(el('p','dica','Escolha uma aba. Nada muda até tocar em Salvar.'));
  var abas=el('div','abas');abas.setAttribute('role','tablist');var paineis={};var f0=f;
- [['proj','Projetos'],['dest','Destaques'],['grup','Grupos'],['tx','Textos']].forEach(function(a,i){var b=el('button','aba'+(i?'':' on'),a[1]);b.type='button';b.setAttribute('role','tab');b.setAttribute('aria-selected',i?'false':'true');var pn=el('div','painel'+(i?'':' on'));paineis[a[0]]=pn;
-  b.addEventListener('click',function(){Array.prototype.forEach.call(abas.children,function(x){x.classList.remove('on');x.setAttribute('aria-selected','false');});b.classList.add('on');b.setAttribute('aria-selected','true');for(var k in paineis)paineis[k].classList.toggle('on',paineis[k]===pn);});abas.appendChild(b);});
+ var aba0=telaOrganizar.aba||'proj';[['proj','Projetos'],['dest','Destaques'],['grup','Grupos'],['tx','Textos']].forEach(function(a,i){var on=a[0]===aba0;var b=el('button','aba'+(on?' on':''),a[1]);b.type='button';b.setAttribute('role','tab');b.setAttribute('aria-selected',on?'true':'false');var pn=el('div','painel'+(on?' on':''));paineis[a[0]]=pn;
+  b.addEventListener('click',function(){telaOrganizar.aba=a[0];Array.prototype.forEach.call(abas.children,function(x){x.classList.remove('on');x.setAttribute('aria-selected','false');});b.classList.add('on');b.setAttribute('aria-selected','true');for(var k in paineis)paineis[k].classList.toggle('on',paineis[k]===pn);});abas.appendChild(b);});
  f0.appendChild(abas);['proj','dest','grup','tx'].forEach(function(k){f0.appendChild(paineis[k]);});
  function busca0(ph,lista){var w=el('label','campo bproc');var i=el('input');i.type='search';i.placeholder=ph;i.setAttribute('aria-label',ph);i.autocomplete='off';w.appendChild(i);
   i.addEventListener('input',function(){var q=semAcento(i.value.trim());Array.prototype.forEach.call(lista.children,function(r){var t=r.getAttribute('data-t')||'';r.style.display=!q||semAcento(t).indexOf(q)>=0?'':'none';});});return w;}
@@ -1128,11 +1169,11 @@ function telaOrganizar(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcess
  /* projetos */
  var escolha={};M.forEach(function(m){if(m.tipo!=='revista'){escolha[m.id]=null;}});
  function grupoDe(m){if(escolha[m.id])return escolha[m.id];for(var i=0;i<linhasG.length;i++)if(linhasG[i].orig===m.grupo)return linhasG[i];return null;}
- var pw2=el('div','campo');pw2.appendChild(el('span','','Projetos: grupo, Editar e ✕ para apagar'));var pl=el('div','plista');var bn=el('button','gadd','+ Novo projeto');bn.type='button';bn.style.margin='0 0 10px';bn.addEventListener('click',function(){ir('nova');});paineis.proj.appendChild(bn);paineis.proj.appendChild(busca0('Pesquisar projeto',pl));pw2.appendChild(pl);paineis.proj.appendChild(pw2);
- var ow0=el('label','campo');ow0.appendChild(el('span','','Ordem dos projetos no site'));var osel=el('select');osel.id='or-ordem';ORDENS.forEach(function(x){var o=el('option','',x[1]);o.value=x[0];osel.appendChild(o);});osel.value=CFG.ordenar||'novos';ow0.appendChild(osel);ow0.appendChild(el('small','','Vale para a lista do início, o menu e o Perfil.'));paineis.proj.insertBefore(ow0,paineis.proj.children[1]);
+ var pw2=el('div','campo');pw2.appendChild(el('span','','Projetos: grupo, Editar e ✕ para apagar'));var pl=el('div','plista');var bn=el('button','gadd','+ Novo projeto');bn.type='button';bn.style.margin='0 0 10px';bn.addEventListener('click',function(){ir('nova');});paineis.proj.appendChild(bn);paineis.proj.appendChild(busca0('Procurar projeto pelo nome',pl));pw2.appendChild(pl);paineis.proj.appendChild(pw2);
+ var ow0=el('label','campo');ow0.appendChild(el('span','','Ordem dos projetos no site'));var osel=el('select');osel.id='or-ordem';ORDENS.forEach(function(x){var o=el('option','',x[1]);o.value=x[0];osel.appendChild(o);});osel.value=CFG.ordenar||'novos';ow0.appendChild(osel);ow0.appendChild(el('small','','Escolha em que ordem os projetos aparecem no site.'));paineis.proj.insertBefore(ow0,paineis.proj.children[1]);
  var sels=[],tirar={},volta={};M.forEach(function(m){var r=el('div','prow');r.setAttribute('data-id',m.id);r.setAttribute('data-t',m.titulo+' '+m.grupo);var tt=el('span','pt',m.titulo);if(VIS[m.id]!=null)tt.appendChild(el('small','pv',' · '+VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));if(m.rascunho)tt.appendChild(el('small','pv',' · rascunho'));r.appendChild(tt);
   var sl=el('select');sl.setAttribute('aria-label','Grupo de '+m.titulo);if(m.tipo==='revista')sl.disabled=true;r.appendChild(sl);
-  var bE=el('button','gb ged','Editar');bE.type='button';bE.setAttribute('aria-label','Editar '+m.titulo);bE.addEventListener('click',function(){ir('editar/'+m.id);});r.appendChild(bE);
+  var bE=el('button','gb ged','Editar');bE.type='button';bE.setAttribute('aria-label','Editar '+m.titulo);bE.addEventListener('click',function(){window.VOLTA_ORG=true;ir('editar/'+m.id);});r.appendChild(bE);
   var bx=el('button','gb gx','✕');bx.type='button';bx.setAttribute('aria-label','Apagar '+m.titulo);
   bx.addEventListener('click',function(){if(tirar[m.id]){delete tirar[m.id];r.classList.remove('sai');bx.textContent='✕';return;}
    if(!confirm(m.din?'Apagar "'+m.titulo+'" de vez quando salvar? Isso não pode ser desfeito.':'Tirar "'+m.titulo+'" do site quando salvar? Ele fica guardado e pode voltar depois.'))return;
@@ -1148,7 +1189,7 @@ function telaOrganizar(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcess
  function marcaD(){Array.prototype.forEach.call(mk.children,function(l){var id=l.getAttribute('data-id'),k=dsel.indexOf(id),n=l.querySelector('.dn'),cb=l.querySelector('input');cb.checked=k>=0;n.textContent=k<0?'':(k===0?'Principal':(k+1)+'º');l.classList.toggle('pri',k===0);});}
  M.forEach(function(m){var l=el('label');l.setAttribute('data-id',m.id);l.setAttribute('data-t',m.titulo+' '+m.grupo);var cb=el('input');cb.type='checkbox';cb.value=m.id;l.appendChild(cb);l.appendChild(document.createTextNode(m.titulo));l.appendChild(el('span','dn',''));mk.appendChild(l);
   cb.addEventListener('change',function(){var k=dsel.indexOf(m.id);if(cb.checked&&k<0){if(dsel.length>=5){cb.checked=false;alertaTela('No máximo 5 destaques. Desmarque um antes.');return;}dsel.push(m.id);}else if(!cb.checked&&k>=0)dsel.splice(k,1);marcaD();});});
- paineis.dest.appendChild(busca0('Pesquisar projeto',mk));dw.appendChild(mk);paineis.dest.appendChild(dw);marcaD();
+ paineis.dest.appendChild(busca0('Procurar projeto pelo nome',mk));dw.appendChild(mk);paineis.dest.appendChild(dw);marcaD();
  paineis.tx.appendChild(campo('Título acima dos destaques','or-tdest','input',tx.destaques,60));paineis.tx.appendChild(campo('Título acima da lista de projetos','or-tlista','input',tx.lista,60));
  var rw0=campo('Rodapé da página inicial (uma informação por linha)','or-rod','textarea',tx.rodape,300);rw0.querySelector('textarea').rows=3;paineis.tx.appendChild(rw0);
  var st=el('div','st'),ac=el('div','acoes');var bt=el('button','btn','Salvar');bt.type='submit';var bv=el('button','','Cancelar');bv.type='button';bv.addEventListener('click',function(){ir('inicio');});ac.appendChild(bt);ac.appendChild(bv);f.appendChild(ac);f.appendChild(st);c.appendChild(f);
@@ -1164,7 +1205,7 @@ function telaOrganizar(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcess
   M.forEach(function(m){if(tirar[m.id])return;var g=grupoDe(m);if(!g||m.tipo==='revista')return;var novo=g.nome.trim().slice(0,40);if(novo===m.grupo)return;
    if(m.din)up['materias/'+m.id+'/grupo']=novo;else up['edicoes/'+m.id+'/grupo']=novo;});
   bt.disabled=true;st.textContent='Salvando…';
-  fb.database().ref('site').update(up).then(function(){Object.keys(tirar).forEach(function(id){delete DIN[id];});carregaSite();ir('inicio');alertaTela('Site organizado.');}).catch(function(){bt.disabled=false;st.textContent='Não foi possível salvar. Confira a internet e tente de novo.';});});}
+  fb.database().ref('site').update(up).then(function(){Object.keys(tirar).forEach(function(id){delete DIN[id];});var y0=scrollY;carregaSite(function(){if(rota==='organizar'){telaOrganizar();scrollTo(0,y0);}});alertaTela('Salvo. Pode continuar editando.');}).catch(function(){bt.disabled=false;st.textContent='Não foi possível salvar. Confira a internet e tente de novo.';});});}
 var REDES=[['instagram','Instagram','@seuperfil'],['email','E-mail','voce@gmail.com'],['whatsapp','WhatsApp','(47) 99999-9999'],['linkedin','LinkedIn','linkedin.com/in/voce'],['behance','Behance','behance.net/voce'],['pinterest','Pinterest','pinterest.com/voce'],['site','Site ou portfólio','seusite.com'],['outro','Outro link','endereço completo']];
 var PERFIL0={"nome": "João Pedro de Oliveira", "titulo": "Moda / Styling / Criação", "bio": "Designer de Moda formado na UNIVALI, busco sempre aliar sensibilidade estética, funcionalidade e inovação, desenvolvendo projetos que expressem propósito e personalidade.\n\nAo longo da minha formação, construí uma visão ampla do universo da moda, explorando áreas como criação, styling, fotografia, desenvolvimento de produtos e comunicação visual.\n\nAcredito que cada projeto é uma oportunidade de transformar conceitos em experiências, utilizando formas, cores, texturas e detalhes para contar histórias e criar conexões.\n\nEste portfólio reúne alguns dos trabalhos que representam minha trajetória, meu processo criativo e minha constante busca por evolução como designer.", "foto": "https://res.cloudinary.com/wzjgmszm/image/upload/c_limit,w_900,q_auto,f_auto/v1795114301/perfil/h36on0bk1hwy0y8vkvq8.jpg"};var PERFIL_CV=[["Formação acadêmica", ["Design de Moda – UNIVALI", "Formação voltada ao desenvolvimento de produtos de moda, com vivência em todas as etapas do processo criativo e produtivo. Ao longo do curso, foram desenvolvidos projetos nas áreas de vestuário, acessórios, calçados, joias e fotografia de moda, abrangendo pesquisa de tendências, desenvolvimento de coleções, ilustração, modelagem, fichas técnicas, materiais e processos de confecção.", "A formação também inclui domínio de ferramentas técnicas e de criação, com experiência no pacote Adobe (Illustrator, Photoshop e InDesign) e no sistema Audaces para desenvolvimento de desenhos técnicos, modelagem e documentação de produtos, integrando conhecimentos de design, produção e comunicação visual."]], ["Experiência profissional", ["Visual Merchandiser – Tok&Stok", "Designer – SantaCosta"]], ["Habilidades técnicas", ["Adobe Photoshop e Illustrator", "AutoCAD, Revit, SketchUp, Vray e Promob", "Montagem e composição de ambientes", "Pesquisa de tendência, produção e styling"]], ["Idiomas", ["Português – Nativo", "Inglês – Intermediário", "Espanhol – Intermediário"]], ["Interesses", ["Styling de moda", "Design de espaços", "Criação de narrativas visuais", "Moda conceitual e direção criativa"]]];var CONT0={email:'jottap1605@gmail.com',instagram:'jottapedro.16'};
 function perfil(){var p=PERFIL||{},o={};for(var k in PERFIL0)o[k]=(p[k]!=null&&p[k]!=='')?String(p[k]):PERFIL0[k];
@@ -1341,6 +1382,7 @@ function mostra(id,pg){var tipo='inicio';
 function lerHash(){var raw=location.hash.replace(/^#\/?/,''),h=raw.split('/');var id=h[0]||'inicio',pg=parseInt(h[1],10)||0;if(id==='editar'){id='editar/'+(h[1]||'');pg=0;}mostra(id,pg);}
 addEventListener('hashchange',lerHash);
 function ph(){$('q').placeholder=innerWidth<560?'Pesquisar':'Pesquisar matérias e textos';}ph();addEventListener('resize',ph);
+Array.prototype.forEach.call(document.querySelectorAll('#barra-ed [data-be]'),function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-be');if(k==='sair'){try{fb.auth().signOut();}catch(e){}ls('cartolaEditor','0');return;}window.VOLTA_ORG=false;ir(k);});});
 Array.prototype.forEach.call(document.querySelectorAll('#ed-barra [data-ed]'),function(b){b.addEventListener('click',function(){ir(b.getAttribute('data-ed'));});});
 Array.prototype.forEach.call(document.querySelectorAll('#lateral [data-ir="perfil"]'),function(b){b.addEventListener('click',function(){menu(false);ir('perfil');});});
 Array.prototype.forEach.call(document.querySelectorAll('#lateral [data-ir="sobre"]'),function(b){b.addEventListener('click',function(){menu(false);ir('sobre');});});
