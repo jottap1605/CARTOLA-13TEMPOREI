@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611201530";</script>
+<script>var VERSAO="202611201620";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -752,6 +752,7 @@ body.filtrando #mural{height:auto;overflow:visible;column-fill:balance;-webkit-m
 .pags.m-grade{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;max-width:none!important;align-items:start}
 .pags.m-grade .pg{margin:0!important}
 @media(max-width:560px){.pags.m-grade{grid-template-columns:1fr 1fr;gap:8px}}
+.pags.m-apres{display:block!important;max-width:none!important}
 .pags.m-apres .pg{display:none!important}
 .pags.m-apres .pg.on{display:block!important;margin:0 auto!important;max-width:min(100%,1100px)}
 .pags.m-apres .pg.on img{max-height:calc(100svh - var(--hh) - 200px);width:auto;max-width:100%;margin:0 auto;display:block}
@@ -759,6 +760,30 @@ body.filtrando #mural{height:auto;overflow:visible;column-fill:balance;-webkit-m
 .apb{width:52px;height:52px;border-radius:50%;border:1px solid rgba(237,237,234,.5);background:rgba(20,20,20,.6);color:#EDEDEA;font-size:26px;line-height:1;cursor:pointer;padding:0 0 3px}
 .apb:disabled{opacity:.3;cursor:default}
 .apct{font-size:13px;letter-spacing:.12em;color:#C9CBCC;min-width:70px;text-align:center}
+
+/* botão ⋯ dos modos (para quem visita) */
+#modo-v{position:fixed;z-index:61;right:calc(var(--pn) + max(16px,env(safe-area-inset-right)));bottom:calc(18px + env(safe-area-inset-bottom))}
+#modo-v[hidden]{display:none!important}
+body.na-revista #modo-v{bottom:calc(74px + env(safe-area-inset-bottom))}
+body.editando #modo-v{bottom:calc(84px + env(safe-area-inset-bottom))}
+body.editando.na-revista #modo-v{bottom:calc(140px + env(safe-area-inset-bottom))}
+#modo-bt{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(237,237,234,.6);background:rgba(20,20,20,.62);color:#EDEDEA;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.45);padding:0}
+#modo-bt svg{width:22px;height:22px;fill:currentColor}
+#modo-menu{position:absolute;right:0;bottom:54px;min-width:220px;background:#1c1c1c;border:1px solid var(--borda);border-radius:14px;padding:8px;box-shadow:0 12px 40px rgba(0,0,0,.55)}
+#modo-menu[hidden]{display:none}
+.mm-t{font-size:10px;letter-spacing:.18em;color:#B8BBBD;padding:6px 10px 6px}
+.mm-i{display:block;width:100%;text-align:left;min-height:44px;padding:0 12px;border-radius:10px;border:0;background:none;color:#EDEDEA;font:inherit;font-size:14px;cursor:pointer}
+.mm-i.on{background:rgba(237,237,234,.1)}
+.mm-i.on::after{content:"✓";float:right;color:#C9CBCC}
+body.rev-cheia #modo-v{display:none!important}
+
+.apfs{display:flex;align-items:center;gap:7px;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid rgba(237,237,234,.5);background:rgba(20,20,20,.6);color:#EDEDEA;font:inherit;font-size:13px;cursor:pointer;margin-left:8px}
+.apfs svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.apwrap:fullscreen{background:#111;display:flex;flex-direction:column;justify-content:center;padding:12px}
+.apwrap:-webkit-full-screen{background:#111;display:flex;flex-direction:column;justify-content:center;padding:12px}
+.apwrap:fullscreen .pags.m-apres .pg.on img{max-height:calc(100vh - 90px)}
+.apwrap:-webkit-full-screen .pags.m-apres .pg.on img{max-height:calc(100vh - 90px)}
+.apwrap:fullscreen .pg .n{display:none}
 </style></head><body>
 <header id="topo">
  <button id="abre" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -778,6 +803,7 @@ body.filtrando #mural{height:auto;overflow:visible;column-fill:balance;-webkit-m
  <div class="rod"><span id="rod-t" hidden></span><button id="l-editar" type="button" class="editar">Editar o site</button></div>
 </aside>
 <div id="veu"></div>
+<div id="modo-v" hidden><button id="modo-bt" type="button" aria-label="Modos de visualização" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></button><div id="modo-menu" role="menu" hidden></div></div>
 <div id="barra-ed" role="toolbar" aria-label="Modo de edição"><div class="be-in">
  <button type="button" data-be="nova" class="be-prim"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo projeto</span></button>
  <button type="button" data-be="organizar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Organizar o site</span></button>
@@ -953,10 +979,20 @@ var MESES=['jan.','fev.','mar.','abr.','maio','jun.','jul.','ago.','set.','out.'
 function mesAno(t){if(!t)return '';var d=new Date(t);return MESES[d.getMonth()]+' '+d.getFullYear();}
 function usaCapaImg(m,ci){if(ci&&ci.s){m.capa=ci.s;m.cw=ci.w;m.ch=ci.h;m.capaImg=ci;}}
 function folheavel(m){if(!m)return false;if(m.tipo==='revista')return true;var pode=!!(m.paginas&&m.paginas.length>1);if(m.modo)return m.modo==='revista'&&pode;return m.grupo==='Revistas'&&m.tipo!=='slides'&&pode;}
-function modoDe(m){if(folheavel(m))return 'revista';return m.modo&&m.modo!=='revista'?m.modo:'vertical';}
+function modoPadrao(m){if(folheavel(m))return 'revista';return m.modo&&m.modo!=='revista'?m.modo:'vertical';}
+function modoDe(m){return VER[m.id]||modoPadrao(m);}
 var MODOS=[['','Automático (grupo Revistas: revista; os outros: rolagem vertical)'],['revista','Revista (folhear as páginas)'],['vertical','Rolagem vertical (uma página embaixo da outra)'],['lateral','Rolagem lateral (passar as páginas para o lado)'],['grade','Grade (todas as páginas pequenas, estilo feed)'],['apres','Apresentação (uma página por vez, com setas)']];
+(function(){var bt=$('modo-bt'),mn=$('modo-menu');
+ function nome(k){return {revista:'Revista',vertical:'Rolagem vertical',lateral:'Rolagem lateral',grade:'Grade',apres:'Apresentação'}[k]||k;}
+ function monta(){var m=porId[rota];if(!m)return;mn.innerHTML='';mn.appendChild(el('div','mm-t','VER COMO'));var pad=modoPadrao(m),atual=modoDe(m);
+  [[pad,'Padrão ('+nome(pad)+')']].concat([['grade','Grade'],['apres','Apresentação']].filter(function(x){return x[0]!==pad;})).forEach(function(x){var b=el('button','mm-i'+(x[0]===atual?' on':''),x[1]);b.type='button';b.setAttribute('role','menuitem');
+   b.addEventListener('click',function(){if(x[0]===pad)delete VER[m.id];else VER[m.id]=x[0];mn.hidden=true;bt.setAttribute('aria-expanded','false');mostra(rota);scrollTo(0,0);if(x[0]==='apres')setTimeout(function(){var a=document.querySelector('.apwrap');if(a){a.scrollIntoView({block:'start'});scrollBy(0,-70);}},60);});mn.appendChild(b);});}
+ bt.addEventListener('click',function(e){e.stopPropagation();var abre=mn.hidden;if(abre)monta();mn.hidden=!abre;bt.setAttribute('aria-expanded',abre?'true':'false');});
+ document.addEventListener('click',function(e){if(!mn.hidden&&!$('modo-v').contains(e.target)){mn.hidden=true;bt.setAttribute('aria-expanded','false');}});})();
 function campoModo(id,val){var w=el('label','campo');w.appendChild(el('span','','Modo de visualização'));var sl=el('select');sl.id=id;MODOS.forEach(function(x){var o=el('option','',x[1]);o.value=x[0];sl.appendChild(o);});sl.value=val||'';w.appendChild(sl);w.appendChild(el('small','','Como as páginas aparecem quando alguém abre o projeto.'));return w;}
-function ehRev(id){return folheavel(porId[id]);}
+var VER={};/* modo escolhido pelo visitante (só nesta visita) */
+function ehRev(id){var m=porId[id];return !!m&&modoDe(m)==='revista';}
+function pgsDe(m){if(m.paginas&&m.paginas.length)return m.paginas;if(m.tipo==='revista'){var l=[];for(var i=1;i<=38;i++)l.push({src:'arquivos/revista/p'+('0'+i).slice(-2)+'.jpg',w:1241,h:1755});return l;}return [];}
 function poeCapa(m,n){n=parseInt(n,10)||1;var p=m.paginas[Math.min(Math.max(n,1),m.paginas.length)-1];if(p){m.capa=p.src;m.cw=p.w;m.ch=p.h;m.capaPg=n;}}
 function aplicaEdicao(m){var o=ORIG[m.id],e=EDIT[m.id];if(!o)return;
  m.titulo=o.titulo;m.resumo=o.resumo;m.info=JSON.parse(JSON.stringify(o.info));m.grupo=o.grupo;m.tag=o.tag;m.paginas=o.paginas;m.textos=o.textos;m.capa=o.capa;m.cw=o.cw;m.ch=o.ch;m.tipo=o.tipo;m.fotos=o.fotos;m.ano='';m.rascunho=false;m.privado=false;m.capaImg=null;m.capaPos='';m.modo='';m.capaPg=0;m.data='2026';m.t=0;m.mod=0;
@@ -1122,14 +1158,19 @@ function montaCab(m,cab0){cab0.innerHTML='';var cab=el('div','cab-esq');cab0.app
  if(editor&&VIS[m.id]!=null)cab.appendChild(el('div','ficha vis-m',VIS[m.id]+(VIS[m.id]===1?' visita':' visitas')));
  cab0.classList.remove('duas');
 }
-function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');c.innerHTML='';montaCab(m,cab);
- var lista=m.paginas.map(function(p,i){return{src:p.src,leg:m.curto+' · pág. '+(i+1)};});
- var md=modoDe(m);var ps=el('div','pags'+(m.tipo==='slides'?' slides':'')+(md!=='vertical'?' m-'+md:''));m.paginas.forEach(function(p,i){var b=el('button','pg');b.type='button';b.id='p-'+(i+1);var im=el('img');im.src=p.src;im.alt=m.curto+', página '+(i+1);im.width=p.w;im.height=p.h;im.loading=i<2?'eager':'lazy';im.decoding='async';b.appendChild(im);b.appendChild(el('span','n',(i+1)+' / '+m.paginas.length));
+function abreMateria(m,pg){var cab=$('m-cab'),c=$('m-corpo');c.innerHTML='';montaCab(m,cab);var PG=pgsDe(m);
+ var lista=PG.map(function(p,i){return{src:p.src,leg:m.curto+' · pág. '+(i+1)};});
+ var md=modoDe(m);if(md==='revista')md='vertical';var ps=el('div','pags'+(m.tipo==='slides'?' slides':'')+(md!=='vertical'?' m-'+md:''));PG.forEach(function(p,i){var b=el('button','pg');b.type='button';b.id='p-'+(i+1);var im=el('img');im.src=p.src;im.alt=m.curto+', página '+(i+1);im.width=p.w;im.height=p.h;im.loading=i<2?'eager':'lazy';im.decoding='async';b.appendChild(im);b.appendChild(el('span','n',(i+1)+' / '+PG.length));
   b.addEventListener('click',function(){abreVz(lista,i);});ps.appendChild(b);});c.appendChild(ps);
- if(md==='apres'){var at=0,tot=m.paginas.length,nav=el('div','apnav'),ba=el('button','apb','‹'),bp=el('button','apb','›'),ct=el('span','apct','');ba.type=bp.type='button';ba.setAttribute('aria-label','Página anterior');bp.setAttribute('aria-label','Próxima página');nav.appendChild(ba);nav.appendChild(ct);nav.appendChild(bp);c.insertBefore(nav,ps.nextSibling);
+ if(md==='apres'){var at=0,tot=PG.length,nav=el('div','apnav'),ba=el('button','apb','‹'),bp=el('button','apb','›'),ct=el('span','apct','');ba.type=bp.type='button';ba.setAttribute('aria-label','Página anterior');bp.setAttribute('aria-label','Próxima página');nav.appendChild(ba);nav.appendChild(ct);nav.appendChild(bp);var apw=el('div','apwrap');c.insertBefore(apw,ps);apw.appendChild(ps);apw.appendChild(nav);
+  var fsb=el('button','apfs');fsb.type='button';fsb.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Tela cheia</span>';
+  if(apw.requestFullscreen||apw.webkitRequestFullscreen){nav.appendChild(fsb);fsb.addEventListener('click',function(){var em=document.fullscreenElement||document.webkitFullscreenElement;try{if(em)(document.exitFullscreen||document.webkitExitFullscreen).call(document);else(apw.requestFullscreen||apw.webkitRequestFullscreen).call(apw);}catch(e){}});
+   var mudaFs=function(){var on=(document.fullscreenElement||document.webkitFullscreenElement)===apw;fsb.querySelector('span').textContent=on?'Sair da tela cheia':'Tela cheia';};document.addEventListener('fullscreenchange',mudaFs);document.addEventListener('webkitfullscreenchange',mudaFs);}
+  /* na tela cheia: tocar na metade direita avança, na esquerda volta */
+  ps.addEventListener('click',function(e){if((document.fullscreenElement||document.webkitFullscreenElement)!==apw)return;e.stopPropagation();e.preventDefault();var r=ps.getBoundingClientRect();vai(e.clientX>r.left+r.width/2?at+1:at-1);},true);
   function vai(k){at=Math.max(0,Math.min(tot-1,k));Array.prototype.forEach.call(ps.children,function(b,j){b.classList.toggle('on',j===at);});ct.textContent=(at+1)+' / '+tot;ba.disabled=at===0;bp.disabled=at===tot-1;}
   ba.addEventListener('click',function(){vai(at-1);});bp.addEventListener('click',function(){vai(at+1);});vai(pg?pg-1:0);abreMateria.apres=vai;abreMateria.apAt=function(){return at;};pg=0;}else abreMateria.apres=null;
- if(m.fotos&&m.fotos.length){c.appendChild(el('div','rot cx','FOTOS DO EDITORIAL')).style.maxWidth='1100px';var fs=el('div','fotos');m.fotos.forEach(function(f,i){var b=el('button','pg');b.type='button';var im=el('img');im.src=f.p;im.alt=m.curto+', foto '+(i+1);im.width=f.w;im.height=f.h;im.loading='lazy';im.decoding='async';b.appendChild(im);
+ if(m.fotos&&m.fotos.length&&md!=='apres'){c.appendChild(el('div','rot cx','FOTOS DO EDITORIAL')).style.maxWidth='1100px';var fs=el('div','fotos');m.fotos.forEach(function(f,i){var b=el('button','pg');b.type='button';var im=el('img');im.src=f.p;im.alt=m.curto+', foto '+(i+1);im.width=f.w;im.height=f.h;im.loading='lazy';im.decoding='async';b.appendChild(im);
   b.addEventListener('click',function(){abreVz(m.fotos.map(function(f,j){return{src:f.g,leg:m.curto+' · foto '+(j+1)};}),i);});fs.appendChild(b);});c.appendChild(fs);}
  if(pg){var alvo=$('p-'+pg);if(alvo){alvo.classList.add('alvo');setTimeout(function(){alvo.scrollIntoView({block:'start'});scrollBy(0,-70);},60);}}else scrollTo(0,0);}
 
@@ -1539,6 +1580,7 @@ function mostra(id,pg){var tipo='inicio';
  else if(ehRev(id)){montaCab(m,$('r-cab'));$('t-revista').classList.add('on');iniciaRevista(m);setTimeout(window._fit,20);if(pg&&pf){try{pf.turnToPage(Math.max(0,Math.min(nPag()-1,pg-1)));label();}catch(e){}}}
  else{$('t-mat').classList.add('on');abreMateria(m,pg);}
  if(tipo==='inicio')setTimeout(function(){try{layoutMural();}catch(e){}},30);
+ try{var mv=$('modo-v');mv.hidden=!(m&&tipo==='materia'&&pgsDe(m).length>1);$('modo-menu').hidden=true;$('modo-bt').setAttribute('aria-expanded','false');}catch(e){}
  try{var be=$('rod-editar'),bc0=$('chat-bt'),tl0=document.querySelector('.tela.on');be.hidden=tipo!=='perfil';bc0.hidden=!(m&&(tipo==='materia'||id==='revista'));if(tl0){var alvo=tl0.id==='t-inicio'?tl0.querySelector('.cx'):tl0;alvo.insertBefore(be,alvo.firstChild);alvo.insertBefore(bc0,alvo.firstChild);}}catch(e){}
  try{var rod=$('rodape');if(!mostra.casa)mostra.casa=rod.parentNode;var tl=document.querySelector('.tela.on');if(tipo==='inicio')mostra.casa.appendChild(rod);else if(tl&&tipo!=='form'&&tipo!=='espera')tl.appendChild(rod);rod.hidden=(tipo==='form'||tipo==='espera');}catch(e){}
  if(innerWidth>=1100&&tipo!=='materia'&&document.body.classList.contains('chat-fixo')){fechaChat();}ajustaPainel();if(chat.aberto&&tipo==='materia')conecta(salaAtual());}
