@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611201235";</script>
+<script>var VERSAO="202611201300";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -695,6 +695,26 @@ body.mu-sem-nav .mu-nav{visibility:hidden}
 body.filtrando #normal{display:block}
 body.filtrando #corte,body.filtrando .mu-nav{display:none}
 body.filtrando #mural{height:auto;overflow:visible;column-fill:balance;-webkit-mask-image:none;mask-image:none;padding-left:0;margin-left:0}
+
+/* 20/11 13h: lista em fileiras encaixadas; destaque do tamanho dos destaques */
+#mural{display:flex!important;flex-direction:column;gap:16px;columns:auto!important;column-width:auto!important;height:auto;overflow-x:auto;overflow-y:hidden;scroll-snap-type:none}
+#mural .mrow{display:flex;gap:16px;flex:none}
+#mural .pin{flex:none;margin:0;break-inside:auto}
+#mural:not(.vert) .card{height:100%;display:flex;flex-direction:column}
+#mural:not(.vert) .card img{flex:none;width:100%;background:#1a1a1a}
+#mural:not(.vert) .card .tx{flex:1;min-height:0;overflow:hidden;padding:10px 12px 10px!important}
+#mural:not(.vert) .card p{display:none}
+#mural:not(.vert) .card h3{font-size:16px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:6px 0 2px}
+#mural:not(.vert) .card .tag{font-size:10px}
+#mural.vert{display:block!important;columns:250px!important;column-gap:16px;height:auto!important;overflow:visible}
+#mural.vert .pin{break-inside:avoid;margin:0 0 16px}
+@media(max-width:899px){#mural,#mural .mrow{gap:12px}}
+@media(min-width:900px){
+ body[data-dn="1"] #normal{grid-template-columns:minmax(300px,30%) 1px minmax(0,1fr)}
+ body[data-dn="1"] #dest{grid-template-columns:1fr!important}
+ body[data-dn="2"] #normal{grid-template-columns:minmax(0,46fr) 1px minmax(0,54fr)}
+}
+@media(min-width:1500px){body[data-dn="1"] #normal{grid-template-columns:minmax(340px,26%) 1px minmax(0,1fr)}}
 </style></head><body>
 <header id="topo">
  <button id="abre" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -732,7 +752,7 @@ body.filtrando #mural{height:auto;overflow:visible;column-fill:balance;-webkit-m
    <div class="rot" style="margin-top:0" id="rot-dest">EM DESTAQUE</div>
    <section id="dest"></section>
    <div id="corte" aria-hidden="true"></div>
-   <div class="rot" id="rot-mural"><span id="rot-mural-t">MATÉRIAS E PROCESSO</span><span class="mu-nav"><button type="button" id="mu-ant" aria-label="Voltar a lista">‹</button><button type="button" id="mu-prox" aria-label="Avançar a lista">›</button></span></div>
+   <div class="rot" id="rot-mural"><span id="rot-mural-t">MATÉRIAS E PROCESSO</span></div>
    <section id="mural"></section>
   </div>
   <footer id="rodape"><div class="rf-topo">
@@ -954,15 +974,23 @@ function card(m,cls){var b=el('button','card '+(cls||''));b.type='button';var i=
 function montaInicio(){var d=$('dest');d.innerHTML='';
  var ds=((CFG.destaques&&CFG.destaques.length)?CFG.destaques:['revista','temporei','cenarios']).filter(function(x){return porId[x];});
  if(ds.length){d.appendChild(card(porId[ds[0]],'principal inteira'));var lado=el('div','lado');ds.slice(1,5).forEach(function(x){lado.appendChild(card(porId[x],'inteira'));});if(lado.childNodes.length)d.appendChild(lado);}
+ document.body.setAttribute('data-dn',String(Math.min(Math.max(ds.length,1),3)));
  var gs=GRUPOS.filter(function(g){return M.some(function(m){return m.grupo===g;});});if(gs.indexOf(filtro)<0)filtro='';
  var fl=$('filtros');fl.innerHTML='';filtro='';if(false){[''].concat(gs).forEach(function(g){var b=el('button','chip'+(g===filtro?' on':''),g||'Todos');b.type='button';b.setAttribute('aria-pressed',g===filtro?'true':'false');b.addEventListener('click',function(){filtro=g;montaInicio();});fl.appendChild(b);});}
  document.body.classList.toggle('filtrando',!!filtro);var rm=$('rot-mural-t');if(rm)rm.textContent=filtro?filtro.toUpperCase():textos().lista.toUpperCase();
- var mu=$('mural');mu.innerHTML='';M.forEach(function(m){if(filtro&&m.grupo!==filtro)return;var p=el('div','pin');p.appendChild(card(m,'inteira'));mu.appendChild(p);});alturaMural();Array.prototype.forEach.call(document.querySelectorAll('#dest img,#mural img'),function(i){if(!i.complete)i.addEventListener('load',alturaMural,{once:true});});}
-function alturaMural(){try{var d=$('dest'),largo=innerWidth>=900,h;if(largo)h=Math.max(520,d.offsetHeight||0);else h=Math.min(600,Math.max(420,Math.round(innerHeight*0.72)));document.documentElement.style.setProperty('--hm',h+'px');navMural();}catch(e){}}
-function navMural(){var mu=$('mural'),a=$('mu-ant'),b=$('mu-prox');if(!a)return;var max=mu.scrollWidth-mu.clientWidth-2;a.disabled=mu.scrollLeft<=2;b.disabled=mu.scrollLeft>=max;document.body.classList.toggle('mu-sem-nav',max<=0);}
-(function(){var mu=$('mural');function passo(){var p=mu.querySelector('.pin');return (p?p.offsetWidth:260)+16;}
- $('mu-ant').addEventListener('click',function(){mu.scrollBy({left:-passo(),behavior:'smooth'});});$('mu-prox').addEventListener('click',function(){mu.scrollBy({left:passo(),behavior:'smooth'});});
- mu.addEventListener('scroll',navMural,{passive:true});addEventListener('resize',function(){clearTimeout(alturaMural.t);alturaMural.t=setTimeout(alturaMural,150);});})();
+ MURAL=M.filter(function(m){return !filtro||m.grupo===filtro;});layoutMural();Array.prototype.forEach.call(document.querySelectorAll('#dest img'),function(i){if(!i.complete)i.addEventListener('load',layoutMural,{once:true});});}
+var MURAL=[];
+/* lista do início em fileiras encaixadas (sem buracos): cada fileira com a mesma altura, cada cartão com a largura da sua imagem */
+function layoutMural(){var mu=$('mural');if(!mu)return;mu.innerHTML='';
+ if(document.body.classList.contains('filtrando')){mu.classList.add('vert');MURAL.forEach(function(m){var p=el('div','pin');p.appendChild(card(m,'inteira'));mu.appendChild(p);});return;}
+ mu.classList.remove('vert');var largo=innerWidth>=900,gap=largo?16:12,H;
+ var TX=86,R,rowH,imgH,maxW;if(largo){var d=$('dest');H=Math.max(480,d.offsetHeight||0);R=Math.max(1,Math.round(H/400));rowH=(H-gap*(R-1))/R;imgH=Math.max(120,rowH-TX);maxW=imgH*2.2;}
+ else{R=2;imgH=Math.round(Math.min(190,Math.max(150,innerWidth*0.44)));rowH=imgH+TX;H=rowH*R+gap*(R-1);maxW=(mu.clientWidth||innerWidth-32)*0.92;}
+ var rows=[],lens=[];for(var r=0;r<R;r++){var rw=el('div','mrow');rw.style.height=rowH+'px';rows.push(rw);lens.push(0);mu.appendChild(rw);}
+ MURAL.forEach(function(m){var a=(m.cw&&m.ch)?m.cw/m.ch:0.75,w=imgH*a,fit='contain';if(w>maxW)w=maxW;if(w<imgH*0.55)w=imgH*0.55;w=Math.round(w);
+  var k=0;for(var r=1;r<R;r++)if(lens[r]<lens[k])k=r;var p=el('div','pin');p.style.width=w+'px';var c=card(m,'inteira');var im=c.querySelector('img');im.style.height=imgH+'px';im.style.objectFit=fit;p.appendChild(c);rows[k].appendChild(p);lens[k]+=w+gap;});
+ mu.style.height=H+'px';}
+addEventListener('resize',function(){clearTimeout(layoutMural.t);layoutMural.t=setTimeout(function(){if(rota==='inicio')layoutMural();},180);});
 
 /* ---------- BUSCA ---------- */
 function semAcento(s){return s.normalize?s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase():s.toLowerCase();}
@@ -1415,6 +1443,7 @@ function mostra(id,pg){var tipo='inicio';
  else if(tipo==='espera'){$('t-form').classList.add('on');$('fm-corpo').innerHTML='';$('fm-corpo').appendChild(el('div','aviso','Carregando…'));}
  else if(id==='revista'){montaCab(porId.revista,$('r-cab'));$('t-revista').classList.add('on');iniciaRevista();setTimeout(window._fit,20);if(pg&&pf){try{pf.turnToPage(Math.max(0,Math.min(37,pg-1)));label();}catch(e){}}}
  else{$('t-mat').classList.add('on');abreMateria(m,pg);}
+ if(tipo==='inicio')setTimeout(function(){try{layoutMural();}catch(e){}},30);
  try{var be=$('rod-editar'),bc0=$('chat-bt'),tl0=document.querySelector('.tela.on');be.hidden=tipo!=='perfil';bc0.hidden=!(m&&(tipo==='materia'||id==='revista'));if(tl0){var alvo=tl0.id==='t-inicio'?tl0.querySelector('.cx'):tl0;alvo.insertBefore(be,alvo.firstChild);alvo.insertBefore(bc0,alvo.firstChild);}}catch(e){}
  try{var rod=$('rodape');if(!mostra.casa)mostra.casa=rod.parentNode;var tl=document.querySelector('.tela.on');if(tipo==='inicio')mostra.casa.appendChild(rod);else if(tl&&tipo!=='form'&&tipo!=='espera')tl.appendChild(rod);rod.hidden=(tipo==='form'||tipo==='espera');}catch(e){}
  if(innerWidth>=1100&&tipo!=='materia'&&document.body.classList.contains('chat-fixo')){fechaChat();}ajustaPainel();if(chat.aberto&&tipo==='materia')conecta(salaAtual());}
