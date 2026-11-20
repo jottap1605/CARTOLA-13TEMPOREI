@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611201415";</script>
+<script>var VERSAO="202611201445";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -933,6 +933,8 @@ function deDB(id,r){if(!r||!r.paginas||!r.paginas.length)return null;var p0=r.pa
 var MESES=['jan.','fev.','mar.','abr.','maio','jun.','jul.','ago.','set.','out.','nov.','dez.'];
 function mesAno(t){if(!t)return '';var d=new Date(t);return MESES[d.getMonth()]+' '+d.getFullYear();}
 function usaCapaImg(m,ci){if(ci&&ci.s){m.capa=ci.s;m.cw=ci.w;m.ch=ci.h;m.capaImg=ci;}}
+function folheavel(m){return !!m&&(m.tipo==='revista'||(m.grupo==='Revistas'&&m.tipo!=='slides'&&m.paginas&&m.paginas.length>1));}
+function ehRev(id){return folheavel(porId[id]);}
 function poeCapa(m,n){n=parseInt(n,10)||1;var p=m.paginas[Math.min(Math.max(n,1),m.paginas.length)-1];if(p){m.capa=p.src;m.cw=p.w;m.ch=p.h;m.capaPg=n;}}
 function aplicaEdicao(m){var o=ORIG[m.id],e=EDIT[m.id];if(!o)return;
  m.titulo=o.titulo;m.resumo=o.resumo;m.info=JSON.parse(JSON.stringify(o.info));m.grupo=o.grupo;m.tag=o.tag;m.paginas=o.paginas;m.textos=o.textos;m.capa=o.capa;m.cw=o.cw;m.ch=o.ch;m.tipo=o.tipo;m.fotos=o.fotos;m.ano='';m.rascunho=false;m.privado=false;m.capaImg=null;m.capaPos='';m.capaPg=0;m.data='2026';m.t=0;m.mod=0;
@@ -953,8 +955,8 @@ function refaz(){M.length=0;var oc=ocultos();ESTATICAS.forEach(function(m){aplic
  if(!editor){for(var i=M.length-1;i>=0;i--)if(M[i].rascunho||M[i].privado)M.splice(i,1);}
  ordena(M);
  porId={};M.forEach(function(m){porId[m.id]=m;});grupos();indexa();montaLateral();montaInicio();aplicaTextos();if(rota==='perfil')telaPerfil();if(rota==='sobre')telaSobre();
- if(porId[rota]&&rota!=='revista'&&$('t-mat').classList.contains('on')){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}
- if(rota==='revista'&&porId.revista&&$('t-revista').classList.contains('on'))montaCab(porId.revista,$('r-cab'));}
+ if(porId[rota]&&!ehRev(rota)&&$('t-mat').classList.contains('on')){var y=scrollY;abreMateria(porId[rota]);scrollTo(0,y);}
+ if(ehRev(rota)&&$('t-revista').classList.contains('on'))montaCab(porId[rota],$('r-cab'));}
 var TX0={rodape:"JOTTA's house\nTIC II · Design de Moda · Univali · 2026/2",destaques:'Em destaque',lista:'Matérias e processo'};
 function textos(){var t=CFG.textos||{},o={};for(var k in TX0)o[k]=(t[k]!=null&&String(t[k]).trim()!=='')?String(t[k]):TX0[k];return o;}
 function aplicaTextos(){var t=textos(),r=$('rod-p');r.innerHTML='';String(t.rodape).split('\n').forEach(function(l,i){if(!i){r.appendChild(el('div','rf-logo',l));return;}if(i>1)r.appendChild(el('br'));r.appendChild(document.createTextNode(l));});
@@ -1253,6 +1255,8 @@ function telaEditar(id){var c=$('fm-corpo');c.innerHTML='';var m=porId[id];if(!e
  var st=el('div','st'),ac=el('div','acoes');var bt=el('button','btn','Salvar');bt.type='submit';var bv=el('button','','Cancelar');bv.type='button';bv.addEventListener('click',function(){ir(id);});ac.appendChild(bt);ac.appendChild(bv);
  if(!m.din&&EDIT[id]){var br=el('button','','Voltar ao original');br.type='button';br.addEventListener('click',function(){if(!confirm('Voltar este projeto ao original (textos, capa, arquivo e grupo)?'))return;fb.database().ref('site/edicoes/'+id).remove().then(function(){delete EDIT[id];refaz();ir(id);alertaTela('Projeto original de volta.');});});ac.appendChild(br);}
  f.appendChild(ac);f.appendChild(st);c.appendChild(f);
+ try{var tit0=$('ed-titulo').closest('.campo');if(typeof ca!=='undefined'&&ca&&ca.w){f.insertBefore(ca.w,tit0);if(typeof pv!=='undefined'&&pv)f.insertBefore(pv,tit0);if(typeof st0!=='undefined'&&st0)f.insertBefore(st0,tit0);}
+  var cbloco=(capaSel&&capaSel.w)||null;if(cbloco&&cbloco.nextSibling!==cpos.w)f.insertBefore(cpos.w,cbloco.nextSibling);}catch(_){}
  f.addEventListener('submit',function(e){e.preventDefault();var d={capaPos:cpos.valor(),titulo:$('ed-titulo').value.trim().slice(0,120)||m.titulo,resumo:$('ed-resumo').value.trim().slice(0,300),mod:Date.now(),rascunho:$('ed-rasc').checked,privado:$('ed-vis').value==='priv',sobre:$('ed-sobre').value.trim().slice(0,6000),processo:$('ed-processo').value.trim().slice(0,6000),creditos:$('ed-creditos').value.trim().slice(0,3000)};
   if(cg){var gv=cg.valor();if(!gv){st.textContent='Escreva o nome do grupo novo.';return;}d.grupo=gv;}
   bt.disabled=true;st.textContent='Salvando…';var ref=m.din?fb.database().ref('site/materias/'+id):fb.database().ref('site/edicoes/'+id);
@@ -1383,6 +1387,7 @@ function telaNova(){var c=$('fm-corpo');c.innerHTML='';if(!editor){semAcesso(c);
  f.appendChild(campo('Créditos (um por linha: Função: Nome)','nm-creditos','textarea','',3000));
  f.appendChild(campoVis('nm-vis',false));var rw=caixa('nm-rasc','Salvar como rascunho (só você vê, até publicar)',false);f.appendChild(rw);
  var st=el('div','st');var bt=el('button','btn','Publicar');bt.type='submit';bt.disabled=true;var ac0=el('div','acoes');ac0.appendChild(bt);f.appendChild(ac0);f.appendChild(st);c.appendChild(f);
+ try{var fr0=$('nm-resumo').closest('.campo'),sb0=$('nm-sobre').closest('.campo');f.insertBefore(ccN.w,fr0.nextSibling);f.insertBefore(cposN.w,ccN.w.nextSibling);var vis0=$('nm-vis').closest('.campo');f.insertBefore(vis0,sb0);f.insertBefore(rw,sb0);}catch(_){}
  $('nm-rasc').addEventListener('change',function(){bt.textContent=$('nm-rasc').checked?'Salvar rascunho':'Publicar';});
  var conv=null;
  fi.addEventListener('change',function(){var fs=fi.files;conv=null;bt.disabled=true;prev.innerHTML='';if(!fs||!fs.length)return;
@@ -1431,23 +1436,29 @@ var vz={l:[],i:0};
 function mostraVz(){var x=vz.l[vz.i];$('vz-i').src=x.src;$('vz-i').alt=x.leg;$('vz-t').textContent=x.leg+'  ('+(vz.i+1)+'/'+vz.l.length+')';$('vz-p').style.visibility=vz.i>0?'visible':'hidden';$('vz-n').style.visibility=vz.i<vz.l.length-1?'visible':'hidden';
  [vz.i+1,vz.i-1].forEach(function(j){if(vz.l[j]){var p=new Image();p.src=vz.l[j].src;}});}
 function abreVz(l,i){vz.l=l;vz.i=i;mostraVz();$('vz').classList.add('on');document.body.classList.add('travado');}
-function fechaVz(){$('vz').classList.remove('on');$('vz-i').src='';if(rota!=='revista')document.body.classList.remove('travado');}
+function fechaVz(){$('vz').classList.remove('on');$('vz-i').src='';if(!ehRev(rota))document.body.classList.remove('travado');}
 function passo(d){var j=vz.i+d;if(j>=0&&j<vz.l.length){vz.i=j;mostraVz();}}
 $('vz-x').addEventListener('click',fechaVz);$('vz-p').addEventListener('click',function(){passo(-1);});$('vz-n').addEventListener('click',function(){passo(1);});
 (function(){var x0=null,y0=0;$('vz').addEventListener('pointerdown',function(e){if(e.target.tagName==='BUTTON')return;x0=e.clientX;y0=e.clientY;});
  $('vz').addEventListener('pointerup',function(e){if(x0===null)return;var dx=e.clientX-x0,dy=e.clientY-y0;x0=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy))passo(dx<0?1:-1);else if(Math.abs(dy)>90)fechaVz();});})();
 addEventListener('keydown',function(e){if($('vz').classList.contains('on')){if(e.key==='Escape')fechaVz();else if(e.key==='ArrowRight')passo(1);else if(e.key==='ArrowLeft')passo(-1);return;}
- if(e.key==='Escape'){menu(false);}if(rota==='revista'&&pf&&document.activeElement.tagName!=='INPUT'){if(e.key==='ArrowRight'||e.key==='PageDown')pf.flipNext('top');else if(e.key==='ArrowLeft'||e.key==='PageUp')pf.flipPrev('top');}});
+ if(e.key==='Escape'){menu(false);}if(ehRev(rota)&&pf&&document.activeElement.tagName!=='INPUT'){if(e.key==='ArrowRight'||e.key==='PageDown')pf.flipNext('top');else if(e.key==='ArrowLeft'||e.key==='PageUp')pf.flipPrev('top');}});
 
 /* ---------- REVISTA ---------- */
-var RATIO=595.5/842.25,book=$('book'),pf=null,revIniciada=false;
+var RATIO=595.5/842.25,book=$('book'),pf=null,revIniciada=false,LIVRO=null,LIVRO0=book.innerHTML;
+function nPag(){try{return pf.getPageCount();}catch(e){return 38;}}
 function fit(){if(document.body.classList.contains('nolib'))return;var w=$('wrap'),vw=w.clientWidth,vh=w.clientHeight-8;if(!vw||!vh)return;var um=innerWidth<700,ph=Math.min(vh*0.99,(vw*0.985/(um?1:2))/RATIO);book.style.height=ph+'px';var bw=ph*RATIO*(um?1:2);book.style.width=bw+'px';try{var sz=$('r-prox').offsetWidth||56,lado=(vw-bw)/2,pos=lado>=sz+16?lado-sz-12:6;$('r-ant').style.left=pos+'px';$('r-prox').style.right=pos+'px';}catch(e){}}
-window._fit=function(){if(rota!=='revista')return;fit();try{pf&&pf.update();}catch(e){}};
-function label(){var i=pf.getCurrentPageIndex(),t;if(innerWidth<700){t=i<=0?'Capa':(i>=37?'Contracapa':'Pág. '+(i+1));$('pg').textContent=t;return;}if(i<=0)t='Capa';else if(i>=37)t='Contracapa';else{if(i%2===0)i-=1;t='Págs. '+(i+1)+'–'+(i+2);}$('pg').textContent=t;}
-function iniciaRevista(){if(revIniciada)return;revIniciada=true;fit();
+window._fit=function(){if(!ehRev(rota))return;fit();try{pf&&pf.update();}catch(e){}};
+function label(){var i=pf.getCurrentPageIndex(),t,u=nPag()-1;if(innerWidth<700){t=i<=0?'Capa':(i>=u?'Contracapa':'Pág. '+(i+1));$('pg').textContent=t;return;}if(i<=0)t='Capa';else if(i>=u)t='Contracapa';else{if(i%2===0)i-=1;t='Págs. '+(i+1)+'–'+(i+2);}$('pg').textContent=t;}
+function trocaLivro(m){if(LIVRO===m.id)return false;var nb=document.createElement('div');nb.id='book';
+ if(m.id==='revista'){nb.innerHTML=LIVRO0;RATIO=595.5/842.25;}else{m.paginas.forEach(function(p,k){var d=el('div','page '+(k%2?'l':'r'));var im=el('img');im.src=p.src;im.alt='Página '+(k+1);im.loading=k<4?'eager':'lazy';im.decoding='async';d.appendChild(im);nb.appendChild(d);});var p0=m.paginas[0];RATIO=(p0.w&&p0.h)?p0.w/p0.h:0.707;}
+ var old=book;old.parentNode.insertBefore(nb,old);if(pf){try{pf.destroy();}catch(e){}}if(old.parentNode)old.parentNode.removeChild(old);book=nb;LIVRO=m.id;return true;}
+function iniciaRevista(m){m=m||porId.revista;var novo=trocaLivro(m);if(!revIniciada){revIniciada=true;botoesRevista();}
+ if(!novo&&pf)return;fit();
  if(!window.St||!St.PageFlip){document.body.classList.add('nolib');$('hint').textContent='O efeito de folha precisa de internet e não carregou. As páginas aparecem em lista. Atualize para tentar de novo.';return;}
- pf=new St.PageFlip(book,{width:595,height:842,size:'stretch',minWidth:200,maxWidth:1800,minHeight:283,maxHeight:2546,showCover:true,usePortrait:innerWidth<700,drawShadow:true,maxShadowOpacity:0.55,flippingTime:1100,mobileScrollSupport:true,swipeDistance:18,clickEventForward:false,showPageCorners:false,disableFlipByClick:true,useMouseEvents:false,autoSize:true});
- pf.loadFromHTML(document.querySelectorAll('.page'));
+ var W=595,Hh=Math.round(595/RATIO);
+ pf=new St.PageFlip(book,{width:W,height:Hh,size:'stretch',minWidth:200,maxWidth:1800,minHeight:Math.round(200/RATIO),maxHeight:Math.round(1800/RATIO),showCover:true,usePortrait:innerWidth<700,drawShadow:true,maxShadowOpacity:0.55,flippingTime:1100,mobileScrollSupport:true,swipeDistance:18,clickEventForward:false,showPageCorners:false,disableFlipByClick:true,useMouseEvents:false,autoSize:true});
+ pf.loadFromHTML(book.querySelectorAll('.page'));
  try{var pc=pf.getPageCollection();var ps=pc.getPages?pc.getPages():pc.pages;ps.forEach(function(p){if(p.setDensity)p.setDensity('soft');});pf.update();}catch(e){}
  pf.on('flip',function(){label();$('hint').style.opacity=0;});
  (function(){var yD=null,tD=0,trava=null,raf=0;function guarda(){yD=scrollY;tD=Date.now();}
@@ -1457,15 +1468,15 @@ function iniciaRevista(){if(revIniciada)return;revIniciada=true;fit();
   function solta(){setTimeout(function(){trava=null;},350);}
   var tr=$('t-revista');pf.on('changeState',function(e){var st=e&&e.data;if(st==='read'){solta();setTimeout(function(){tr.style.minHeight='';},400);return;}if(trava===null){trava=(yD!==null&&Date.now()-tD<2500)?yD:scrollY;tr.style.minHeight=tr.offsetHeight+'px';if(!raf)raf=requestAnimationFrame(segura);}});
   pf.on('flip',solta);})();
- $('nx').addEventListener('click',function(){pf.flipNext('top');});$('pv').addEventListener('click',function(){pf.flipPrev('top');});
- $('r-prox').addEventListener('click',function(){pf.flipNext('top');});$('r-ant').addEventListener('click',function(){pf.flipPrev('top');});
- function pontas(){var i=pf.getCurrentPageIndex(),n=pf.getPageCount?pf.getPageCount():38;$('r-ant').classList.toggle('off',i<=0);$('r-prox').classList.toggle('off',i>=n-(innerWidth<700?1:2));}pf.on('flip',pontas);pontas();
- setTimeout(function(){$('hint').style.opacity=0;},7000);}
+ function pontas(){var i=pf.getCurrentPageIndex(),n=nPag();$('r-ant').classList.toggle('off',i<=0);$('r-prox').classList.toggle('off',i>=n-(innerWidth<700?1:2));}pf.on('flip',pontas);pontas();
+ label();setTimeout(function(){$('hint').style.opacity=0;},7000);}
+function botoesRevista(){$('nx').addEventListener('click',function(){pf&&pf.flipNext('top');});$('pv').addEventListener('click',function(){pf&&pf.flipPrev('top');});
+ $('r-prox').addEventListener('click',function(){pf&&pf.flipNext('top');});$('r-ant').addEventListener('click',function(){pf&&pf.flipPrev('top');});}
 (function(){var w0=innerWidth,h0=innerHeight;addEventListener('resize',function(){var w=innerWidth,h=innerHeight;/* só a barra do navegador mexeu: não refaz a revista (evita o pulo) */if(w===w0&&Math.abs(h-h0)<170)return;w0=w;h0=h;window._fit();ajustaPainel();});})();
-$('rsobre').addEventListener('click',function(){var c=$('fcorpo');c.innerHTML='';$('folha').querySelector('.ftopo span').textContent='CARTOLA #13 — TEMPO REI';var x=infoEl(porId.revista);if(x)c.appendChild(x);$('folha').classList.add('on');});
+$('rsobre').addEventListener('click',function(){var c=$('fcorpo');c.innerHTML='';var mr=porId[rota]||porId.revista;$('folha').querySelector('.ftopo span').textContent=(mr.titulo||'').toUpperCase();var x=infoEl(mr);if(x)c.appendChild(x);$('folha').classList.add('on');});
 $('fx').addEventListener('click',function(){$('folha').classList.remove('on');});
 $('folha').addEventListener('click',function(e){if(e.target.id==='folha')$('folha').classList.remove('on');});
-$('rchat').addEventListener('click',function(){abreChat('revista');});
+$('rchat').addEventListener('click',function(){abreChat(rota);});
 (function(){var b=$('r-fs'),t=$('t-revista'),b2=$('r-fs2');b.hidden=true;b.style.display='none';var pode=!!(t.requestFullscreen||t.webkitRequestFullscreen);if(!pode){b2.hidden=true;return;}b2.addEventListener('click',function(){b.click();});t.appendChild(b2);
  function em(){return document.fullscreenElement||document.webkitFullscreenElement;}
  b.addEventListener('click',function(){try{if(em()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}else{(t.requestFullscreen||t.webkitRequestFullscreen).call(t);}}catch(e){}});
@@ -1480,7 +1491,7 @@ function mostra(id,pg){var tipo='inicio';
  else if(/^m[a-z0-9]{6,}$/.test(id)){tipo='espera';}else id='inicio';
  rota=id;pendente=tipo==='espera'?{id:id,pg:pg}:null;
  Array.prototype.forEach.call(document.querySelectorAll('.tela'),function(t){t.classList.remove('on');});
- var m=porId[id];document.body.classList.toggle('em-materia',tipo!=='inicio');document.body.classList.toggle('na-revista',id==='revista');document.body.classList.remove('travado');
+ var m=porId[id];document.body.classList.toggle('em-materia',tipo!=='inicio');document.body.classList.toggle('na-revista',ehRev(id));document.body.classList.remove('travado');
  if(tipo!=='inicio'){$('q').value='';busca();}
  Array.prototype.forEach.call(document.querySelectorAll('[data-ir]'),function(b){b.classList.toggle('atual',b.getAttribute('data-ir')===id);});
  if(m){abreGrupo(m.grupo);contaVisita(m.id);}
@@ -1490,7 +1501,7 @@ function mostra(id,pg){var tipo='inicio';
  else if(tipo==='perfil'){$('t-perfil').classList.add('on');scrollTo(0,0);telaPerfil();}
  else if(tipo==='sobre'){$('t-sobre').classList.add('on');scrollTo(0,0);telaSobre();}
  else if(tipo==='espera'){$('t-form').classList.add('on');$('fm-corpo').innerHTML='';$('fm-corpo').appendChild(el('div','aviso','Carregando…'));}
- else if(id==='revista'){montaCab(porId.revista,$('r-cab'));$('t-revista').classList.add('on');iniciaRevista();setTimeout(window._fit,20);if(pg&&pf){try{pf.turnToPage(Math.max(0,Math.min(37,pg-1)));label();}catch(e){}}}
+ else if(ehRev(id)){montaCab(m,$('r-cab'));$('t-revista').classList.add('on');iniciaRevista(m);setTimeout(window._fit,20);if(pg&&pf){try{pf.turnToPage(Math.max(0,Math.min(nPag()-1,pg-1)));label();}catch(e){}}}
  else{$('t-mat').classList.add('on');abreMateria(m,pg);}
  if(tipo==='inicio')setTimeout(function(){try{layoutMural();}catch(e){}},30);
  try{var be=$('rod-editar'),bc0=$('chat-bt'),tl0=document.querySelector('.tela.on');be.hidden=tipo!=='perfil';bc0.hidden=!(m&&(tipo==='materia'||id==='revista'));if(tl0){var alvo=tl0.id==='t-inicio'?tl0.querySelector('.cx'):tl0;alvo.insertBefore(be,alvo.firstChild);alvo.insertBefore(bc0,alvo.firstChild);}}catch(e){}
