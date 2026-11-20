@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611201215";</script>
+<script>var VERSAO="202611201235";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -664,6 +664,37 @@ body.editando .tela{padding-bottom:calc(110px + env(safe-area-inset-bottom))!imp
 .le-nome{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .le-seta{margin-left:auto;color:#B8BBBD;font-size:20px}
 #lateral nav{flex:none}
+
+/* 20/11: início com destaques ao lado da lista que passa para o lado (versão de teste) */
+#mural{display:block!important;grid-template-columns:none!important;column-width:250px;column-gap:16px;column-fill:auto;height:var(--hm,560px);overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 34px);mask-image:linear-gradient(to right,transparent 0,#000 34px);padding-left:18px;scrollbar-width:thin;scrollbar-color:rgba(237,237,234,.25) transparent;overscroll-behavior-x:contain}
+#mural .pin{break-inside:avoid;-webkit-column-break-inside:avoid;margin:0 0 16px;display:block}
+#rot-mural,#rot-dest{display:flex;align-items:center;gap:12px;min-height:40px;margin-bottom:10px}
+.mu-nav{margin-left:auto;display:flex;gap:6px}
+.mu-nav button{width:40px;height:40px;border-radius:50%;border:1px solid rgba(237,237,234,.3);background:rgba(237,237,234,.06);color:#EDEDEA;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 0 2px}
+.mu-nav button:disabled{opacity:.3;cursor:default}
+body.mu-sem-nav .mu-nav{visibility:hidden}
+#corte{display:none}
+@media(max-width:899px){
+ #corte{display:block;height:1px;margin:26px 0 4px;background:linear-gradient(to right,transparent,rgba(237,237,234,.35),transparent)}
+ #mural{display:flex!important;align-items:flex-start;gap:12px;columns:auto;height:auto;padding:0 0 8px 12px;margin-left:-12px;scroll-snap-type:x mandatory;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 18px);mask-image:linear-gradient(to right,transparent 0,#000 18px)}
+ #mural .pin{flex:0 0 74%;margin:0;scroll-snap-align:start}
+ body.filtrando #mural{display:grid!important;grid-template-columns:1fr 1fr;flex-wrap:wrap}
+ body.filtrando #mural .pin{flex:none}
+}
+@media(min-width:900px){
+ #normal{display:grid;grid-template-columns:minmax(0,56fr) 1px minmax(0,44fr);column-gap:26px;grid-template-areas:"eb eb eb" "f f f" "rd c rm" "d c m";align-items:start}
+ #ed-barra{grid-area:eb}#filtros{grid-area:f}#rot-dest{grid-area:rd}#dest{grid-area:d}#rot-mural{grid-area:rm;margin-top:0!important}#mural{grid-area:m}
+ #corte{display:block;grid-area:c;align-self:stretch;width:1px;background:linear-gradient(to bottom,transparent,rgba(237,237,234,.4) 12%,rgba(237,237,234,.4) 88%,transparent);box-shadow:0 0 18px rgba(237,237,234,.12)}
+ #dest{grid-template-columns:1fr 1fr!important;gap:16px!important}
+ #dest .lado{grid-template-columns:1fr!important;gap:16px!important}
+ #mural{margin-left:-26px;padding-left:26px}
+}
+@media(min-width:600px) and (max-width:899px){#mural .pin{flex-basis:44%}}
+@media(min-width:1500px){#normal{grid-template-columns:minmax(0,52fr) 1px minmax(0,48fr)}}
+/* filtro escolhido: lista normal, de cima para baixo, encaixada */
+body.filtrando #normal{display:block}
+body.filtrando #corte,body.filtrando .mu-nav{display:none}
+body.filtrando #mural{height:auto;overflow:visible;column-fill:balance;-webkit-mask-image:none;mask-image:none;padding-left:0;margin-left:0}
 </style></head><body>
 <header id="topo">
  <button id="abre" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -700,7 +731,8 @@ body.editando .tela{padding-bottom:calc(110px + env(safe-area-inset-bottom))!imp
    <div id="filtros" role="group" aria-label="Filtrar projetos"></div>
    <div class="rot" style="margin-top:0" id="rot-dest">EM DESTAQUE</div>
    <section id="dest"></section>
-   <div class="rot" id="rot-mural">MATÉRIAS E PROCESSO</div>
+   <div id="corte" aria-hidden="true"></div>
+   <div class="rot" id="rot-mural"><span id="rot-mural-t">MATÉRIAS E PROCESSO</span><span class="mu-nav"><button type="button" id="mu-ant" aria-label="Voltar a lista">‹</button><button type="button" id="mu-prox" aria-label="Avançar a lista">›</button></span></div>
    <section id="mural"></section>
   </div>
   <footer id="rodape"><div class="rf-topo">
@@ -880,7 +912,7 @@ function refaz(){M.length=0;var oc=ocultos();ESTATICAS.forEach(function(m){aplic
 var TX0={rodape:"JOTTA's house\nTIC II · Design de Moda · Univali · 2026/2",destaques:'Em destaque',lista:'Matérias e processo'};
 function textos(){var t=CFG.textos||{},o={};for(var k in TX0)o[k]=(t[k]!=null&&String(t[k]).trim()!=='')?String(t[k]):TX0[k];return o;}
 function aplicaTextos(){var t=textos(),r=$('rod-p');r.innerHTML='';String(t.rodape).split('\n').forEach(function(l,i){if(!i){r.appendChild(el('div','rf-logo',l));return;}if(i>1)r.appendChild(el('br'));r.appendChild(document.createTextNode(l));});
- $('rot-dest').textContent=t.destaques.toUpperCase();$('rot-mural').textContent=filtro?filtro.toUpperCase():t.lista.toUpperCase();}
+ $('rot-dest').textContent=t.destaques.toUpperCase();$('rot-mural-t').textContent=filtro?filtro.toUpperCase():t.lista.toUpperCase();}
 function carregaSite(cb){fetch(DB+'site.json').then(function(r){return r.json();}).then(function(d){if(!d||d.error)return;DIN=d.materias||{};EDIT=d.edicoes||{};CFG=d.config||{};PERFIL=d.perfil||null;refaz();try{montaAutor();}catch(e){}try{montaEu();}catch(e){}if(cb)try{cb();}catch(e){}if(!carregaSite.ok){carregaSite.ok=1;if(rota==='organizar')telaOrganizar();else if(rota==='editar-perfil')telaEditarPerfil();else if(rota==='editar-sobre')telaEditarSobre();else if(rota.indexOf('editar/')===0)telaEditar(rota.slice(7));}if(pendente){var p=pendente;pendente=null;mostra(p.id,p.pg);}}).catch(function(){});}
 
 /* ---------- MENU ---------- */
@@ -924,8 +956,13 @@ function montaInicio(){var d=$('dest');d.innerHTML='';
  if(ds.length){d.appendChild(card(porId[ds[0]],'principal inteira'));var lado=el('div','lado');ds.slice(1,5).forEach(function(x){lado.appendChild(card(porId[x],'inteira'));});if(lado.childNodes.length)d.appendChild(lado);}
  var gs=GRUPOS.filter(function(g){return M.some(function(m){return m.grupo===g;});});if(gs.indexOf(filtro)<0)filtro='';
  var fl=$('filtros');fl.innerHTML='';filtro='';if(false){[''].concat(gs).forEach(function(g){var b=el('button','chip'+(g===filtro?' on':''),g||'Todos');b.type='button';b.setAttribute('aria-pressed',g===filtro?'true':'false');b.addEventListener('click',function(){filtro=g;montaInicio();});fl.appendChild(b);});}
- document.body.classList.toggle('filtrando',!!filtro);var rm=$('rot-mural');if(rm)rm.textContent=filtro?filtro.toUpperCase():textos().lista.toUpperCase();
- var mu=$('mural');mu.innerHTML='';M.forEach(function(m){if(filtro&&m.grupo!==filtro)return;var p=el('div','pin');p.appendChild(card(m,'inteira'));mu.appendChild(p);});}
+ document.body.classList.toggle('filtrando',!!filtro);var rm=$('rot-mural-t');if(rm)rm.textContent=filtro?filtro.toUpperCase():textos().lista.toUpperCase();
+ var mu=$('mural');mu.innerHTML='';M.forEach(function(m){if(filtro&&m.grupo!==filtro)return;var p=el('div','pin');p.appendChild(card(m,'inteira'));mu.appendChild(p);});alturaMural();Array.prototype.forEach.call(document.querySelectorAll('#dest img,#mural img'),function(i){if(!i.complete)i.addEventListener('load',alturaMural,{once:true});});}
+function alturaMural(){try{var d=$('dest'),largo=innerWidth>=900,h;if(largo)h=Math.max(520,d.offsetHeight||0);else h=Math.min(600,Math.max(420,Math.round(innerHeight*0.72)));document.documentElement.style.setProperty('--hm',h+'px');navMural();}catch(e){}}
+function navMural(){var mu=$('mural'),a=$('mu-ant'),b=$('mu-prox');if(!a)return;var max=mu.scrollWidth-mu.clientWidth-2;a.disabled=mu.scrollLeft<=2;b.disabled=mu.scrollLeft>=max;document.body.classList.toggle('mu-sem-nav',max<=0);}
+(function(){var mu=$('mural');function passo(){var p=mu.querySelector('.pin');return (p?p.offsetWidth:260)+16;}
+ $('mu-ant').addEventListener('click',function(){mu.scrollBy({left:-passo(),behavior:'smooth'});});$('mu-prox').addEventListener('click',function(){mu.scrollBy({left:passo(),behavior:'smooth'});});
+ mu.addEventListener('scroll',navMural,{passive:true});addEventListener('resize',function(){clearTimeout(alturaMural.t);alturaMural.t=setTimeout(alturaMural,150);});})();
 
 /* ---------- BUSCA ---------- */
 function semAcento(s){return s.normalize?s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase():s.toLowerCase();}
