@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#141414">
-<script>var VERSAO="202611201505";</script>
+<script>var VERSAO="202611201510";</script>
 <script>document.documentElement.classList.remove("claro");try{localStorage.removeItem("cartolaTema");}catch(e){}</script>
 <title>JOTTA's house</title>
 <meta property="og:type" content="website">
@@ -696,6 +696,8 @@ body.filtrando #normal{display:block}
 body.filtrando #corte,body.filtrando .mu-nav{display:none}
 body.filtrando #mural{height:auto;overflow:visible;column-fill:balance;-webkit-mask-image:none;mask-image:none;padding-left:0;margin-left:0}
 
+#mural{scrollbar-width:none;-ms-overflow-style:none}#mural::-webkit-scrollbar{display:none;width:0;height:0}
+#mural.arrasta{cursor:grabbing;user-select:none}
 /* 20/11 13h: lista em fileiras encaixadas; destaque do tamanho dos destaques */
 #mural{display:flex!important;flex-direction:column;gap:16px;columns:auto!important;column-width:auto!important;height:auto;overflow-x:auto;overflow-y:hidden;scroll-snap-type:none}
 #mural .mrow{display:flex;gap:16px;flex:none}
@@ -1018,6 +1020,13 @@ function layoutMural(){var mu=$('mural');if(!mu)return;mu.innerHTML='';
  MURAL.forEach(function(m){var a=(m.cw&&m.ch)?m.cw/m.ch:0.75,w=imgH*a,fit='cover';if(w>maxW)w=maxW;if(w<imgH*(largo?1.05:1.15))w=imgH*(largo?1.05:1.15);w=Math.round(w);
   var k=0;for(var r=1;r<R;r++)if(lens[r]<lens[k])k=r;var p=el('div','pin');p.style.width=w+'px';var c=card(m,'inteira');var im=c.querySelector('img');im.style.height=imgH+'px';im.style.objectFit=fit;p.appendChild(c);rows[k].appendChild(p);lens[k]+=w+gap;});
  mu.style.height=H+'px';}
+/* sem barra de rolagem: com mouse, arrastar a lista para o lado */
+(function(){var mu=$('mural'),x0=0,s0=0,ativo=false,moveu=false;
+ mu.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse'||e.button!==0)return;ativo=true;moveu=false;x0=e.clientX;s0=mu.scrollLeft;});
+ addEventListener('pointermove',function(e){if(!ativo)return;var dx=e.clientX-x0;if(!moveu&&Math.abs(dx)>6){moveu=true;mu.classList.add('arrasta');}if(moveu){mu.scrollLeft=s0-dx;e.preventDefault();}});
+ addEventListener('pointerup',function(){if(!ativo)return;ativo=false;mu.classList.remove('arrasta');if(moveu)setTimeout(function(){moveu=false;},0);});
+ mu.addEventListener('click',function(e){if(moveu){e.stopPropagation();e.preventDefault();}},true);
+ mu.addEventListener('dragstart',function(e){e.preventDefault();});})();
 addEventListener('resize',function(){clearTimeout(layoutMural.t);layoutMural.t=setTimeout(function(){if(rota==='inicio')layoutMural();},180);});
 
 /* ---------- BUSCA ---------- */
